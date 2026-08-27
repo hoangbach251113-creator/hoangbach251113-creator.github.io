@@ -62,9 +62,11 @@
         .admin-box { background: #fff; border: 2px dashed #ef4444; border-radius: 12px; padding: 20px; margin-top: 25px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-        /* Giao diện xem hàng mua thành công */
         .order-result-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; margin-top: 15px; }
         .order-result-content { background: #fff; border: 1px dashed #16a34a; padding: 12px; border-radius: 6px; margin-top: 10px; word-break: break-all; font-family: monospace; color: #15803d; font-weight: 700; }
+        
+        /* Khung thông báo hỗ trợ nạp tiền */
+        .support-alert { background: #fef2f2; border: 1px dashed #ef4444; color: #991b1b; padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; font-weight: 600; text-align: center; }
     </style>
 </head>
 <body>
@@ -131,6 +133,12 @@
                         <p><strong>Ví điện tử:</strong> ZaloPay</p>
                         <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
                         <p><strong>Nội dung ck:</strong> <span id="deposit-memo" style="color:#ef4444; font-weight:700;">NAP [Đăng nhập để xem ID]</span></p>
+                    </div>
+
+                    <!-- THÔNG BÁO HỖ TRỢ NẠP TIỀN -->
+                    <div class="support-alert">
+                        <i class="fa-solid fa-headset" style="color:#ef4444; margin-right: 4px;"></i> 
+                        Nếu nạp tiền mà không vô, vui lòng liên hệ Zalo/SĐT: <a href="https://zalo.me/0973350113" target="_blank" style="color:#ef4444; font-weight:800; text-decoration: underline;">0973350113</a> (Hoàng Bách) để được hỗ trợ!
                     </div>
                 </div>
             </div>
