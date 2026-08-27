@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUB1S2001.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- TÍCH HỢP FIREBASE DATABASE ĐỒNG BỘ ĐÁM MÂY -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root {
             --primary: #ef4444;
@@ -209,7 +214,7 @@
                 <div>
                     <strong>1. Cộng số dư theo ID Tài Khoản:</strong>
                     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 1001)">
+                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 4811)">
                         <input type="number" id="admin-add-amount" class="form-control" placeholder="Số tiền cộng (VNĐ)">
                         <button class="btn-auth btn-login" onclick="adminCongTienTheoID()"><i class="fa-solid fa-plus"></i> Cộng Tiền Theo ID</button>
                     </div>
@@ -265,7 +270,14 @@
     </div>
 
     <script>
-        // CẤU HÌNH DỮ LIỆU KÈM LINK TẢI / KEY MẶC ĐỊNH
+        // CẤU HÌNH FIREBASE PUBLIC DATABASE
+        const firebaseConfig = {
+            databaseURL: "https://sub1s2001-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // CẤU HÌNH DỮ LIỆU DỊCH VỤ
         const serviceData = {
             trangchu: {
                 title: "Trang Chủ",
@@ -318,24 +330,35 @@
             }
         };
 
-        // Sử dụng ảnh SVG trực tiếp để tránh lỗi mạng net::ERR_CONNECTION_CLOSED
         const defaultPlaceholderImg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff' font-family='sans-serif' font-size='18' font-weight='bold'>SẢN PHẨM GAME</text></svg>";
-
-        let defaultProducts = [
-            { id: 1, title: "Menu antiband 99%", price: 20000, img: defaultPlaceholderImg, link: "KEY-ANTIBAND-99-XXXX" },
-            { id: 2, title: "file aimlock ios anti 90%", price: 40000, img: defaultPlaceholderImg, link: "https://drive.google.com/file/d/aimlock-ios/view" },
-            { id: 3, title: "file aimlock adr vip", price: 30000, img: defaultPlaceholderImg, link: "https://drive.google.com/file/d/aimlock-adr/view" }
-        ];
 
         let currentTabKey = 'trangchu';
         let currentSelectedServer = null;
+        let users = {};
+        let mmoProducts = [];
+        let currentUser = localStorage.getItem('currentUser') || null;
 
-        let mmoProducts = JSON.parse(localStorage.getItem('mmoProducts')) || defaultProducts;
-        
-        let users = JSON.parse(localStorage.getItem('users')) || {
-            'admin': { id: 1000, pass: 'admin123', balance: 9999999, isAdmin: true }
-        };
-        let currentUser = localStorage.getItem('currentUser') || 'admin';
+        // LẮNG NGHE VÀ ĐỒNG BỘ DỮ LIỆU TỪ CLOUD THEO THỜI GIAN THỰC
+        function khoiTaoDongBoData() {
+            db.ref('users').on('value', snapshot => {
+                users = snapshot.val() || {};
+                // Đảm bảo luôn có tài khoản Admin mặc định
+                if (!users['admin']) {
+                    db.ref('users/admin').set({ id: 1000, pass: 'admin123', balance: 108909999, isAdmin: true });
+                }
+                capNhatGiaoDienUser();
+            });
+
+            db.ref('products').on('value', snapshot => {
+                const data = snapshot.val();
+                mmoProducts = data ? Object.values(data) : [
+                    { id: 1, title: "Menu antiband 99%", price: 20000, img: defaultPlaceholderImg, link: "KEY-ANTIBAND-99-XXXX" },
+                    { id: 2, title: "file aimlock ios anti 90%", price: 40000, img: defaultPlaceholderImg, link: "https://drive.google.com/file/d/aimlock-ios/view" },
+                    { id: 3, title: "file aimlock adr vip", price: 30000, img: defaultPlaceholderImg, link: "https://drive.google.com/file/d/aimlock-adr/view" }
+                ];
+                hienThiDanhSachMMO();
+            });
+        }
 
         function hienThiDanhSachMMO() {
             const container = document.getElementById('mmo-product-view');
@@ -343,11 +366,11 @@
 
             const isAdmin = currentUser && users[currentUser] && users[currentUser].isAdmin;
 
-            mmoProducts.forEach((p, index) => {
+            mmoProducts.forEach((p) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    ${isAdmin ? `<button class="btn-delete-product" onclick="xoaSanPhamMMO(${index})"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                    ${isAdmin ? `<button class="btn-delete-product" onclick="xoaSanPhamMMO('${p.id}')"><i class="fa-solid fa-xmark"></i></button>` : ''}
                     <img src="${p.img}" class="product-img" alt="${p.title}" onerror="this.src='${defaultPlaceholderImg}'">
                     <div class="product-body">
                         <div class="product-title">${p.title}</div>
@@ -357,7 +380,7 @@
                             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                             <span>Đã bán 0</span>
                         </div>
-                        <button class="btn-buy-product" onclick="muaSanPhamMMO(${index})">Mua Hàng</button>
+                        <button class="btn-buy-product" onclick="muaSanPhamMMO('${p.id}')">Mua Hàng</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -373,34 +396,25 @@
             if (!title || !price || price <= 0) return alert("Vui lòng điền tên và giá tiền hợp lệ!");
             if (!img) img = defaultPlaceholderImg;
 
-            mmoProducts.push({ id: Date.now(), title, price, img, link });
-            localStorage.setItem('mmoProducts', JSON.stringify(mmoProducts));
-            
+            const prodId = 'prod_' + Date.now();
+            db.ref('products/' + prodId).set({ id: prodId, title, price, img, link });
+
             document.getElementById('new-prod-title').value = '';
             document.getElementById('new-prod-price').value = '';
             document.getElementById('new-prod-img').value = '';
             document.getElementById('new-prod-link').value = '';
 
-            hienThiDanhSachMMO();
-            alert("Thêm sản phẩm mới thành công!");
+            alert("Thêm sản phẩm mới lên Cloud thành công!");
         }
 
-        function xoaSanPhamMMO(index) {
+        function xoaSanPhamMMO(prodId) {
             if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
-                mmoProducts.splice(index, 1);
-                localStorage.setItem('mmoProducts', JSON.stringify(mmoProducts));
-                hienThiDanhSachMMO();
+                db.ref('products/' + prodId).remove();
             }
         }
 
         function capNhatGiaoDienUser() {
             if (currentUser && users[currentUser]) {
-                // Tự động kiểm tra và gán ID nếu tài khoản bị thiếu ID
-                if (!users[currentUser].id) {
-                    users[currentUser].id = users[currentUser].isAdmin ? 1000 : Math.floor(1001 + Math.random() * 8999);
-                    localStorage.setItem('users', JSON.stringify(users));
-                }
-
                 document.getElementById('auth-buttons').style.display = 'none';
                 document.getElementById('user-info').style.display = 'flex';
                 document.getElementById('display-username').innerText = currentUser;
@@ -430,16 +444,16 @@
             if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
             if (users[user]) return alert("Tài khoản đã tồn tại!");
 
-            let newId = 1001;
-            const existingIds = Object.values(users).map(u => u.id);
-            while (existingIds.includes(newId)) {
-                newId++;
-            }
-
-            users[user] = { id: newId, pass: pass, balance: 0, isAdmin: false };
-            localStorage.setItem('users', JSON.stringify(users));
-            alert("Đăng ký thành công! ID tài khoản của bạn là: " + newId + "\nVui lòng đăng nhập.");
-            dongModal('register-modal');
+            let newId = Math.floor(1001 + Math.random() * 8999);
+            db.ref('users/' + user).set({
+                id: newId,
+                pass: pass,
+                balance: 0,
+                isAdmin: false
+            }).then(() => {
+                alert("Đăng ký thành công! ID tài khoản đám mây của bạn là: " + newId + "\nVui lòng đăng nhập.");
+                dongModal('register-modal');
+            });
         }
 
         function xuLyDangNhap() {
@@ -480,16 +494,17 @@
             }
 
             if (!foundUserKey) {
-                return alert("Không tìm thấy người dùng có ID: " + targetId);
+                return alert("Không tìm thấy người dùng có ID: " + targetId + "\n(Hãy đảm bảo tài khoản đã từng đăng ký thành công).");
             }
 
-            users[foundUserKey].balance += amount;
-            localStorage.setItem('users', JSON.stringify(users));
-            capNhatGiaoDienUser();
-            alert("Đã cộng " + amount.toLocaleString('vi-VN') + "đ cho tài khoản " + foundUserKey + " (ID: " + targetId + ")!");
-            
-            document.getElementById('admin-target-id').value = '';
-            document.getElementById('admin-add-amount').value = '';
+            const currentBal = users[foundUserKey].balance || 0;
+            const newBal = currentBal + amount;
+
+            db.ref('users/' + foundUserKey + '/balance').set(newBal).then(() => {
+                alert("Đã cộng " + amount.toLocaleString('vi-VN') + "đ cho tài khoản " + foundUserKey + " (ID: " + targetId + ") thành công!");
+                document.getElementById('admin-target-id').value = '';
+                document.getElementById('admin-add-amount').value = '';
+            });
         }
 
         function moModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -566,28 +581,29 @@
                 return;
             }
 
-            users[currentUser].balance -= tongTien;
-            localStorage.setItem('users', JSON.stringify(users));
-            capNhatGiaoDienUser();
-
-            const resultLink = currentSelectedServer.link || "https://sub1s2001.com/download-link";
-            alert(
-                "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
-                "📌 Gói mua: " + currentSelectedServer.name + "\n" +
-                "💰 Tổng tiền: " + tongTien.toLocaleString('vi-VN') + "đ\n" +
-                "💳 Số dư còn lại: " + users[currentUser].balance.toLocaleString('vi-VN') + "đ\n\n" +
-                "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
-            );
+            const newBalance = userBalance - tongTien;
+            db.ref('users/' + currentUser + '/balance').set(newBalance).then(() => {
+                const resultLink = currentSelectedServer.link || "https://sub1s2001.com/download-link";
+                alert(
+                    "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
+                    "📌 Gói mua: " + currentSelectedServer.name + "\n" +
+                    "💰 Tổng tiền: " + tongTien.toLocaleString('vi-VN') + "đ\n" +
+                    "💳 Số dư còn lại: " + newBalance.toLocaleString('vi-VN') + "đ\n\n" +
+                    "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
+                );
+            });
         }
 
-        function muaSanPhamMMO(index) {
+        function muaSanPhamMMO(prodId) {
             if (!currentUser) {
                 alert("Vui lòng đăng nhập tài khoản trước khi mua!");
                 moModal('login-modal');
                 return;
             }
 
-            const item = mmoProducts[index];
+            const item = mmoProducts.find(p => p.id === prodId);
+            if (!item) return;
+
             const userBalance = users[currentUser].balance;
 
             if (userBalance < item.price) {
@@ -595,18 +611,17 @@
                 return;
             }
 
-            users[currentUser].balance -= item.price;
-            localStorage.setItem('users', JSON.stringify(users));
-            capNhatGiaoDienUser();
-
-            const resultLink = item.link || "https://sub1s2001.com/download-mmo";
-            alert(
-                "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
-                "📌 Sản phẩm: " + item.title + "\n" +
-                "💰 Giá tiền: " + item.price.toLocaleString('vi-VN') + "đ\n" +
-                "💳 Số dư còn lại: " + users[currentUser].balance.toLocaleString('vi-VN') + "đ\n\n" +
-                "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
-            );
+            const newBalance = userBalance - item.price;
+            db.ref('users/' + currentUser + '/balance').set(newBalance).then(() => {
+                const resultLink = item.link || "https://sub1s2001.com/download-mmo";
+                alert(
+                    "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
+                    "📌 Sản phẩm: " + item.title + "\n" +
+                    "💰 Giá tiền: " + item.price.toLocaleString('vi-VN') + "đ\n" +
+                    "💳 Số dư còn lại: " + newBalance.toLocaleString('vi-VN') + "đ\n\n" +
+                    "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
+                );
+            });
         }
 
         let isEdit = false;
@@ -623,7 +638,7 @@
         });
 
         window.onload = function() {
-            capNhatGiaoDienUser();
+            khoiTaoDongBoData();
             chonDichVu('trangchu', document.querySelector('.sidebar .menu-item.active'));
         };
     </script>
