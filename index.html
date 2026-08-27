@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUB1S2001.COM - Quản Lý Dịch Vụ</title>
+    <title>SUB1S2001.COM - Quản Lý Dịch Vụ Tăng Tương Tác</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #4f46e5;
             --primary-soft: #eef2ff;
             --bg: #f8fafc;
-            --sidebar-width: 260px;
+            --sidebar-width: 250px;
             --border: #e2e8f0;
             --text: #334155;
             --text-muted: #94a3b8;
@@ -20,175 +20,168 @@
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
         /* SIDEBAR STYLES */
-        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; overflow-y: auto; height: 100vh; position: sticky; top: 0; }
-        .logo-box { padding: 10px 5px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
-        .logo-box div { background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 12px; }
+        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        .logo-box { padding: 10px 5px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
+        .logo-box div { background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
 
-        .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 8px; letter-spacing: 0.5px; }
-        
-        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 2px; cursor: pointer; transition: all 0.2s; user-select: none; }
+        .menu-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 5px; letter-spacing: 0.5px; }
+
+        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13.5px; font-weight: 500; margin-bottom: 4px; cursor: pointer; transition: 0.2s; }
         .menu-item:hover, .menu-item.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
         .menu-item .left { display: flex; align-items: center; gap: 10px; }
         .menu-item i.arrow { font-size: 10px; transition: transform 0.3s; color: var(--text-muted); }
-        .menu-item.open i.arrow { transform: rotate(90deg); color: var(--primary); }
 
-        /* SUBMENU STYLES */
-        .submenu { display: none; padding-left: 15px; margin-bottom: 5px; }
-        .submenu.show { display: block; }
-        .submenu-item { display: flex; align-items: center; padding: 8px 12px; font-size: 12px; color: #64748b; text-decoration: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .submenu-item:hover, .submenu-item.active { color: var(--primary); background: #f1f5f9; font-weight: 600; }
+        /* MAIN CONTENT STYLES */
+        .main-content { flex-grow: 1; padding: 25px 35px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header-title { font-size: 20px; font-weight: 700; color: #0f172a; }
+        .balance-badge { background: #fff; padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); font-weight: 700; font-size: 14px; color: #16a34a; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
-        /* CONTENT AREA */
-        .wrapper { flex-grow: 1; display: flex; flex-direction: column; }
-        header { background: #fff; border-bottom: 1px solid var(--border); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
-        main { padding: 25px; flex-grow: 1; }
+        .welcome-card { background: #fff; border: 1px solid var(--border); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; }
+        .welcome-card h2 { font-size: 18px; color: #0f172a; margin-bottom: 6px; }
+        .welcome-card p { color: var(--text-muted); font-size: 14px; }
 
-        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        /* GRID SECTIONS */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: #1e293b; }
+
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #1e293b; }
-        .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
         .form-control:focus { border-color: var(--primary); }
-        .btn-submit { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
+
+        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-submit:hover { opacity: 0.9; }
+
+        .qr-container { text-align: center; }
+        .qr-container img { border: 1px solid var(--border); border-radius: 8px; padding: 5px; background: #fff; }
+        .bank-info { font-size: 13px; line-height: 1.6; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px; }
+
+        /* EDIT MODE NOTIFICATION */
+        #edit-bar { display: none; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
+    <div id="edit-bar"><i class="fa-solid fa-pen-to-square"></i> ĐANG BẬT CHẾ ĐỘ SỬA MÀN HÌNH (Nhấn F2 để hoàn tất & khóa lại)</div>
+
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="logo-box">
-            <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><span style="color: #818cf8; font-size: 10px;">sub1s2001.com</span></div>
+            <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><small style="font-weight: 400; opacity: 0.8;">sub1s2001.com</small></div>
         </div>
 
         <div class="menu-title">DASHBOARD</div>
-        <div class="menu-item active" onclick="showDashboard()">
-            <div class="left"><i class="fa-solid fa-house" style="color: #6366f1;"></i> Trang chủ</div>
+        <div class="menu-item active">
+            <div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div>
         </div>
 
         <div class="menu-title">DỊCH VỤ</div>
-
-        <!-- FREE FIRE -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ff')">
-            <div class="left"><i class="fa-solid fa-gamepad" style="color: #06b6d4;"></i> Free Fire</div>
+        <div class="menu-item">
+            <div class="left"><i class="fa-solid fa-gamepad" style="color:#ef4444;"></i> Free Fire</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="submenu" id="sub-ff">
-            <div class="submenu-item" onclick="openService('Free Fire', 'Nạp Kim Cương')">Nạp Kim Cương</div>
-            <div class="submenu-item" onclick="openService('Free Fire', 'Cày Cấp / Thách Đấu')">Cày Cấp / Thách Đấu</div>
-        </div>
-
-        <!-- FACEBOOK -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-fb')">
-            <div class="left"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</div>
+        <div class="menu-item">
+            <div class="left"><i class="fa-brands fa-facebook" style="color:#2563eb;"></i> Facebook</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="submenu" id="sub-fb">
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Like Bài Viết')">Tăng Like Bài Viết</div>
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Theo Dõi (Follow)')">Tăng Theo Dõi (Follow)</div>
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Mắt Livestream')">Tăng Mắt Livestream</div>
-        </div>
-
-        <!-- TIKTOK -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-tiktok')">
-            <div class="left"><i class="fa-brands fa-tiktok" style="color: #000;"></i> Tiktok</div>
+        <div class="menu-item">
+            <div class="left"><i class="fa-brands fa-tiktok" style="color:#000;"></i> Tiktok</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="submenu" id="sub-tiktok">
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Tim Video')">Tăng Tim Video</div>
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Follow TikTok')">Tăng Follow TikTok</div>
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng View Video')">Tăng View Video</div>
-        </div>
-
-        <!-- INSTAGRAM -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ig')">
-            <div class="left"><i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</div>
+        <div class="menu-item">
+            <div class="left"><i class="fa-brands fa-instagram" style="color:#db2777;"></i> Instagram</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="submenu" id="sub-ig">
-            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Like Instagram')">Tăng Like Instagram</div>
-            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Follow Instagram')">Tăng Follow Instagram</div>
         </div>
     </div>
 
-    <!-- MAIN WORKSPACE -->
-    <div class="wrapper">
-        <header>
-            <h3 id="header-title" style="font-size: 16px;">Trang Chủ</h3>
-            <div style="font-size: 13px; font-weight: 700; color: var(--primary);">Số dư: 24.999đ</div>
-        </header>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="header-bar">
+            <div class="header-title">Trang Chủ</div>
+            <div class="balance-badge">Số dư: <span id="user-balance">24.999đ</span></div>
+        </div>
 
-        <main id="main-content">
+        <div class="welcome-card">
+            <h2>Chào mừng trở lại!</h2>
+            <p>Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.</p>
+        </div>
+
+        <div class="grid-container">
+            <!-- MỤC ĐẶT HÀNG DỊCH VỤ -->
             <div class="card">
-                <h3>Chào mừng trở lại!</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Chọn một dịch vụ ở menu bên trái để bắt đầu chỉnh sửa và đặt đơn hàng.</p>
+                <div class="card-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary);"></i> Đặt Đơn Hàng Dịch Vụ</div>
+                
+                <div class="form-group">
+                    <label>Chọn dịch vụ/máy chủ:</label>
+                    <select class="form-control" id="server-select" onchange="tinhTien()">
+                        <option value="100">Tiktok - Tang Like Video (100đ / lượt)</option>
+                        <option value="200">Tiktok - Tang Follower (200đ / lượt)</option>
+                        <option value="150">Facebook - Tang Like Bai Viet (150đ / lượt)</option>
+                        <option value="50">Free Fire - Tang Luot Thich (50đ / lượt)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Link / ID Tài khoản nhận:</label>
+                    <input type="text" class="form-control" placeholder="Dán link bài viết hoặc ID tại đây...">
+                </div>
+
+                <div class="form-group">
+                    <label>Số lượng cần mua:</label>
+                    <input type="number" class="form-control" id="quantity" value="1000" min="100" oninput="tinhTien()">
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">100.000đ</span></p>
+                </div>
+
+                <button class="btn-submit" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> TẠO ĐƠN HÀNG NGAY</button>
             </div>
-        </main>
+
+            <!-- MỤC NẠP TIỀN TỰ ĐỘNG -->
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#16a34a;"></i> Nạp Tiền Qua VietQR (Tự Động)</div>
+                
+                <div class="qr-container">
+                    <img id="qr-image" src="https://img.vietqr.io/image/MB-0388888888-compact2.png?amount=50000&addInfo=NAP%20HOANGBACH" width="180px" alt="Mã QR Nạp Tiền">
+                    
+                    <div class="bank-info">
+                        <p><strong>Ngân hàng:</strong> MBBank (Nội địa)</p>
+                        <p><strong>Số tài khoản:</strong> 0388888888</p>
+                        <p><strong>Chủ tài khoản:</strong> HOANG BACH</p>
+                        <p><strong>Nội dung ck:</strong> <span style="color:#ef4444; font-weight:700;">NAP HOANGBACH</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- SCRIPT TÍNH TIỀN VÀ BẬT/TẮT CHẾ ĐỘ SỬA TRỰC TIẾP -->
     <script>
-        // Xử lý ẩn/hHiện Submenu
-        function toggleSubmenu(element, subId) {
-            const submenu = document.getElementById(subId);
-            const isOpen = submenu.classList.contains('show');
+        // 1. Hàm tính tổng tiền đơn hàng
+        function tinhTien() {
+            const donGia = parseInt(document.getElementById('server-select').value);
+            const soLuong = parseInt(document.getElementById('quantity').value) || 0;
+            const tongTien = donGia * soLuong;
+            document.getElementById('total-price').innerText = tongTien.toLocaleString('vi-VN') + 'đ';
+        }
 
-            // Đóng tất cả submenu khác
-            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('open'));
+        // 2. Hàm xử lý nút Đặt Hàng
+        function xacNhanDatHang() {
+            alert("Đã gửi đơn hàng thành công! Hệ thống đang xử lý.");
+        }
 
-            // Mở mục được click nếu chưa mở
-            if (!isOpen) {
-                submenu.classList.add('show');
-                element.classList.add('open');
+        // 3. CHẾ ĐỘ CHỈNH SỬA MÀN HÌNH TRỰC TIẾP (BẤM F2)
+        let isEdit = false;
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F2') {
+                isEdit = !isEdit;
+                document.body.contentEditable = isEdit;
+                document.getElementById('edit-bar').style.display = isEdit ? 'block' : 'none';
             }
-        }
-
-        // Tải form tạo đơn hàng tương ứng khi bấm vào dịch vụ con
-        function openService(platform, serviceName) {
-            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.getElementById('header-title').innerText = `${platform} - ${serviceName}`;
-
-            const mainContent = document.getElementById('main-content');
-            mainContent.innerHTML = `
-                <div class="card">
-                    <h3 style="margin-bottom: 15px; font-size: 16px;">Tạo Đơn Hàng: ${serviceName}</h3>
-                    <div class="form-group">
-                        <label>Nhập Link / ID Cần Trợ Lực:</label>
-                        <input type="text" class="form-control" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Chọn Máy Chủ (Server):</label>
-                        <select class="form-control">
-                            <option>Server 1 (Tốc độ nhanh - Cực ổn định) - 25đ/lượt</option>
-                            <option>Server 2 (Giá rẻ - Hoàn thành trong 24h) - 10đ/lượt</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Số Lượng Cần Mua:</label>
-                        <input type="number" class="form-control" value="1000" min="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Ghi Chú Đơn Hàng:</label>
-                        <textarea class="form-control" rows="2" placeholder="Nhập ghi chú nếu có..."></textarea>
-                    </div>
-                    <button class="btn-submit">Tạo Đơn Hàng Ngay</button>
-                </div>
-            `;
-        }
-
-        function showDashboard() {
-            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('open', 'active'));
-            event.currentTarget.classList.add('active');
-            
-            document.getElementById('header-title').innerText = "Trang Chủ";
-            document.getElementById('main-content').innerHTML = `
-                <div class="card">
-                    <h3>Chào mừng trở lại!</h3>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Chọn một dịch vụ ở menu bên trái để bắt đầu chỉnh sửa và đặt đơn hàng.</p>
-                </div>
-            `;
-        }
+        });
     </script>
 </body>
 </html>
