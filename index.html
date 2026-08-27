@@ -53,6 +53,7 @@
         .product-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
         .product-price { font-size: 17px; font-weight: 800; color: #ef4444; margin-bottom: 8px; }
         .btn-buy-product { width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto; }
+        .btn-delete-product { width: 100%; background: #ef4444; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 10000; }
         .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 350px; position: relative; }
@@ -124,6 +125,7 @@
 
         <div class="product-grid" id="mmo-product-view" style="display: none;"></div>
 
+        <!-- BẢNG QUẢN TRỊ ADMIN -->
         <div class="admin-box" id="admin-panel" style="display: none;">
             <h3 style="color:#ef4444; margin-bottom:12px;"><i class="fa-solid fa-user-shield"></i> BẢNG QUẢN TRỊ ADMIN (ONLINE CLOUD)</h3>
             <div class="admin-grid">
@@ -133,6 +135,15 @@
                         <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 1001)">
                         <input type="number" id="admin-add-amount" class="form-control" placeholder="Số tiền cộng (VNĐ)">
                         <button class="btn-auth btn-login" onclick="adminCongTienTheoID()"><i class="fa-solid fa-plus"></i> Cộng Tiền Cloud</button>
+                    </div>
+                </div>
+                <div>
+                    <strong>2. Thêm Sản Phẩm MMO Mới:</strong>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <input type="text" id="mmo-title-input" class="form-control" placeholder="Tên sản phẩm (VD: Tài khoản FB Clone)">
+                        <input type="number" id="mmo-price-input" class="form-control" placeholder="Giá tiền (VNĐ)">
+                        <input type="text" id="mmo-img-input" class="form-control" placeholder="Link ảnh (Để trống nếu dùng mặc định)">
+                        <button class="btn-auth btn-login" style="background:#10b981;" onclick="adminThemMMO()"><i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Cloud</button>
                     </div>
                 </div>
             </div>
@@ -177,6 +188,7 @@
         const db = firebase.database();
 
         let users = {};
+        let mmoProducts = {};
         let currentUser = localStorage.getItem('currentUser') || null;
 
         const dichVuData = {
@@ -208,21 +220,32 @@
             }
         };
 
-        const mmoProducts = [
-            { id: 1, name: 'Tài Khoản Facebook Clone Veri Phone', price: 5000, img: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' },
-            { id: 2, name: 'Tài Khoản TikTok 1k Follow (Bật Livestream)', price: 45000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=400' },
-            { id: 3, name: 'VPS US 2 Core - 4GB RAM (1 Tháng)', price: 80000, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400' },
-            { id: 4, name: 'Proxy IPv4 Dùng Riêng (1 Tháng)', price: 30000, img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400' }
-        ];
-
         let currentCategory = 'trangchu';
 
+        // Lắng nghe dữ liệu Người dùng từ Firebase
         db.ref('users').on('value', snapshot => {
             users = snapshot.val() || {};
             if (!users['admin']) {
                 db.ref('users/admin').set({ id: 1000, pass: 'admin123', balance: 108909999, isAdmin: true });
             }
             capNhatGiaoDienUser();
+        });
+
+        // Lắng nghe dữ liệu Sản phẩm MMO từ Firebase
+        db.ref('mmo_products').on('value', snapshot => {
+            mmoProducts = snapshot.val() || {};
+            // Nếu chưa có sản phẩm nào thì khởi tạo dữ liệu mẫu
+            if (Object.keys(mmoProducts).length === 0) {
+                const macDinh = {
+                    p1: { name: 'Tài Khoản Facebook Clone Veri Phone', price: 5000, img: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' },
+                    p2: { name: 'Tài Khoản TikTok 1k Follow (Bật Livestream)', price: 45000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=400' },
+                    p3: { name: 'VPS US 2 Core - 4GB RAM (1 Tháng)', price: 80000, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400' },
+                    p4: { name: 'Proxy IPv4 Dùng Riêng (1 Tháng)', price: 30000, img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400' }
+                };
+                db.ref('mmo_products').set(macDinh);
+            } else {
+                if (currentCategory === 'mmo') hienThiMMO();
+            }
         });
 
         function chonDichVu(key, element) {
@@ -278,18 +301,27 @@
         function hienThiMMO() {
             const container = document.getElementById('mmo-product-view');
             container.innerHTML = '';
-            mmoProducts.forEach(prod => {
+
+            const isAdmin = currentUser && users[currentUser] && users[currentUser].isAdmin;
+
+            for (let key in mmoProducts) {
+                let prod = mmoProducts[key];
+                let imgUrl = prod.img || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400';
+                
+                let adminDeleteBtn = isAdmin ? `<button class="btn-delete-product" onclick="adminXoaMMO('${key}')"><i class="fa-solid fa-trash"></i> Xóa sản phẩm</button>` : '';
+
                 container.innerHTML += `
                     <div class="product-card">
-                        <img src="${prod.img}" class="product-img">
+                        <img src="${imgUrl}" class="product-img">
                         <div class="product-body">
                             <div class="product-title">${prod.name}</div>
-                            <div class="product-price">${prod.price.toLocaleString('vi-VN')}đ</div>
+                            <div class="product-price">${Number(prod.price).toLocaleString('vi-VN')}đ</div>
                             <button class="btn-buy-product" onclick="muaMMO(${prod.price}, '${prod.name}')"><i class="fa-solid fa-cart-arrow-down"></i> Mua Ngay</button>
+                            ${adminDeleteBtn}
                         </div>
                     </div>
                 `;
-            });
+            }
         }
 
         function tinhTien() {
@@ -376,6 +408,7 @@
             }
         }
 
+        // CHỨC NĂNG ADMIN: CỘNG TIỀN
         function adminCongTienTheoID() {
             const targetId = parseInt(document.getElementById('admin-target-id').value);
             const amount = parseInt(document.getElementById('admin-add-amount').value);
@@ -400,6 +433,36 @@
             });
         }
 
+        // CHỨC NĂNG ADMIN: THÊM SẢN PHẨM MMO
+        function adminThemMMO() {
+            const title = document.getElementById('mmo-title-input').value.trim();
+            const price = parseInt(document.getElementById('mmo-price-input').value);
+            const img = document.getElementById('mmo-img-input').value.trim();
+
+            if (!title || !price || price <= 0) return alert("Vui lòng nhập Tên sản phẩm và Giá tiền hợp lệ!");
+
+            const newRef = db.ref('mmo_products').push();
+            newRef.set({
+                name: title,
+                price: price,
+                img: img || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+            }).then(() => {
+                alert("Thêm sản phẩm MMO mới thành công!");
+                document.getElementById('mmo-title-input').value = '';
+                document.getElementById('mmo-price-input').value = '';
+                document.getElementById('mmo-img-input').value = '';
+            });
+        }
+
+        // CHỨC NĂNG ADMIN: XÓA SẢN PHẨM MMO
+        function adminXoaMMO(key) {
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi Cloud?")) {
+                db.ref('mmo_products/' + key).remove().then(() => {
+                    alert("Đã xóa sản phẩm!");
+                });
+            }
+        }
+
         function capNhatGiaoDienUser() {
             if (currentUser && users[currentUser]) {
                 document.getElementById('auth-buttons').style.display = 'none';
@@ -416,6 +479,7 @@
                 document.getElementById('deposit-memo').innerText = 'NAP [Đăng nhập để xem ID]';
                 document.getElementById('admin-panel').style.display = 'none';
             }
+            if (currentCategory === 'mmo') hienThiMMO();
         }
 
         function dangXuat() {
