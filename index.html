@@ -33,7 +33,8 @@
 
         .welcome-card { background: #fff; border: 1px solid var(--border); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; }
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
         .card-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
         .form-group { margin-bottom: 15px; }
@@ -63,12 +64,10 @@
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         .order-result-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; margin-top: 15px; }
-.order-result-content { background: #fff; border: 1px dashed #16a34a; padding: 12px; border-radius: 6px; margin-top: 10px; word-break: break-all; font-family: monospace; color: #15803d; font-weight: 700; }
+        .order-result-content { background: #fff; border: 1px dashed #16a34a; padding: 12px; border-radius: 6px; margin-top: 10px; word-break: break-all; font-family: monospace; color: #15803d; font-weight: 700; }
         
-        /* Thông báo hỗ trợ nạp tiền */
         .support-alert { background: #fef2f2; border: 1px dashed #ef4444; color: #991b1b; padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; font-weight: 600; text-align: center; }
         
-        /* Khung thông báo mã đơn hàng & hỗ trợ nhanh trong Modal thành công */
         .order-id-badge { background: #e0f2fe; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 13px; display: inline-block; margin-bottom: 8px; border: 1px solid #bae6fd; }
         .order-footer-support { margin-top: 12px; font-size: 12.5px; color: #475569; text-align: center; font-weight: 600; }
     </style>
@@ -102,7 +101,7 @@
         <div class="header-bar">
             <div class="header-title" id="page-title">Trang Chủ</div>
             <div class="user-auth-area">
-<div class="balance-badge">Số dư: <span id="user-balance">0đ</span></div>
+                <div class="balance-badge">Số dư: <span id="user-balance">0đ</span></div>
                 <div id="auth-buttons">
                     <button class="btn-auth btn-login" onclick="moModal('login-modal')">Đăng nhập</button>
                     <button class="btn-auth btn-register" onclick="moModal('register-modal')">Đăng ký</button>
@@ -132,14 +131,13 @@
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#0068ff;"></i> Nạp Tiền Qua ZaloPay</div>
                 <div style="text-align: center;">
-                    <img id="qr-image" src="https://i.postimg.cc/wBX4sDtd/1787827694385-696929691253049774-8699560983222085822-94543adeb257cbe2ab14e39c8e798af6.jpg" width="180px">
+                    <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://zalopay.vn/qr/p/m4p6v7" width="180px">
                     <div style="font-size: 13px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px;">
                         <p><strong>Ví điện tử:</strong> ZaloPay</p>
                         <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
-<p><strong>Nội dung ck:</strong> <span id="deposit-memo" style="color:#ef4444; font-weight:700;">NAP [Đăng nhập để xem ID]</span></p>
+                        <p><strong>Nội dung ck:</strong> <span id="deposit-memo" style="color:#ef4444; font-weight:700;">NAP [Đăng nhập để xem ID]</span></p>
                     </div>
 
-                    <!-- THÔNG BÁO HỖ TRỢ NẠP TIỀN -->
                     <div class="support-alert">
                         <i class="fa-solid fa-headset" style="color:#ef4444; margin-right: 4px;"></i> 
                         Nếu nạp tiền mà không vô, vui lòng liên hệ Zalo/SĐT: <a href="https://zalo.me/0973350113" target="_blank" style="color:#ef4444; font-weight:800; text-decoration: underline;">0973350113</a> (Hoàng Bách) để được hỗ trợ!
@@ -172,6 +170,27 @@
                     </div>
                 </div>
             </div>
+
+            <!-- BẢNG TRA CỨU ĐƠN HÀNG ADMIN -->
+            <div style="margin-top: 20px; border-top: 1px dashed #cbd5e1; padding-top: 15px;">
+                <strong>3. Tra Cứu Đơn Hàng Qua Mã Đơn:</strong>
+                <div style="display: flex; gap: 10px; margin-top: 8px;">
+                    <input type="text" id="admin-order-search-id" class="form-control" placeholder="Nhập mã đơn hàng (VD: #DH100000)">
+                    <button class="btn-auth btn-login" style="white-space: nowrap; background: #0284c7;" onclick="adminTraCuuDonHang()"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra Đơn Hàng</button>
+                </div>
+                <div id="admin-order-result" style="display: none;" class="order-result-box">
+                    <p style="font-weight: 700; color: #0369a1;">Kết Quả Tra Cứu Đơn Hàng:</p>
+                    <div style="font-size: 13px; line-height: 1.6; margin-top: 6px;">
+                        <p><strong>Mã đơn:</strong> <span id="res-order-id"></span></p>
+                        <p><strong>ID Khách Hàng:</strong> <span id="res-user-id"></span></p>
+                        <p><strong>Tên Sản Phẩm:</strong> <span id="res-product-name"></span></p>
+                        <p><strong>Giá Tiền:</strong> <span id="res-price"></span></p>
+                        <p><strong>Thời Gian:</strong> <span id="res-time"></span></p>
+                        <p><strong>Chi Tiết / Mã Thẻ:</strong></p>
+                        <div class="order-result-content" id="res-details"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -180,12 +199,11 @@
         <div class="modal-content">
             <span class="close-modal" onclick="dongModal('order-success-modal')">&times;</span>
             <div style="font-size:20px; font-weight:800; color:#16a34a; text-align:center; margin-bottom: 10px;">
-<i class="fa-solid fa-circle-check" style="font-size:32px; display:block; margin-bottom:8px;"></i>
+                <i class="fa-solid fa-circle-check" style="font-size:32px; display:block; margin-bottom:8px;"></i>
                 GIAO DỊCH THÀNH CÔNG!
             </div>
             
             <div class="order-result-box">
-                <!-- Mã đơn hàng hiển thị tại đây -->
                 <div style="text-align: center;">
                     <span class="order-id-badge"><i class="fa-solid fa-receipt"></i> Mã đơn hàng: <span id="display-order-id">#DH10000</span></span>
                 </div>
@@ -196,7 +214,6 @@
 
             <button class="btn-submit" style="background: #10b981; margin-top: 15px;" onclick="saoChepHang()"><i class="fa-solid fa-copy"></i> Sao Chép Nội Dung</button>
             
-            <!-- THÔNG BÁO HỖ TRỢ NHANH Ở DƯỚI BẢNG -->
             <div class="order-footer-support">
                 <i class="fa-solid fa-headset" style="color: #ef4444;"></i> Vui lòng liên hệ <a href="https://zalo.me/0973350113" target="_blank" style="color: #ef4444; font-weight: 800; text-decoration: underline;">0973350113</a> để được hỗ trợ nhanh nhất!
             </div>
@@ -229,7 +246,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCEgTw4uVIOEvYlwBVQtlVBhYQLac9lTxs",
             authDomain: "sub1s2001-db.firebaseapp.com",
-databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
+            databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
             projectId: "sub1s2001-db",
             storageBucket: "sub1s2001-db.firebasestorage.app",
             messagingSenderId: "124812432783",
@@ -278,7 +295,7 @@ databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
                     { name: 'Gói Miễn Phí: File Regedit Free iOS & Android - 0đ', price: 0, content: 'https://vip6s2000.com/free/regedit-free-ios-android.zip' }
                 ]
             },
-'free_menu_ysm_v8': {
+            'free_menu_ysm_v8': {
                 title: 'Dịch Vụ Miễn Phí: Menu YSM V8',
                 labelInput: 'Nhập ID Game / Email Nhận Key:',
                 servers: [
@@ -319,6 +336,32 @@ databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
             }
         });
 
+        function moModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function dongModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function capNhatGiaoDienUser() {
+            if (currentUser && users[currentUser]) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-info').style.display = 'flex';
+                document.getElementById('display-username').innerText = currentUser;
+                document.getElementById('display-id').innerText = users[currentUser].id;
+                document.getElementById('user-balance').innerText = (users[currentUser].balance || 0).toLocaleString('vi-VN') + 'đ';
+                document.getElementById('deposit-memo').innerText = 'NAP ' + users[currentUser].id;
+
+                if (users[currentUser].isAdmin) {
+                    document.getElementById('admin-panel').style.display = 'block';
+                } else {
+                    document.getElementById('admin-panel').style.display = 'none';
+                }
+            } else {
+                document.getElementById('auth-buttons').style.display = 'flex';
+                document.getElementById('user-info').style.display = 'none';
+                document.getElementById('user-balance').innerText = '0đ';
+                document.getElementById('deposit-memo').innerText = 'NAP [Đăng nhập để xem ID]';
+                document.getElementById('admin-panel').style.display = 'none';
+            }
+        }
+
         function chonDichVu(key, element) {
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
@@ -333,7 +376,7 @@ databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
                 mmoView.style.display = 'grid';
                 document.getElementById('page-title').innerText = 'Dịch Vụ Kiếm Tiền (MMO)';
                 document.getElementById('welcome-heading').innerText = 'Kho Sản Phẩm MMO VIP';
-document.getElementById('welcome-sub').innerText = 'Tự động giao dịch - Nhận tài khoản ngay lập tức!';
+                document.getElementById('welcome-sub').innerText = 'Tự động giao dịch - Nhận tài khoản ngay lập tức!';
                 hienThiMMO();
             } else if (dichVuData[key]) {
                 defaultView.style.display = 'grid';
@@ -382,7 +425,7 @@ document.getElementById('welcome-sub').innerText = 'Tự động giao dịch - N
         }
 
         function hienThiMMO() {
-const container = document.getElementById('mmo-product-view');
+            const container = document.getElementById('mmo-product-view');
             container.innerHTML = '';
 
             const isAdmin = currentUser && users[currentUser] && users[currentUser].isAdmin;
@@ -418,10 +461,9 @@ const container = document.getElementById('mmo-product-view');
             }
         }
 
-        function hienThiGiaoDienNhanHang(title, content) {
-            // Tạo mã đơn hàng ngẫu nhiên #DHxxxxxx
-            const randomOrderId = '#DH' + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('display-order-id').innerText = randomOrderId;
+        function hienThiGiaoDienNhanHang(title, content, orderId) {
+            const finalOrderId = orderId || ('#DH' + Math.floor(100000 + Math.random() * 900000));
+            document.getElementById('display-order-id').innerText = finalOrderId;
 
             document.getElementById('result-title').innerText = title;
             document.getElementById('result-content').innerText = content;
@@ -438,9 +480,22 @@ const container = document.getElementById('mmo-product-view');
             });
         }
 
+        function luuDonHangLenCloud(orderId, productName, price, details) {
+            const orderRef = db.ref('orders/' + orderId.replace('#', ''));
+            orderRef.set({
+                orderId: orderId,
+                userId: users[currentUser] ? users[currentUser].id : 'N/A',
+                username: currentUser,
+                productName: productName,
+                price: price,
+                details: details,
+                time: new Date().toLocaleString('vi-VN')
+            });
+        }
+
         function xacNhanDatHang() {
             if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện đặt đơn!");
-if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
+            if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
 
             const targetInput = document.getElementById('order-input-target').value.trim();
             if (!targetInput) return alert("Vui lòng nhập ID/Thông tin trước khi tiếp tục!");
@@ -457,7 +512,10 @@ if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch v�
                 let newBal = userBal - total;
                 db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
                     const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
-                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
+                    const generatedOrderId = '#DH' + Math.floor(100000 + Math.random() * 900000);
+                    
+                    luuDonHangLenCloud(generatedOrderId, selectedSrv.name, total, content);
+                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content, generatedOrderId);
                 });
             }
         }
@@ -471,7 +529,10 @@ if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch v�
                 let newBal = userBal - price;
                 db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
                     let randomAccount = "TK: clone_" + Math.floor(Math.random()*899999+100000) + " | PASS: vip6s2000@" + Math.floor(Math.random()*899+100) + " | 2FA: " + Math.random().toString(36).substring(2, 10).toUpperCase();
-                    hienThiGiaoDienNhanHang('Nội dung sản phẩm (' + name + '):', randomAccount);
+                    const generatedOrderId = '#DH' + Math.floor(100000 + Math.random() * 900000);
+                    
+                    luuDonHangLenCloud(generatedOrderId, name, price, randomAccount);
+                    hienThiGiaoDienNhanHang('Nội dung sản phẩm (' + name + '):', randomAccount, generatedOrderId);
                 });
             }
         }
@@ -497,7 +558,7 @@ if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch v�
             }).then(() => {
                 alert("Đăng ký thành công!\nTài khoản: " + user + "\nID Cloud của bạn: " + newId);
                 document.getElementById('reg-user').value = '';
-document.getElementById('reg-pass').value = '';
+                document.getElementById('reg-pass').value = '';
                 dongModal('register-modal');
             });
         }
@@ -508,37 +569,47 @@ document.getElementById('reg-pass').value = '';
 
             if (users[user] && users[user].pass === pass) {
                 currentUser = user;
-                localStorage.setItem('currentUser', currentUser);
-                alert("Đăng nhập thành công!");
-                dongModal('login-modal');
+                localStorage.setItem('currentUser', user);
                 capNhatGiaoDienUser();
+                dongModal('login-modal');
+                alert("Đăng nhập thành công!");
             } else {
-                alert("Sai tài khoản hoặc mật khẩu!");
+                alert("Tài khoản hoặc mật khẩu không chính xác!");
             }
+        }
+
+        function dangXuat() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            capNhatGiaoDienUser();
+            alert("Đã đăng xuất!");
         }
 
         function adminCongTienTheoID() {
             const targetId = parseInt(document.getElementById('admin-target-id').value);
             const amount = parseInt(document.getElementById('admin-add-amount').value);
 
-            if (!targetId || !amount || amount <= 0) return alert("Vui lòng nhập ID và Số tiền hợp lệ!");
+            if (!targetId || !amount) return alert("Vui lòng nhập đủ ID và số tiền!");
 
-            let foundUserKey = null;
-            for (let username in users) {
-                if (parseInt(users[username].id) === targetId) {
-                    foundUserKey = username;
+            let foundUser = null;
+            for (let u in users) {
+                if (users[u].id === targetId) {
+                    foundUser = u;
                     break;
                 }
             }
 
-            if (!foundUserKey) return alert("Không tìm thấy ID " + targetId + " trên hệ thống Cloud!");
-
-            let newBalance = (users[foundUserKey].balance || 0) + amount;
-            db.ref('users/' + foundUserKey + '/balance').set(newBalance).then(() => {
-                alert("Cộng tiền thành công cho tài khoản: " + foundUserKey + " (ID: " + targetId + ")");
-                document.getElementById('admin-target-id').value = '';
-                document.getElementById('admin-add-amount').value = '';
-            });
+            if (foundUser) {
+                let currentBal = users[foundUser].balance || 0;
+                let newBal = currentBal + amount;
+                db.ref('users/' + foundUser + '/balance').set(newBal).then(() => {
+                    alert("Cộng thành công " + amount.toLocaleString('vi-VN') + "đ cho tài khoản: " + foundUser + " (ID: " + targetId + ")");
+                    document.getElementById('admin-target-id').value = '';
+                    document.getElementById('admin-add-amount').value = '';
+                });
+            } else {
+                alert("Không tìm thấy tài khoản có ID này!");
+            }
         }
 
         function adminThemMMO() {
@@ -546,15 +617,15 @@ document.getElementById('reg-pass').value = '';
             const price = parseInt(document.getElementById('mmo-price-input').value);
             const img = document.getElementById('mmo-img-input').value.trim();
 
-            if (!title || !price || price <= 0) return alert("Vui lòng nhập Tên sản phẩm và Giá tiền hợp lệ!");
+            if (!title || !price) return alert("Vui lòng điền tên và giá sản phẩm!");
 
-            const newRef = db.ref('mmo_products').push();
-            newRef.set({
+            const newKey = 'p_' + Date.now();
+            db.ref('mmo_products/' + newKey).set({
                 name: title,
                 price: price,
                 img: img || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
             }).then(() => {
-                alert("Thêm sản phẩm MMO mới thành công!");
+                alert("Đã thêm sản phẩm mới thành công!");
                 document.getElementById('mmo-title-input').value = '';
                 document.getElementById('mmo-price-input').value = '';
                 document.getElementById('mmo-img-input').value = '';
@@ -562,40 +633,43 @@ document.getElementById('reg-pass').value = '';
         }
 
         function adminXoaMMO(key) {
-            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi Cloud?")) {
-db.ref('mmo_products/' + key).remove().then(() => {
-                    alert("Đã xóa sản phẩm!");
-                });
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+                db.ref('mmo_products/' + key).remove();
             }
         }
 
-        function capNhatGiaoDienUser() {
-            if (currentUser && users[currentUser]) {
-                document.getElementById('auth-buttons').style.display = 'none';
-                document.getElementById('user-info').style.display = 'flex';
-                document.getElementById('display-username').innerText = currentUser;
-                document.getElementById('display-id').innerText = users[currentUser].id;
-                document.getElementById('user-balance').innerText = (users[currentUser].balance || 0).toLocaleString('vi-VN') + 'đ';
-                document.getElementById('deposit-memo').innerText = 'NAP ' + users[currentUser].id;
-                document.getElementById('admin-panel').style.display = users[currentUser].isAdmin ? 'block' : 'none';
-            } else {
-                document.getElementById('auth-buttons').style.display = 'flex';
-                document.getElementById('user-info').style.display = 'none';
-                document.getElementById('user-balance').innerText = '0đ';
-                document.getElementById('deposit-memo').innerText = 'NAP [Đăng nhập để xem ID]';
-                document.getElementById('admin-panel').style.display = 'none';
+        function adminTraCuuDonHang() {
+            const orderId = document.getElementById('admin-order-search-id').value.trim().replace('#', '');
+            const resultBox = document.getElementById('admin-order-result');
+
+            if (!orderId) {
+                alert("Vui lòng nhập Mã đơn hàng!");
+                return;
             }
-            if (currentCategory === 'mmo') hienThiMMO();
-        }
 
-        function dangXuat() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            capNhatGiaoDienUser();
-        }
+            db.ref('orders/' + orderId).once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
 
-        function moModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function dongModal(id) { document.getElementById(id).style.display = 'none'; }
+                    document.getElementById('res-order-id').innerText = '#' + orderId;
+                    document.getElementById('res-user-id').innerText = data.userId || data.idKhach || 'Không xác định';
+                    document.getElementById('res-product-name').innerText = data.productName || data.tenSanPham || 'Đơn hàng';
+                    document.getElementById('res-price').innerText = (data.price || data.gia || 0).toLocaleString('vi-VN') + 'đ';
+                    document.getElementById('res-time').innerText = data.time || data.thoiGian || 'Không rõ';
+
+                    const details = data.details || data.noiDung || data.code || JSON.stringify(data, null, 2);
+                    document.getElementById('res-details').innerText = details;
+
+                    resultBox.style.display = 'block';
+                } else {
+                    alert("Không tìm thấy đơn hàng với mã này!");
+                    resultBox.style.display = 'none';
+                }
+            }).catch((error) => {
+                console.error(error);
+                alert("Lỗi kết nối CSDL!");
+            });
+        }
     </script>
 </body>
 </html>
