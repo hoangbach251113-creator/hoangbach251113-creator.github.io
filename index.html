@@ -253,9 +253,9 @@ nav a:hover {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #08a85a;
-    background: #eefaf2;
-    color: #08a85a;
-    font-size: 14px;
+    background: #08a85a;
+    color: white;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     text-align: center;
@@ -265,8 +265,7 @@ nav a:hover {
 }
 
 .buy-btn:hover {
-    background: #08a85a;
-    color: white;
+    background: #068748;
 }
 
 .btn-delete-prod {
@@ -360,6 +359,23 @@ nav a:hover {
     margin-top: 5px;
 }
 
+/* KHUNG HIỂN THỊ SĐT MUA HÀNG */
+.contact-box {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.phone-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #08a85a;
+    margin: 15px 0;
+    background: #eefaf2;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px dashed #08a85a;
+}
+
 @media (max-width: 800px) {
     nav { display: none; }
     .container { grid-template-columns: 1fr; }
@@ -431,7 +447,7 @@ nav a:hover {
 
     <main>
         <div class="products" id="products">
-            <!-- Sản phẩm được tự động hiển thị từ Script bên dưới -->
+            <!-- Sản phẩm được tự động hiển thị từ Script -->
         </div>
     </main>
 </div>
@@ -467,7 +483,7 @@ nav a:hover {
         <form class="auth-form" onsubmit="addNewProduct(event)">
             <input type="text" id="newProdName" placeholder="Tên sản phẩm" required>
             <input type="number" id="newProdPrice" placeholder="Giá (VD: 25000)" required>
-            <input type="text" id="newProdImg" placeholder="Tên file ảnh (VD: ./sp1.jpg)" required>
+            <input type="text" id="newProdImg" placeholder="Link hoặc Tên file ảnh" required>
             <select id="newProdCat">
                 <option value="game">Sản phẩm Game</option>
                 <option value="tool">Tool</option>
@@ -475,6 +491,24 @@ nav a:hover {
             </select>
             <button type="submit" class="btn-submit" style="background:#ff9800;">Thêm Ngay</button>
         </form>
+    </div>
+</div>
+
+<!-- MODAL BẢNG THÔNG BÁO SỐ ĐIỆN THOẠI HỖ TRỢ -->
+<div class="modal-overlay" id="buyModal">
+    <div class="modal">
+        <span class="close-btn" onclick="closeBuyModal()">&times;</span>
+        <div class="contact-box">
+            <h3 style="color:#08a85a; margin-bottom: 5px;">XÁC NHẬN MUA HÀNG</h3>
+            <p id="buyProdName" style="font-weight: bold; margin-bottom: 10px;"></p>
+            <p style="font-size: 14px; color: #555;">Vui lòng liên hệ Admin <b>Hoàng Bách</b> để hoàn tất giao dịch:</p>
+            
+            <div class="phone-number">0973 350 113</div>
+            
+            <a id="zaloLinkBtn" href="https://zalo.me/0973350113" target="_blank" class="btn-submit" style="display:block; text-decoration:none; text-align:center;">
+                💬 Nhắn Tin Qua Zalo Ngay
+            </a>
+        </div>
     </div>
 </div>
 
@@ -512,10 +546,28 @@ function renderProducts() {
                 </div>
                 <span class="category">${item.cat === 'game' ? 'Sản phẩm Game' : item.cat === 'tool' ? 'Tool' : 'File Free'}</span>
                 <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán ${item.sold}</span></div>
-                <button class="buy-btn" onclick="payViaZalo('${item.name}', ${item.price})">→ Mua Qua Zalo</button>
+                <button class="buy-btn" onclick="openBuyModal('${item.name}', ${item.price})">Mua Hàng</button>
             </div>
         </div>
     `).join('');
+}
+
+/* XỬ LÝ NÚT MUA HÀNG VÀ HIỂN THỊ SĐT */
+const buyModal = document.getElementById("buyModal");
+
+function openBuyModal(productName, price) {
+    const priceText = price === 0 ? "Miễn Phí" : price.toLocaleString('vi-VN') + "đ";
+    document.getElementById("buyProdName").innerText = productName + " (" + priceText + ")";
+    
+    // Tự mở Zalo trực tiếp tới SĐT
+    window.open("https://zalo.me/0973350113", "_blank");
+    
+    // Hiển thị khung popup
+    buyModal.style.display = "flex";
+}
+
+function closeBuyModal() {
+    buyModal.style.display = "none";
 }
 
 /* HỆ THỐNG ĐĂNG NHẬP / ADMIN */
@@ -539,12 +591,11 @@ function handleLogin(e) {
     const user = document.getElementById("loginUser").value.trim();
     const pass = document.getElementById("loginPass").value.trim();
 
-    // Mật khẩu Admin mặc định
     if (user === "admin" && pass === "123456") {
         localStorage.setItem("currentUser", "admin");
         checkUserSession();
         closeAuthModal();
-        alert("Chào mừng Admin! Bạn đã có quyền quản lý web.");
+        alert("Chào mừng Admin Hoàng Bách! Bạn đã có quyền quản lý web.");
         return;
     }
 
@@ -618,11 +669,6 @@ function deleteProduct(id) {
         saveProducts(list);
         renderProducts();
     }
-}
-
-/* THANH TOÁN ZALO */
-function payViaZalo(productName, price) {
-    window.open("https://zalo.me/g/qe0xsuzluo0h15rs3foh", "_blank");
 }
 
 /* BỘ LỌC SẢN PHẨM */
