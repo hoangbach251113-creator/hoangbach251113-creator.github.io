@@ -102,6 +102,18 @@ nav a:hover {
     color: white;
 }
 
+.btn-admin-panel {
+    background: #ff9800;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    display: none;
+}
+
 .user-display {
     display: none;
     align-items: center;
@@ -172,6 +184,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
 }
 
 .product:hover {
@@ -256,6 +269,21 @@ nav a:hover {
     color: white;
 }
 
+.btn-delete-prod {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+}
+
 /* MODAL OVERLAY */
 .modal-overlay {
     position: fixed;
@@ -273,7 +301,7 @@ nav a:hover {
 .modal {
     background: white;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     border-radius: 12px;
     padding: 24px;
     position: relative;
@@ -311,7 +339,7 @@ nav a:hover {
     border-bottom-color: #08a85a;
 }
 
-.auth-form input {
+.auth-form input, .auth-form select {
     width: 100%;
     padding: 11px;
     border: 1px solid #ddd;
@@ -332,45 +360,6 @@ nav a:hover {
     margin-top: 5px;
 }
 
-/* PAYMENT POPUP */
-.pay-header {
-    text-align: center;
-    color: #0068ff;
-    font-weight: 800;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.qr-container {
-    text-align: center;
-    margin: 12px 0;
-}
-
-.qr-container img {
-    width: 200px;
-    height: 200px;
-    border: 2px solid #0068ff;
-    border-radius: 10px;
-    padding: 5px;
-}
-
-.pay-details {
-    background: #f0f7ff;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 15px;
-}
-
-.pay-details div {
-    margin-bottom: 6px;
-}
-
-.pay-details span {
-    font-weight: bold;
-    color: #d32f2f;
-}
-
 @media (max-width: 800px) {
     nav { display: none; }
     .container { grid-template-columns: 1fr; }
@@ -388,7 +377,6 @@ nav a:hover {
 <header>
     <a href="#" class="logo-box">
         <div class="cat-avatar">
-            <!-- SVG Con Mèo Ngủ Dễ Thương -->
             <svg width="35" height="35" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="45" fill="#ffb74d"/>
                 <polygon points="20,35 10,10 40,20" fill="#f57c00"/>
@@ -410,6 +398,7 @@ nav a:hover {
     </nav>
 
     <div class="auth-box">
+        <button class="btn-admin-panel" id="adminBtn" onclick="openAdminModal()">⚙️ Thêm SP Mới</button>
         <button class="btn-auth" id="loginBtn" onclick="openAuthModal()">Đăng nhập</button>
         <div class="user-display" id="userDisplay">
             <span>👋 Chào, <b id="usernameText">User</b></span>
@@ -442,69 +431,7 @@ nav a:hover {
 
     <main>
         <div class="products" id="products">
-            <!-- SP 1 -->
-            <div class="product" data-category="tool" data-price="35000">
-                <img class="product-img" src="./sp1.jpg" alt="tool dame facebook pro">
-                <div class="product-info">
-                    <div class="product-name">tool dame facebook pro 4 che do</div>
-                    <div class="price">35.000 đ</div>
-                    <span class="category">Tool</span>
-                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 12</span></div>
-                    <button class="buy-btn" onclick="openPayment('tool dame facebook pro 4 che do', 35000)">→ Mua ngay</button>
-                </div>
-            </div>
-
-            <!-- SP 2 -->
-            <div class="product" data-category="game" data-price="15000">
-                <img class="product-img" src="./sp2.jpg" alt="menu hack ff">
-                <div class="product-info">
-                    <div class="product-name">menu hack ff</div>
-                    <div class="price">15.000 đ</div>
-                    <span class="category">Sản phẩm Game</span>
-                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 28</span></div>
-                    <button class="buy-btn" onclick="openPayment('menu hack ff', 15000)">→ Mua ngay</button>
-                </div>
-            </div>
-
-            <!-- SP 3 -->
-            <div class="product" data-category="game" data-price="25000">
-                <img class="product-img" src="./sp3.jpg" alt="menu hack ff vip">
-                <div class="product-info">
-                    <div class="product-name">menu hack ff vip</div>
-                    <div class="price">25.000 đ</div>
-                    <span class="category">Sản phẩm Game</span>
-                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 45</span></div>
-                    <button class="buy-btn" onclick="openPayment('menu hack ff vip', 25000)">→ Mua ngay</button>
-                </div>
-            </div>
-
-            <!-- SP 4 -->
-            <div class="product" data-category="game" data-price="20000">
-                <img class="product-img" src="./sp4.jpg" alt="random hack ff">
-                <div class="product-info">
-                    <div class="product-name">random hack ff</div>
-                    <div class="price">20.000 đ</div>
-                    <span class="category">Sản phẩm Game</span>
-                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 19</span></div>
-                    <button class="buy-btn" onclick="openPayment('random hack ff', 20000)">→ Mua ngay</button>
-                </div>
-            </div>
-
-            <!-- SP 5 -->
-            <div class="product" data-category="file" data-price="0">
-                <a href="https://zalo.me/g/qe0xsuzluo0h15rs3foh" target="_blank">
-                    <img class="product-img" src="./sp5.jpg" alt="Nhận File Free">
-                </a>
-                <div class="product-info">
-                    <div class="product-name">Nhận File Free Cho Cả Android và iOS</div>
-                    <div class="price price-free">MIỄN PHÍ (0đ)</div>
-                    <span class="category">File Free</span>
-                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã nhận 102</span></div>
-                    <a href="https://zalo.me/g/qe0xsuzluo0h15rs3foh" target="_blank" class="buy-btn" style="background:#e1f5fe; color:#0288d1; border-color:#0288d1;">
-                        → Nhận Free Qua Zalo
-                    </a>
-                </div>
-            </div>
+            <!-- Sản phẩm được tự động hiển thị từ Script bên dưới -->
         </div>
     </main>
 </div>
@@ -532,76 +459,94 @@ nav a:hover {
     </div>
 </div>
 
-<!-- MODAL THANH TOÁN ZALOPAY -->
-<div class="modal-overlay" id="payModal">
+<!-- MODAL QUẢN TRỊ ADMIN (THÊM SẢN PHẨM) -->
+<div class="modal-overlay" id="adminModal">
     <div class="modal">
-        <span class="close-btn" onclick="closePayModal()">&times;</span>
-        <div class="pay-header">💳 THANH TOÁN ZALOPAY</div>
-        <p style="font-size:12px; color:#666; text-align:center;">Quét QR bằng ZaloPay hoặc App Ngân hàng bất kỳ</p>
-        
-        <div class="qr-container">
-            <img id="qrImg" src="" alt="Mã QR Thanh Toán">
-        </div>
-
-        <div class="pay-details">
-            <div>Chủ TK: <b>DANG TRAN HOANG BACH</b></div>
-            <div>Sản phẩm: <b id="payProd">...</b></div>
-            <div>Số tiền: <span id="payPrice">0 đ</span></div>
-            <div>Mã đơn hàng: <b id="payCode" style="color:#0068ff;">...</b></div>
-        </div>
-
-        <button class="btn-submit" style="background:#0068ff;" onclick="confirmPaid()">
-            ✅ Tôi Đã Chuyển Khoản (Xác Nhận Qua Zalo)
-        </button>
+        <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+        <h3 style="margin-bottom:15px; color:#ff9800;">⚙️ Thêm Sản Phẩm Mới</h3>
+        <form class="auth-form" onsubmit="addNewProduct(event)">
+            <input type="text" id="newProdName" placeholder="Tên sản phẩm" required>
+            <input type="number" id="newProdPrice" placeholder="Giá (VD: 25000)" required>
+            <input type="text" id="newProdImg" placeholder="Tên file ảnh (VD: ./sp1.jpg)" required>
+            <select id="newProdCat">
+                <option value="game">Sản phẩm Game</option>
+                <option value="tool">Tool</option>
+                <option value="file">File Free</option>
+            </select>
+            <button type="submit" class="btn-submit" style="background:#ff9800;">Thêm Ngay</button>
+        </form>
     </div>
 </div>
 
 <script>
-/* --- HỆ THỐNG ĐĂNG NHẬP / ĐĂNG KÝ (LOCALSTORAGE) --- */
+/* DỮ LIỆU SẢN PHẨM MẶC ĐỊNH */
+const defaultProducts = [
+    { id: 1, name: "tool dame facebook pro 4 che do", price: 35000, cat: "tool", img: "./sp1.jpg", sold: 12 },
+    { id: 2, name: "menu hack ff", price: 15000, cat: "game", img: "./sp2.jpg", sold: 28 },
+    { id: 3, name: "menu hack ff vip", price: 25000, cat: "game", img: "./sp3.jpg", sold: 45 },
+    { id: 4, name: "random hack ff", price: 20000, cat: "game", img: "./sp4.jpg", sold: 19 },
+    { id: 5, name: "Nhận File Free Cho Cả Android và iOS", price: 0, cat: "file", img: "./sp5.jpg", sold: 102 }
+];
+
+function getProducts() {
+    return JSON.parse(localStorage.getItem("shopProducts")) || defaultProducts;
+}
+
+function saveProducts(data) {
+    localStorage.setItem("shopProducts", JSON.stringify(data));
+}
+
+function renderProducts() {
+    const list = getProducts();
+    const box = document.getElementById("products");
+    const isAdmin = localStorage.getItem("currentUser") === "admin";
+    
+    box.innerHTML = list.map(item => `
+        <div class="product" data-category="${item.cat}" data-price="${item.price}">
+            ${isAdmin ? `<button class="btn-delete-prod" style="display:block;" onclick="deleteProduct(${item.id})">✕</button>` : ''}
+            <img class="product-img" src="${item.img}" alt="${item.name}">
+            <div class="product-info">
+                <div class="product-name">${item.name}</div>
+                <div class="price ${item.price === 0 ? 'price-free' : ''}">
+                    ${item.price === 0 ? 'MIỄN PHÍ (0đ)' : item.price.toLocaleString('vi-VN') + ' đ'}
+                </div>
+                <span class="category">${item.cat === 'game' ? 'Sản phẩm Game' : item.cat === 'tool' ? 'Tool' : 'File Free'}</span>
+                <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán ${item.sold}</span></div>
+                <button class="buy-btn" onclick="payViaZalo('${item.name}', ${item.price})">→ Mua Qua Zalo</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+/* HỆ THỐNG ĐĂNG NHẬP / ADMIN */
 const authModal = document.getElementById("authModal");
-const formLogin = document.getElementById("formLogin");
-const formRegister = document.getElementById("formRegister");
-const tabLogin = document.getElementById("tabLogin");
-const tabRegister = document.getElementById("tabRegister");
+const adminModal = document.getElementById("adminModal");
 
 function openAuthModal() { authModal.style.display = "flex"; }
 function closeAuthModal() { authModal.style.display = "none"; }
+function openAdminModal() { adminModal.style.display = "flex"; }
+function closeAdminModal() { adminModal.style.display = "none"; }
 
 function switchTab(tab) {
-    if (tab === 'login') {
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        formLogin.style.display = 'block';
-        formRegister.style.display = 'none';
-    } else {
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        formRegister.style.display = 'block';
-        formLogin.style.display = 'none';
-    }
-}
-
-function handleRegister(e) {
-    e.preventDefault();
-    const user = document.getElementById("regUser").value.trim();
-    const pass = document.getElementById("regPass").value.trim();
-
-    let users = JSON.parse(localStorage.getItem("users") || "{}");
-    if (users[user]) {
-        alert("Tên tài khoản này đã tồn tại!");
-        return;
-    }
-
-    users[user] = pass;
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Đăng ký thành công! Vui lòng đăng nhập.");
-    switchTab('login');
+    document.getElementById("tabLogin").classList.toggle('active', tab === 'login');
+    document.getElementById("tabRegister").classList.toggle('active', tab === 'register');
+    document.getElementById("formLogin").style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById("formRegister").style.display = tab === 'register' ? 'block' : 'none';
 }
 
 function handleLogin(e) {
     e.preventDefault();
     const user = document.getElementById("loginUser").value.trim();
     const pass = document.getElementById("loginPass").value.trim();
+
+    // Mật khẩu Admin mặc định
+    if (user === "admin" && pass === "123456") {
+        localStorage.setItem("currentUser", "admin");
+        checkUserSession();
+        closeAuthModal();
+        alert("Chào mừng Admin! Bạn đã có quyền quản lý web.");
+        return;
+    }
 
     let users = JSON.parse(localStorage.getItem("users") || "{}");
     if (users[user] && users[user] === pass) {
@@ -614,16 +559,36 @@ function handleLogin(e) {
     }
 }
 
+function handleRegister(e) {
+    e.preventDefault();
+    const user = document.getElementById("regUser").value.trim();
+    const pass = document.getElementById("regPass").value.trim();
+
+    let users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (users[user] || user === "admin") {
+        alert("Tài khoản này không thể tạo!");
+        return;
+    }
+
+    users[user] = pass;
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Đăng ký thành công!");
+    switchTab('login');
+}
+
 function checkUserSession() {
-    const currentUser = localStorage.getItem("currentUser");
-    if (currentUser) {
+    const user = localStorage.getItem("currentUser");
+    if (user) {
         document.getElementById("loginBtn").style.display = "none";
         document.getElementById("userDisplay").style.display = "flex";
-        document.getElementById("usernameText").innerText = currentUser;
+        document.getElementById("usernameText").innerText = user;
+        document.getElementById("adminBtn").style.display = (user === "admin") ? "block" : "none";
     } else {
         document.getElementById("loginBtn").style.display = "block";
         document.getElementById("userDisplay").style.display = "none";
+        document.getElementById("adminBtn").style.display = "none";
     }
+    renderProducts();
 }
 
 function logout() {
@@ -631,65 +596,53 @@ function logout() {
     checkUserSession();
 }
 
-checkUserSession();
+/* CHỨC NĂNG ADMIN */
+function addNewProduct(e) {
+    e.preventDefault();
+    const name = document.getElementById("newProdName").value;
+    const price = Number(document.getElementById("newProdPrice").value);
+    const img = document.getElementById("newProdImg").value;
+    const cat = document.getElementById("newProdCat").value;
 
-/* --- HỆ THỐNG THANH TOÁN ZALOPAY QUÉT QR --- */
-const payModal = document.getElementById("payModal");
-let currentOrderCode = "";
-
-function openPayment(name, price) {
-    const orderCode = "BACH" + Math.floor(1000 + Math.random() * 9000);
-    currentOrderCode = orderCode;
-
-    document.getElementById("payProd").innerText = name;
-    document.getElementById("payPrice").innerText = price.toLocaleString('vi-VN') + " đ";
-    document.getElementById("payCode").innerText = orderCode;
-
-    // QR ZaloPay sinh động
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://u.zalopay.vn/qr/p/01020000000000000000?amount=${price}&note=${orderCode}`;
-    document.getElementById("qrImg").src = qrUrl;
-
-    payModal.style.display = "flex";
+    let list = getProducts();
+    list.push({ id: Date.now(), name, price, cat, img, sold: 0 });
+    saveProducts(list);
+    renderProducts();
+    closeAdminModal();
+    alert("Đã thêm sản phẩm mới thành công!");
 }
 
-function closePayModal() { payModal.style.display = "none"; }
+function deleteProduct(id) {
+    if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
+        let list = getProducts().filter(p => p.id !== id);
+        saveProducts(list);
+        renderProducts();
+    }
+}
 
-function confirmPaid() {
-    alert("Đang chuyển sang Zalo Admin để duyệt đơn hàng: " + currentOrderCode);
+/* THANH TOÁN ZALO */
+function payViaZalo(productName, price) {
     window.open("https://zalo.me/g/qe0xsuzluo0h15rs3foh", "_blank");
 }
 
-/* --- BỘ LỌC TÌM KIẾM SẢN PHẨM --- */
-const search = document.getElementById("search");
-const category = document.getElementById("category");
-const sort = document.getElementById("sort");
-const productsBox = document.getElementById("products");
+/* BỘ LỌC SẢN PHẨM */
+document.getElementById("search").addEventListener("input", filterProducts);
+document.getElementById("category").addEventListener("change", filterProducts);
+document.getElementById("sort").addEventListener("change", filterProducts);
 
 function filterProducts() {
-    const keyword = search.value.toLowerCase();
-    const selectedCat = category.value;
-    const products = Array.from(productsBox.querySelectorAll(".product"));
+    const keyword = document.getElementById("search").value.toLowerCase();
+    const selectedCat = document.getElementById("category").value;
+    const products = Array.from(document.querySelectorAll(".product"));
 
-    products.forEach(product => {
-        const name = product.querySelector(".product-name").textContent.toLowerCase();
-        const cat = product.dataset.category;
-        const matchName = name.includes(keyword);
-        const matchCat = selectedCat === "all" || cat === selectedCat;
-        product.style.display = (matchName && matchCat) ? "" : "none";
+    products.forEach(p => {
+        const name = p.querySelector(".product-name").textContent.toLowerCase();
+        const cat = p.dataset.category;
+        p.style.display = (name.includes(keyword) && (selectedCat === "all" || cat === selectedCat)) ? "" : "none";
     });
-
-    if (sort.value === "cheap") {
-        products.sort((a,b) => Number(a.dataset.price) - Number(b.dataset.price));
-    } else if (sort.value === "expensive") {
-        products.sort((a,b) => Number(b.dataset.price) - Number(a.dataset.price));
-    }
-
-    products.forEach(p => productsBox.appendChild(p));
 }
 
-search.addEventListener("input", filterProducts);
-category.addEventListener("change", filterProducts);
-sort.addEventListener("change", filterProducts);
+checkUserSession();
 </script>
 
 </body>
