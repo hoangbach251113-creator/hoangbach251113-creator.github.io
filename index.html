@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Bách Shop</title>
 
 <style>
@@ -127,6 +126,7 @@ nav a {
     height: 190px;
     object-fit: cover;
     display: block;
+    background-color: #eee;
 }
 
 .product-info {
@@ -144,21 +144,6 @@ nav a {
     font-size: 17px;
     font-weight: 800;
     margin-bottom: 7px;
-}
-
-.old-price {
-    color: #999;
-    text-decoration: line-through;
-    font-size: 13px;
-    margin-right: 8px;
-}
-
-.discount {
-    border: 1px solid #ff4b43;
-    color: #ff3025;
-    font-size: 12px;
-    padding: 3px 6px;
-    border-radius: 4px;
 }
 
 .category {
@@ -200,40 +185,18 @@ nav a {
     color: white;
 }
 
-/* MOBILE */
+/* MOBILE RESPONSIVE */
 @media (max-width: 800px) {
-
-    header {
-        padding: 0 15px;
-        gap: 15px;
-    }
-
-    nav {
-        display: none;
-    }
-
-    .container {
-        grid-template-columns: 1fr;
-    }
-
-    .sidebar {
-        min-height: auto;
-    }
-
-    .products {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    header { padding: 0 15px; gap: 15px; }
+    nav { display: none; }
+    .container { grid-template-columns: 1fr; }
+    .sidebar { min-height: auto; }
+    .products { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 500px) {
-
-    .products {
-        grid-template-columns: 1fr;
-    }
-
-    .product-img {
-        height: 210px;
-    }
+    .products { grid-template-columns: 1fr; }
+    .product-img { height: 210px; }
 }
 </style>
 </head>
@@ -241,41 +204,22 @@ nav a {
 <body>
 
 <header>
-
-    <div class="logo">
-        BÁCH <span>SHOP</span>
-    </div>
-
+    <div class="logo">BÁCH <span>SHOP</span></div>
     <nav>
         <a href="#">TRANG CHỦ</a>
         <a href="#">SẢN PHẨM</a>
         <a href="#">KHUYẾN MÃI</a>
         <a href="#">LIÊN HỆ</a>
     </nav>
-
-    <button class="login">
-        Đăng nhập
-    </button>
-
+    <button class="login">Đăng nhập</button>
 </header>
 
-
 <div class="container">
-
-    <!-- SIDEBAR -->
-
     <aside class="sidebar">
-
         <label>Tìm kiếm</label>
-
-        <input
-            type="text"
-            id="search"
-            placeholder="Tìm sản phẩm..."
-        >
+        <input type="text" id="search" placeholder="Tìm sản phẩm...">
 
         <label>Danh mục</label>
-
         <select id="category">
             <option value="all">Tất cả</option>
             <option value="game">Sản phẩm Game</option>
@@ -285,338 +229,125 @@ nav a {
         </select>
 
         <label>Sắp xếp</label>
-
         <select id="sort">
             <option value="default">Mặc định</option>
             <option value="cheap">Giá thấp → cao</option>
             <option value="expensive">Giá cao → thấp</option>
         </select>
-
     </aside>
 
-
-    <!-- PRODUCT LIST -->
-
     <main>
-
         <div class="products" id="products">
 
             <!-- SẢN PHẨM 1 -->
-
             <div class="product" data-category="game" data-price="50000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+1"
-                    alt="Sản phẩm 1"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500" alt="Sản phẩm Game #1" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        Sản phẩm Game #1
-                    </div>
-
-                    <div class="price">
-                        50.000 đ
-                    </div>
-
-                    <span class="category">
-                        Sản phẩm Game
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 12
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">Sản phẩm Game #1</div>
+                    <div class="price">50.000 đ</div>
+                    <span class="category">Sản phẩm Game</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 12</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
-
 
             <!-- SẢN PHẨM 2 -->
-
             <div class="product" data-category="tool" data-price="100000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+2"
-                    alt="Sản phẩm 2"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500" alt="Sản phẩm Tool #2" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        Sản phẩm Tool #2
-                    </div>
-
-                    <div class="price">
-                        100.000 đ
-                    </div>
-
-                    <span class="category">
-                        Tool
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 8
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">Sản phẩm Tool #2</div>
+                    <div class="price">100.000 đ</div>
+                    <span class="category">Tool</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 8</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
-
 
             <!-- SẢN PHẨM 3 -->
-
             <div class="product" data-category="file" data-price="30000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+3"
-                    alt="Sản phẩm 3"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500" alt="File Premium #3" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        File Premium #3
-                    </div>
-
-                    <div class="price">
-                        30.000 đ
-                    </div>
-
-                    <span class="category">
-                        File
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 25
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">File Premium #3</div>
+                    <div class="price">30.000 đ</div>
+                    <span class="category">File</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 25</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
-
 
             <!-- SẢN PHẨM 4 -->
-
             <div class="product" data-category="game" data-price="80000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+4"
-                    alt="Sản phẩm 4"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" alt="Sản phẩm Game #4" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        Sản phẩm Game #4
-                    </div>
-
-                    <div class="price">
-                        80.000 đ
-                    </div>
-
-                    <span class="category">
-                        Sản phẩm Game
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 15
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">Sản phẩm Game #4</div>
+                    <div class="price">80.000 đ</div>
+                    <span class="category">Sản phẩm Game</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 15</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
-
 
             <!-- SẢN PHẨM 5 -->
-
             <div class="product" data-category="other" data-price="120000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+5"
-                    alt="Sản phẩm 5"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500" alt="Sản phẩm đặc biệt #5" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        Sản phẩm đặc biệt #5
-                    </div>
-
-                    <div class="price">
-                        120.000 đ
-                    </div>
-
-                    <span class="category">
-                        Khác
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 6
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">Sản phẩm đặc biệt #5</div>
+                    <div class="price">120.000 đ</div>
+                    <span class="category">Khác</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 6</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
 
-
             <!-- SẢN PHẨM 6 -->
-
             <div class="product" data-category="tool" data-price="150000">
-
-                <img
-                    class="product-img"
-                    src="https://via.placeholder.com/500x300?text=San+Pham+6"
-                    alt="Sản phẩm 6"
-                >
-
+                <img class="product-img" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500" alt="Tool Premium #6" onerror="this.src='https://dummyimage.com/500x300/e0e0e0/000000&text=No+Image'">
                 <div class="product-info">
-
-                    <div class="product-name">
-                        Tool Premium #6
-                    </div>
-
-                    <div class="price">
-                        150.000 đ
-                    </div>
-
-                    <span class="category">
-                        Tool
-                    </span>
-
-                    <div class="rating">
-                        ★ ★ ★ ★ ★
-                        <span class="sold">
-                            Đã bán 4
-                        </span>
-                    </div>
-
-                    <button class="buy-btn">
-                        → Xem ngay
-                    </button>
-
+                    <div class="product-name">Tool Premium #6</div>
+                    <div class="price">150.000 đ</div>
+                    <span class="category">Tool</span>
+                    <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 4</span></div>
+                    <button class="buy-btn">→ Xem ngay</button>
                 </div>
-
             </div>
 
         </div>
-
     </main>
-
 </div>
 
-
 <script>
-
 const search = document.getElementById("search");
 const category = document.getElementById("category");
 const sort = document.getElementById("sort");
 const productsBox = document.getElementById("products");
 
 function filterProducts() {
-
     const keyword = search.value.toLowerCase();
     const selectedCategory = category.value;
-
-    const products = Array.from(
-        productsBox.querySelectorAll(".product")
-    );
+    const products = Array.from(productsBox.querySelectorAll(".product"));
 
     products.forEach(product => {
+        const name = product.querySelector(".product-name").textContent.toLowerCase();
+        const productCategory = product.dataset.category;
 
-        const name =
-            product
-            .querySelector(".product-name")
-            .textContent
-            .toLowerCase();
+        const matchName = name.includes(keyword);
+        const matchCategory = selectedCategory === "all" || productCategory === selectedCategory;
 
-        const productCategory =
-            product.dataset.category;
-
-        const matchName =
-            name.includes(keyword);
-
-        const matchCategory =
-            selectedCategory === "all" ||
-            productCategory === selectedCategory;
-
-        product.style.display =
-            matchName && matchCategory
-            ? ""
-            : "none";
-
+        product.style.display = (matchName && matchCategory) ? "" : "none";
     });
 
     if (sort.value === "cheap") {
-
-        products.sort(
-            (a,b) =>
-            Number(a.dataset.price) -
-            Number(b.dataset.price)
-        );
-
+        products.sort((a,b) => Number(a.dataset.price) - Number(b.dataset.price));
+    } else if (sort.value === "expensive") {
+        products.sort((a,b) => Number(b.dataset.price) - Number(a.dataset.price));
     }
 
-    if (sort.value === "expensive") {
-
-        products.sort(
-            (a,b) =>
-            Number(b.dataset.price) -
-            Number(a.dataset.price)
-        );
-
-    }
-
-    products.forEach(product =>
-        productsBox.appendChild(product)
-    );
+    products.forEach(product => productsBox.appendChild(product));
 }
 
 search.addEventListener("input", filterProducts);
 category.addEventListener("change", filterProducts);
 sort.addEventListener("change", filterProducts);
-
 </script>
 
 </body>
