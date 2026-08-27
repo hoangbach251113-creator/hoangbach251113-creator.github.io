@@ -78,6 +78,7 @@
         <div class="logo-box"><div>HỆ THỐNG DỊCH VỤ GAME<br><small style="font-weight: 400;">Vip6s2000.com</small></div></div>
         <div class="menu-title">DASHBOARD</div>
         <div class="menu-item active" onclick="chonDichVu('trangchu', this)"><div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div></div>
+        <div class="menu-item" onclick="chonDichVu('tracuu_file', this)"><div class="left" style="color: #0284c7; font-weight: 700;"><i class="fa-solid fa-download"></i> Tải File Bằng Mã Đơn</div></div>
         
         <div class="menu-title">CHUYÊN MỤC GAME</div>
         <div class="submenu">
@@ -131,7 +132,7 @@
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#0068ff;"></i> Nạp Tiền Qua ZaloPay</div>
                 <div style="text-align: center;">
-                    <img id="qr-image" src="https://i.postimg.cc/wBX4sDtd/1787827694385-696929691253049774-8699560983222085822-94543adeb257cbe2ab14e39c8e798af6.jpg" width="180px">
+                    <img id="qr-image" src="https://i.postimg.cc/wBX4sDtd/1787827694385-696929691253049774-8699560983222085822-9454adeb257cbe2ab14e39c8e798af6.jpg" width="180px">
                     <div style="font-size: 13px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px;">
                         <p><strong>Ví điện tử:</strong> ZaloPay</p>
                         <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
@@ -143,6 +144,29 @@
                         Nếu nạp tiền mà không vô, vui lòng liên hệ Zalo/SĐT: <a href="https://zalo.me/0973350113" target="_blank" style="color:#ef4444; font-weight:800; text-decoration: underline;">0973350113</a> (Hoàng Bách) để được hỗ trợ!
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- MỤC TRA CỨU TẢI FILE DÀNH CHO KHÁCH HÀNG -->
+        <div class="card" id="tracuu-file-view" style="display: none; max-width: 600px; margin: 0 auto;">
+            <div class="card-title"><i class="fa-solid fa-file-arrow-down" style="color:#0284c7;"></i> Tra Cứu & Tải File Đã Mua</div>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Nhập mã đơn hàng bạn nhận được sau khi mua hàng thành công để tải file hoặc nhận key.</p>
+            
+            <div class="form-group">
+                <label>Mã đơn hàng:</label>
+                <input type="text" id="user-search-order-id" class="form-control" placeholder="Nhập mã đơn hàng (VD: #DH100000)">
+            </div>
+            <button class="btn-submit" style="background: #0284c7;" onclick="khachTraCuuFile()"><i class="fa-solid fa-magnifying-glass"></i> LẤY LINK FILE ngay</button>
+
+            <div id="user-file-result" style="display: none;" class="order-result-box">
+                <p style="font-weight: 700; color: #0369a1;">Thông Tin File Của Bạn:</p>
+                <div style="font-size: 13px; line-height: 1.6; margin-top: 6px;">
+                    <p><strong>Mã đơn:</strong> <span id="uf-order-id"></span></p>
+                    <p><strong>Tên sản phẩm:</strong> <span id="uf-product-name"></span></p>
+                    <p><strong>Nội dung / Link File:</strong></p>
+                    <div class="order-result-content" id="uf-details"></div>
+                </div>
+                <button class="btn-submit" style="background: #10b981; margin-top: 12px; padding: 8px;" onclick="saoChepLinkKhach()"><i class="fa-solid fa-copy"></i> Sao Chép Nội Dung</button>
             </div>
         </div>
 
@@ -369,10 +393,19 @@
 
             const defaultView = document.getElementById('default-view');
             const mmoView = document.getElementById('mmo-product-view');
+            const tracuuView = document.getElementById('tracuu-file-view');
             const btnSubmit = document.getElementById('btn-submit-order');
 
-            if (key === 'mmo') {
+            if (key === 'tracuu_file') {
                 defaultView.style.display = 'none';
+                mmoView.style.display = 'none';
+                tracuuView.style.display = 'block';
+                document.getElementById('page-title').innerText = 'Tải File Đã Mua';
+                document.getElementById('welcome-heading').innerText = 'Tra Cứu & Tải File';
+                document.getElementById('welcome-sub').innerText = 'Nhập mã đơn hàng để lấy đường dẫn tải file nhanh chóng!';
+            } else if (key === 'mmo') {
+                defaultView.style.display = 'none';
+                tracuuView.style.display = 'none';
                 mmoView.style.display = 'grid';
                 document.getElementById('page-title').innerText = 'Dịch Vụ Kiếm Tiền (MMO)';
                 document.getElementById('welcome-heading').innerText = 'Kho Sản Phẩm MMO VIP';
@@ -381,6 +414,7 @@
             } else if (dichVuData[key]) {
                 defaultView.style.display = 'grid';
                 mmoView.style.display = 'none';
+                tracuuView.style.display = 'none';
 
                 const data = dichVuData[key];
                 document.getElementById('page-title').innerText = data.title;
@@ -409,6 +443,7 @@
             } else {
                 defaultView.style.display = 'grid';
                 mmoView.style.display = 'none';
+                tracuuView.style.display = 'none';
                 document.getElementById('page-title').innerText = 'Trang Chủ';
                 document.getElementById('welcome-heading').innerText = 'Chào mừng trở lại!';
                 document.getElementById('welcome-sub').innerText = 'Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.';
@@ -422,6 +457,35 @@
                 select.innerHTML = '<option value="">-- Vui lòng chọn chuyên mục ở menu trái --</option>';
                 document.getElementById('total-price').innerText = '0đ';
             }
+        }
+
+        function khachTraCuuFile() {
+            const orderId = document.getElementById('user-search-order-id').value.trim().replace('#', '');
+            const resultBox = document.getElementById('user-file-result');
+
+            if (!orderId) return alert("Vui lòng nhập Mã đơn hàng!");
+
+            db.ref('orders/' + orderId).once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    document.getElementById('uf-order-id').innerText = '#' + orderId;
+                    document.getElementById('uf-product-name').innerText = data.productName || data.tenSanPham || 'Sản phẩm';
+                    
+                    const details = data.details || data.noiDung || data.code || 'Không có dữ liệu';
+                    document.getElementById('uf-details').innerText = details;
+                    resultBox.style.display = 'block';
+                } else {
+                    alert("Không tìm thấy mã đơn hàng này trên hệ thống!");
+                    resultBox.style.display = 'none';
+                }
+            });
+        }
+
+        function saoChepLinkKhach() {
+            const content = document.getElementById('uf-details').innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Đã sao chép đường dẫn file / key thành công!');
+            });
         }
 
         function hienThiMMO() {
