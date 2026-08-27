@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP1S2000.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
+    <title>SUB1S2001.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -184,15 +184,14 @@
             </div>
 
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#16a34a;"></i> Nạp Tiền Qua VietQR (Tự Động)</div>
+                <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#0068ff;"></i> Nạp Tiền Qua ZaloPay</div>
                 
                 <div class="qr-container">
-                    <img id="qr-image" src="https://img.vietqr.io/image/MB-0388888888-compact2.png?amount=50000&addInfo=NAP%20HOANGBACH" width="180px" alt="Mã QR Nạp Tiền">
+                    <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://zalopay.vn/qr/p/m4p6v7" width="180px" alt="Mã QR ZaloPay">
                     
                     <div class="bank-info">
-                        <p><strong>Ngân hàng:</strong> MBBank (Nội địa)</p>
-                        <p><strong>Số tài khoản:</strong> 0388888888</p>
-                        <p><strong>Chủ tài khoản:</strong> HOANG BACH</p>
+                        <p><strong>Ví điện tử:</strong> ZaloPay</p>
+                        <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
                         <p><strong>Nội dung ck:</strong> <span style="color:#ef4444; font-weight:700;">NAP HOANGBACH</span></p>
                     </div>
                 </div>
@@ -578,6 +577,7 @@
             );
         }
 
+        // CHẾ ĐỘ SỬA MÀN HÌNH BẰNG NÚT F2 (ADMIN)
         let isEdit = false;
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F2') {
@@ -585,14 +585,17 @@
                     return alert("Chỉ tài khoản Admin mới có quyền bật chế độ sửa!");
                 }
                 isEdit = !isEdit;
-                document.body.contentEditable = isEdit;
                 document.getElementById('edit-bar').style.display = isEdit ? 'block' : 'none';
+                document.body.contentEditable = isEdit;
+                alert(isEdit ? "Đã BẬT chế độ chỉnh sửa giao diện!" : "Đã TẮT chế độ chỉnh sửa giao diện!");
             }
         });
 
-        // KÍCH HOẠT KHI TẢI TRANG
-        capNhatGiaoDienUser();
-        chonDichVu('trangchu', document.querySelector('.menu-item.active'));
+        // TỰ ĐỘNG KHỞI TẠO KHI TẢI TRANG
+        window.onload = function() {
+            capNhatGiaoDienUser();
+            chonDichVu('trangchu', document.querySelector('.sidebar .menu-item.active'));
+        };
     </script>
 </body>
 </html>
