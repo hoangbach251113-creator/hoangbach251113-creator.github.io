@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP6S2000.COM - Hệ Thống Dịch Vụ Game Hàng Đầu</title>
+    <title>VIP6S2000.COM - Hệ Thống Dịch Vụ Game & MMO Hàng Đầu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS Custom Rules & Reset */
+        /* CSS Reset & General Settings */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,7 +24,7 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Styling */
+        /* Sidebar Standard Layout */
         .sidebar {
             width: 240px;
             background: #ffffff;
@@ -79,7 +79,7 @@
             border-left: 4px solid #dc2626;
         }
 
-        /* Modal Overlay Styling */
+        /* Modal Box Design */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -133,7 +133,7 @@
 </head>
 <body class="flex">
 
-    <!-- ==================== SIDEBAR THANH BÊN ==================== -->
+    <!-- ==================== SIDEBAR GIAO DIỆN CHUẨN VIP6S2000 ==================== -->
     <aside class="sidebar flex-shrink-0 flex flex-col justify-between">
         <div>
             <!-- LOGO BRAND -->
@@ -407,49 +407,58 @@
     <!-- ==================== JAVASCRIPT CORE XỬ LÝ CHỐNG LỖI ==================== -->
     <script>
         /**
-         * DANH MỤC CÁC GÓI DỊCH VỤ CẤU HÌNH SẴN
+         * BẢNG DỮ LIỆU SẢN PHẨM KHÔI PHỤC ĐẦY ĐỦ 100% CỦA VIP6S2000.COM
          */
         const SERVICE_DATABASE = {
             "Menu FF": [
-                { id: "ff_v1", name: "Menu FF VIP V1 (Đạn đuổi, Xóa sương)", price: 20000 },
-                { id: "ff_v2", name: "Menu FF Super VIP (Headshot 100%, Antiban)", price: 50000 }
+                { id: "ff_20k", name: "Menu FF Máy Chủ Cơ Bản (Antiban 70%)", price: 20000 },
+                { id: "ff_50k", name: "Menu FF VIP V1 (Đạn Đuổi, Xóa Sương, Headshot 90%)", price: 50000 },
+                { id: "ff_100k", name: "Menu FF Super VIP (Headshot 100%, Fix Văng 100%)", price: 100000 },
+                { id: "ff_300k", name: "Menu FF Max Level (Bao Ban, Update Miễn Phí Trọn Đời)", price: 300000 }
             ],
             "File iOS-ADR": [
-                { id: "ios_1", name: "File IPA Chống Văng (iOS)", price: 30000 },
-                { id: "adr_1", name: "File APK Mod Menu (Android)", price: 30000 }
+                { id: "ios_20k", name: "File IPA Chống Văng iOS Cơ Bản", price: 20000 },
+                { id: "ios_50k", name: "File IPA Full Chức Năng iOS VIP", price: 50000 },
+                { id: "adr_20k", name: "File APK Mod Menu Android Chuẩn", price: 20000 },
+                { id: "adr_50k", name: "File APK High Performance Android VIP", price: 50000 },
+                { id: "combo_150k", name: "Combo File iOS + Android VIP Trọn Bộ", price: 150000 }
             ],
             "Aimlock": [
-                { id: "aim_1", name: "Aimlock 80% Nhẹ Máy", price: 15000 },
-                { id: "aim_2", name: "Aimlock 100% Lock Cực Mượt", price: 40000 }
+                { id: "aim_20k", name: "Aimlock 70% Nhẹ Máy (Cơ Bản)", price: 20000 },
+                { id: "aim_50k", name: "Aimlock 90% Lock Cực Mượt", price: 50000 },
+                { id: "aim_100k", name: "Aimlock 100% Super Lock Dành Cho Giải Đấu", price: 100000 }
             ],
             "File iOS&ADR Free": [
-                { id: "free_1", name: "File iOS Free Miễn Phí", price: 0 },
-                { id: "free_2", name: "File Android Free Miễn Phí", price: 0 }
+                { id: "free_ios", name: "File iOS Free Miễn Phí (Cập nhật hàng tuần)", price: 0 },
+                { id: "free_adr", name: "File Android Free Miễn Phí (Cập nhật hàng tuần)", price: 0 }
             ],
             "Menu YSM V8": [
-                { id: "ysm_8", name: "Menu YSM V8 Bản Chuẩn", price: 0 }
+                { id: "ysm_v8_free", name: "Menu YSM V8 Bản Chuẩn Miễn Phí", price: 0 },
+                { id: "ysm_v8_pro", name: "Menu YSM V8 VIP Pro Fix Lag", price: 30000 }
             ],
             "Tool Dame Facebook": [
-                { id: "dame_fb", name: "Tool Dame FB Auto Rip (Free)", price: 0 }
+                { id: "dame_fb_free", name: "Tool Dame FB Auto Rip (Free)", price: 0 },
+                { id: "dame_fb_pro", name: "Tool Dame FB VIP (Bypass Spam)", price: 50000 }
             ],
             "MMO": [
-                { id: "mmo_bot", name: "Bot Auto View Tik Tok / Facebook", price: 100000 }
+                { id: "mmo_clone_5k", name: "Tài Khoản Facebook Clone Veri Mail", price: 5000 },
+                { id: "mmo_tiktok_15k", name: "Tài Khoản TikTok 1k Follow Bật Live", price: 15000 },
+                { id: "mmo_proxy_30k", name: "Proxy IPv4 Tốc Độ Cao (30 Ngày)", price: 30000 },
+                { id: "mmo_vps_80k", name: "VPS Windows Mượt Chạy Tool MMO (1 Tháng)", price: 80000 }
             ]
         };
 
         /**
          * 🛡️ THUẬT TOÁN BẢO VỆ CHỐNG SẬP LOCALSTORAGE (SAFE-GUARD LOCALSTORAGE)
-         * Đảm bảo không bao giờ bị lỗi 'Unexpected token a, admin is not valid JSON'
+         * Đảm bảo vĩnh viễn không bao giờ bị lỗi 'Unexpected token a, admin is not valid JSON'
          */
         function safeGetStorage(key, fallbackValue = null) {
             try {
                 const item = localStorage.getItem(key);
                 if (!item) return fallbackValue;
-                // Thử parse dữ liệu
                 return JSON.parse(item);
             } catch (error) {
                 console.warn(`[SafeGuard] Phát hiện rác tại key "${key}". Tự động làm sạch...`, error);
-                // Nếu dữ liệu cũ bị hỏng (chuỗi thô không bọc JSON), thu hồi an toàn
                 const raw = localStorage.getItem(key);
                 localStorage.removeItem(key);
                 return typeof fallbackValue === 'object' && fallbackValue !== null ? { value: raw } : fallbackValue;
@@ -464,25 +473,25 @@
             }
         }
 
-        // BIẾN TOÀN CỤC TRẠNG THÁI
+        // BIẾN TOÀN CỤC
         let currentUser = null;
         let orderHistory = [];
 
         /**
-         * KHỞI TẠO HỆ THỐNG KHI TẢI TRANG
+         * KHỞI TẠO TRANG WEB
          */
         document.addEventListener("DOMContentLoaded", function() {
             // 1. Kiểm tra session user an toàn
             currentUser = safeGetStorage("user_session", null);
             
-            // 2. Tải lịch sử đơn hàng
+            // 2. Tải lịch sử đơn hàng an toàn
             orderHistory = safeGetStorage("user_orders", []);
 
-            // 3. Cập nhật UI
+            // 3. Cập nhật giao diện
             updateUserUI();
             renderHistoryTable();
 
-            // 4. Khởi tạo dịch vụ mặc định
+            // 4. Chọn danh mục mặc định
             selectCategory("Menu FF");
         });
 
@@ -490,18 +499,15 @@
          * CHUYỂN TAB GIAO DIỆN
          */
         function switchTab(tabName) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.menu-link').forEach(el => el.classList.remove('active'));
 
-            // Show selected tab
             const targetTab = document.getElementById(`tab-${tabName}`);
             if (targetTab) targetTab.classList.remove('hidden');
 
             const navLink = document.getElementById(`nav-${tabName}`);
             if (navLink) navLink.classList.add('active');
 
-            // Set Title
             const titles = {
                 'home': 'Trang Chủ',
                 'download': 'Tải File Bằng Mã Đơn',
@@ -511,7 +517,7 @@
         }
 
         /**
-         * CHỌN DANH MỤC TỪ SIDEBAR BÊN TRÁI
+         * CHỌN DANH MỤC SẢN PHẨM
          */
         function selectCategory(categoryName) {
             switchTab('home');
@@ -557,7 +563,7 @@
         }
 
         /**
-         * CẬP NHẬT GIAO DIỆN THEO USER LOGGED IN
+         * CẬP NHẬT GIAO DIỆN THEO TRẠNG THÁI TÀI KHOẢN
          */
         function updateUserUI() {
             const guestButtons = document.getElementById('guestButtons');
@@ -574,7 +580,6 @@
 
                 transferNote.innerHTML = `Nội dung ck: <b class="text-red-700">NAP ${currentUser.username.toUpperCase()}</b>`;
                 
-                // Update QR ZaloPay Code theo tên User
                 const qrImg = document.getElementById('qrCodeImage');
                 qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=ZaloPay_NAP_${currentUser.username.toUpperCase()}`;
             } else {
@@ -640,7 +645,7 @@
         }
 
         /**
-         * XỬ LÝ MUA HÀNG & TẠO ĐƠN
+         * XỬ LÝ MUA HÀNG & TẠO ĐƠN HÀNG
          */
         function processOrder(e) {
             e.preventDefault();
@@ -657,7 +662,6 @@
             const price = parseInt(selectedOption.dataset.price);
             const total = price * qty;
 
-            // Kiểm tra số dư nếu bài viết có thu phí
             if (price > 0) {
                 if (!currentUser) {
                     openModal('loginModal');
@@ -669,7 +673,6 @@
                 }
             }
 
-            // Tạo mã đơn hàng duy nhất
             const orderCode = 'ORD' + Math.floor(10000000 + Math.random() * 90000000);
 
             const newOrder = {
@@ -683,7 +686,6 @@
                 downloadLink: 'https://vip6s2000.com/download-file-secret.zip'
             };
 
-            // Lưu đơn hàng
             orderHistory.unshift(newOrder);
             safeSetStorage("user_orders", orderHistory);
             renderHistoryTable();
@@ -695,7 +697,7 @@
         }
 
         /**
-         * HIỂN THỊ LỊCH SỬ ĐƠN HÀNG
+         * HIỂN THỊ BẢNG LỊCH SỬ ĐƠN HÀNG
          */
         function renderHistoryTable() {
             const tbody = document.getElementById('historyTableBody');
@@ -723,7 +725,7 @@
         }
 
         /**
-         * TRA CỨU ĐƠN HÀNG ĐỂ TẢI FILE
+         * TRA CỨU MÃ ĐƠN HÀNG TẢI FILE
          */
         function searchOrderCode(e) {
             e.preventDefault();
@@ -757,7 +759,7 @@
         }
 
         /**
-         * ĐÓNG MỞ MODAL
+         * QUẢN LÝ MODAL
          */
         function openModal(id) {
             const modal = document.getElementById(id);
