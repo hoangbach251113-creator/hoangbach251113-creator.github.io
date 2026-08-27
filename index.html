@@ -19,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
-        /* SIDEBAR STYLES */
+        /* SIDEBAR */
         .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
         .logo-box { padding: 10px 5px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
         .logo-box div { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
@@ -33,7 +33,7 @@
         .submenu { margin-left: 15px; border-left: 2px solid #fecaca; padding-left: 10px; }
         .submenu .menu-item { font-size: 13px; padding: 8px 10px; }
 
-        /* MAIN CONTENT STYLES */
+        /* MAIN CONTENT */
         .main-content { flex-grow: 1; padding: 25px 35px; }
         .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .header-title { font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -44,7 +44,7 @@
         .welcome-card h2 { font-size: 18px; color: #0f172a; margin-bottom: 6px; }
         .welcome-card p { color: var(--text-muted); font-size: 14px; }
 
-        /* GRID FORM SECTIONS */
+        /* GRID FORM */
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
         .card-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: #1e293b; }
@@ -66,7 +66,7 @@
         .qr-container img { border: 1px solid var(--border); border-radius: 8px; padding: 5px; background: #fff; }
         .bank-info { font-size: 13px; line-height: 1.6; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px; }
 
-        /* PRODUCT CARDS DISPLAY FOR MMO */
+        /* MMO PRODUCT GRID */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 15px; }
         .product-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: 0.2s; position: relative; display: flex; flex-direction: column; }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
@@ -81,13 +81,13 @@
         .btn-buy-product:hover { background: #059669; }
         .btn-delete-product { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; }
 
-        /* MODAL POPUP */
+        /* MODALS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 10000; }
         .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #0f172a; text-align: center; }
         .close-modal { position: absolute; top: 12px; right: 15px; font-size: 18px; cursor: pointer; color: var(--text-muted); }
 
-        /* ADMIN PANEL STYLES */
+        /* ADMIN PANEL */
         .admin-box { background: #fff; border: 2px dashed #ef4444; border-radius: 12px; padding: 20px; margin-top: 25px; }
         .admin-box h3 { color: #ef4444; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -156,7 +156,7 @@
             <p id="welcome-sub">Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.</p>
         </div>
 
-        <!-- FORM ĐẶT HÀNG THƯỜNG -->
+        <!-- FORM MUA THƯỜNG -->
         <div class="grid-container" id="default-view">
             <div class="card">
                 <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
@@ -198,10 +198,10 @@
             </div>
         </div>
 
-        <!-- BẢNG SẢN PHẨM MMO -->
+        <!-- DANH SÁCH MMO -->
         <div class="product-grid" id="mmo-product-view" style="display: none;"></div>
 
-        <!-- BẢNG ĐIỀU KHIỂN DÀNH RIÊNG CHO ADMIN -->
+        <!-- BẢNG ADMIN -->
         <div class="admin-box" id="admin-panel" style="display: none;">
             <h3><i class="fa-solid fa-user-shield"></i> BẢNG QUẢN TRỊ ADMIN</h3>
             
@@ -230,7 +230,7 @@
 
     </div>
 
-    <!-- MODAL ĐĂNG NHẬP -->
+    <!-- MODAL DANG NHAP -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="dongModal('login-modal')">&times;</span>
@@ -247,7 +247,7 @@
         </div>
     </div>
 
-    <!-- MODAL ĐĂNG KÝ -->
+    <!-- MODAL DANG KY -->
     <div class="modal" id="register-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="dongModal('register-modal')">&times;</span>
@@ -322,10 +322,8 @@
         let currentTabKey = 'trangchu';
         let currentSelectedServer = null;
 
-        // KHỞI TẠO BỘ NHỚ USER VÀ ĐẢM BẢO ADMIN CÓ ID 1000
         let users = JSON.parse(localStorage.getItem('app_users')) || {};
         
-        // Luôn đảm bảo tài khoản admin tồn tại và đúng ID 1000
         users['admin'] = {
             id: 1000,
             pass: 'admin123',
@@ -432,7 +430,6 @@
             if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
             if (users[user]) return alert("Tài khoản đã tồn tại!");
 
-            // Tự động tìm ID tiếp theo (1001, 1002, 1003...)
             let maxId = 1000;
             for (let u in users) {
                 if (users[u].id && users[u].id > maxId) {
@@ -495,7 +492,7 @@
             }
 
             if (!foundUserKey) {
-                return alert("Không tìm thấy người dùng có ID: " + targetId + "\n(Vui lòng kiểm tra lại tài khoản khách đã đăng ký trên máy này chưa)");
+                return alert("Không tìm thấy người dùng có ID: " + targetId);
             }
 
             users[foundUserKey].balance = (users[foundUserKey].balance || 0) + amount;
