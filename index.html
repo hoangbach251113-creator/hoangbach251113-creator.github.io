@@ -73,24 +73,24 @@
         </div>
 
         <div class="menu-title">DASHBOARD</div>
-        <div class="menu-item active">
+        <div class="menu-item active" onclick="chonDichVu('trangchu', this)">
             <div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div>
         </div>
 
         <div class="menu-title">DỊCH VỤ</div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="chonDichVu('freefire', this)">
             <div class="left"><i class="fa-solid fa-gamepad" style="color:#ef4444;"></i> Free Fire</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="chonDichVu('facebook', this)">
             <div class="left"><i class="fa-brands fa-facebook" style="color:#2563eb;"></i> Facebook</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="chonDichVu('tiktok', this)">
             <div class="left"><i class="fa-brands fa-tiktok" style="color:#000;"></i> Tiktok</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="chonDichVu('instagram', this)">
             <div class="left"><i class="fa-brands fa-instagram" style="color:#db2777;"></i> Instagram</div>
             <i class="fa-solid fa-chevron-right arrow"></i>
         </div>
@@ -99,32 +99,29 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="header-bar">
-            <div class="header-title">Trang Chủ</div>
+            <div class="header-title" id="page-title">Trang Chủ</div>
             <div class="balance-badge">Số dư: <span id="user-balance">24.999đ</span></div>
         </div>
 
         <div class="welcome-card">
-            <h2>Chào mừng trở lại!</h2>
-            <p>Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.</p>
+            <h2 id="welcome-heading">Chào mừng trở lại!</h2>
+            <p id="welcome-sub">Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.</p>
         </div>
 
         <div class="grid-container">
             <!-- MỤC ĐẶT HÀNG DỊCH VỤ -->
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary);"></i> Đặt Đơn Hàng Dịch Vụ</div>
+                <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary);"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 
                 <div class="form-group">
                     <label>Chọn dịch vụ/máy chủ:</label>
                     <select class="form-control" id="server-select" onchange="tinhTien()">
-                        <option value="100">Tiktok - Tang Like Video (100đ / lượt)</option>
-                        <option value="200">Tiktok - Tang Follower (200đ / lượt)</option>
-                        <option value="150">Facebook - Tang Like Bai Viet (150đ / lượt)</option>
-                        <option value="50">Free Fire - Tang Luot Thich (50đ / lượt)</option>
+                        <!-- Javascript sẽ tự động load các gói tương ứng -->
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Link / ID Tài khoản nhận:</label>
+                    <label id="input-label">Link / ID Tài khoản nhận:</label>
                     <input type="text" class="form-control" placeholder="Dán link bài viết hoặc ID tại đây...">
                 </div>
 
@@ -158,22 +155,112 @@
         </div>
     </div>
 
-    <!-- SCRIPT TÍNH TIỀN VÀ BẬT/TẮT CHẾ ĐỘ SỬA TRỰC TIẾP -->
+    <!-- SCRIPT CHUYỂN ĐỔI MỤC VÀ TÍNH TIỀN -->
     <script>
-        // 1. Hàm tính tổng tiền đơn hàng
+        // Danh sách dịch vụ tương ứng với từng mục
+        const serviceData = {
+            trangchu: {
+                title: "Trang Chủ",
+                heading: "Chào mừng trở lại!",
+                sub: "Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.",
+                label: "Link / ID Tài khoản nhận:",
+                servers: [
+                    { name: "Tiktok - Tăng Like Video (100đ / lượt)", price: 100 },
+                    { name: "Tiktok - Tăng Follower (200đ / lượt)", price: 200 },
+                    { name: "Facebook - Tăng Like Bài Viết (150đ / lượt)", price: 150 },
+                    { name: "Free Fire - Tăng Lượt Thích (50đ / lượt)", price: 50 }
+                ]
+            },
+            freefire: {
+                title: "Dịch Vụ Free Fire",
+                heading: "Dịch Vụ Game Free Fire",
+                sub: "Tăng lượt thích hồ sơ, tăng lượt xem kênh và các dịch vụ Free Fire.",
+                label: "Nhập ID Nhân Vật Free Fire:",
+                servers: [
+                    { name: "Server 1 - Tăng Lượt Thích Hồ Sơ (50đ / lượt)", price: 50 },
+                    { name: "Server 2 - Tăng Lượt Thích SVIP (80đ / lượt)", price: 80 },
+                    { name: "Server 3 - Buff Lượt Xem Trận Đấu (30đ / lượt)", price: 30 }
+                ]
+            },
+            facebook: {
+                title: "Dịch Vụ Facebook",
+                heading: "Tăng Tương Tác Facebook",
+                sub: "Hỗ trợ buff Like, Follow, Comment bài viết và Trang cá nhân.",
+                label: "Link Bài Viết / Link Profile Facebook:",
+                servers: [
+                    { name: "Server 1 - Tăng Like Bài Viết (150đ / lượt)", price: 150 },
+                    { name: "Server 2 - Tăng Theo Dõi Cá Nhân (250đ / lượt)", price: 250 },
+                    { name: "Server 3 - Tăng Like Fanpage (200đ / lượt)", price: 200 }
+                ]
+            },
+            tiktok: {
+                title: "Dịch Vụ TikTok",
+                heading: "Tăng Tương Tác TikTok",
+                sub: "Hỗ trợ buff View, Like, Follower cho tài khoản TikTok.",
+                label: "Link Video / Link Profile TikTok:",
+                servers: [
+                    { name: "Server 1 - Tăng Like Video (100đ / lượt)", price: 100 },
+                    { name: "Server 2 - Tăng Follower (200đ / lượt)", price: 200 },
+                    { name: "Server 3 - Tăng View Video (10đ / lượt)", price: 10 }
+                ]
+            },
+            instagram: {
+                title: "Dịch Vụ Instagram",
+                heading: "Tăng Tương Tác Instagram",
+                sub: "Hỗ trợ buff Like, Follower Instagram tốc độ cao.",
+                label: "Link Bài Viết / Link Instagram:",
+                servers: [
+                    { name: "Server 1 - Tăng Like Bài Viết (120đ / lượt)", price: 120 },
+                    { name: "Server 2 - Tăng Follower (220đ / lượt)", price: 220 }
+                ]
+            }
+        };
+
+        // Hàm chuyển đổi dịch vụ khi nhấp vào menu
+        function chonDichVu(type, element) {
+            // Đổi class active ở menu
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const data = serviceData[type];
+            if (!data) return;
+
+            // Cập nhật giao diện
+            document.getElementById('page-title').innerText = data.title;
+            document.getElementById('welcome-heading').innerText = data.heading;
+            document.getElementById('welcome-sub').innerText = data.sub;
+            document.getElementById('input-label').innerText = data.label;
+
+            // Load lại danh sách máy chủ
+            const selectEl = document.getElementById('server-select');
+            selectEl.innerHTML = '';
+            data.servers.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.price;
+                opt.innerText = s.name;
+                selectEl.appendChild(opt);
+            });
+
+            tinhTien();
+        }
+
+        // Tự động load trang chủ ban đầu
+        chonDichVu('trangchu', document.querySelector('.menu-item.active'));
+
+        // Hàm tính tổng tiền đơn hàng
         function tinhTien() {
-            const donGia = parseInt(document.getElementById('server-select').value);
+            const donGia = parseInt(document.getElementById('server-select').value) || 0;
             const soLuong = parseInt(document.getElementById('quantity').value) || 0;
             const tongTien = donGia * soLuong;
             document.getElementById('total-price').innerText = tongTien.toLocaleString('vi-VN') + 'đ';
         }
 
-        // 2. Hàm xử lý nút Đặt Hàng
+        // Xử lý nút Đặt Hàng
         function xacNhanDatHang() {
             alert("Đã gửi đơn hàng thành công! Hệ thống đang xử lý.");
         }
 
-        // 3. CHẾ ĐỘ CHỈNH SỬA MÀN HÌNH TRỰC TIẾP (BẤM F2)
+        // Bật/tắt chế độ sửa màn hình trực tiếp bằng phím F2
         let isEdit = false;
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F2') {
