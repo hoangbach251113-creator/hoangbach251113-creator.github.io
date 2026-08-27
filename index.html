@@ -145,7 +145,7 @@
                     <button class="btn-auth btn-register" onclick="moModal('register-modal')">Đăng ký</button>
                 </div>
                 <div id="user-info" style="display: none; align-items: center;">
-                    <span style="font-weight: 600; font-size: 14px;"><i class="fa-solid fa-user-gear" style="color: #ef4444;"></i> <span id="display-username">Admin</span></span>
+                    <span style="font-weight: 600; font-size: 14px;"><i class="fa-solid fa-user-gear" style="color: #ef4444;"></i> <span id="display-username">Admin</span> (ID: <span id="display-id" style="color:#ef4444;">1000</span>)</span>
                     <button class="btn-auth btn-logout" onclick="dangXuat()"><i class="fa-solid fa-right-from-bracket"></i></button>
                 </div>
             </div>
@@ -187,12 +187,12 @@
                 <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#0068ff;"></i> Nạp Tiền Qua ZaloPay</div>
                 
                 <div class="qr-container">
-                    <img id="qr-image" src="https://i.postimg.cc/wBX4sDtd/1787827694385-696929691253049774-8699560983222085822-94543adeb257cbe2ab14e39c8e798af6.jpg" width="180px" alt="Mã QR ZaloPay">
+                    <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://zalopay.vn/qr/p/m4p6v7" width="180px" alt="Mã QR ZaloPay">
                     
                     <div class="bank-info">
                         <p><strong>Ví điện tử:</strong> ZaloPay</p>
                         <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
-                        <p><strong>Nội dung ck:</strong> <span style="color:#ef4444; font-weight:700;">NAP HOANGBACH</span></p>
+                        <p><strong>Nội dung ck:</strong> <span id="deposit-memo" style="color:#ef4444; font-weight:700;">NAP [ID CỦA BẠN]</span></p>
                     </div>
                 </div>
             </div>
@@ -207,10 +207,11 @@
             
             <div class="admin-grid">
                 <div>
-                    <strong>1. Cộng số dư tài khoản:</strong>
-                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <strong>1. Cộng số dư theo ID Tài Khoản:</strong>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 1001)">
                         <input type="number" id="admin-add-amount" class="form-control" placeholder="Số tiền cộng (VNĐ)">
-                        <button class="btn-auth btn-login" onclick="adminCongTien()"><i class="fa-solid fa-plus"></i> Cộng</button>
+                        <button class="btn-auth btn-login" onclick="adminCongTienTheoID()"><i class="fa-solid fa-plus"></i> Cộng Tiền Theo ID</button>
                     </div>
                 </div>
 
@@ -327,8 +328,10 @@
         let currentSelectedServer = null;
 
         let mmoProducts = JSON.parse(localStorage.getItem('mmoProducts')) || defaultProducts;
+        
+        // Khởi tạo danh sách tài khoản kèm ID định danh
         let users = JSON.parse(localStorage.getItem('users')) || {
-            'admin': { pass: 'admin123', balance: 9999999, isAdmin: true }
+            'admin': { id: 1000, pass: 'admin123', balance: 9999999, isAdmin: true }
         };
         let currentUser = localStorage.getItem('currentUser') || null;
 
@@ -393,7 +396,9 @@
                 document.getElementById('auth-buttons').style.display = 'none';
                 document.getElementById('user-info').style.display = 'flex';
                 document.getElementById('display-username').innerText = currentUser;
+                document.getElementById('display-id').innerText = users[currentUser].id;
                 document.getElementById('user-balance').innerText = users[currentUser].balance.toLocaleString('vi-VN') + 'đ';
+                document.getElementById('deposit-memo').innerText = 'NAP ' + users[currentUser].id;
 
                 if (users[currentUser].isAdmin) {
                     document.getElementById('admin-panel').style.display = 'block';
@@ -404,6 +409,7 @@
                 document.getElementById('auth-buttons').style.display = 'flex';
                 document.getElementById('user-info').style.display = 'none';
                 document.getElementById('user-balance').innerText = '0đ';
+                document.getElementById('deposit-memo').innerText = 'NAP [Đăng nhập để xem ID]';
                 document.getElementById('admin-panel').style.display = 'none';
             }
             hienThiDanhSachMMO();
@@ -416,9 +422,16 @@
             if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
             if (users[user]) return alert("Tài khoản đã tồn tại!");
 
-            users[user] = { pass: pass, balance: 0, isAdmin: false };
+            // Tự động cấp ID số tăng dần bắt đầu từ 1001
+            let newId = 1001;
+            const existingIds = Object.values(users).map(u => u.id);
+            while (existingIds.includes(newId)) {
+                newId++;
+            }
+
+            users[user] = { id: newId, pass: pass, balance: 0, isAdmin: false };
             localStorage.setItem('users', JSON.stringify(users));
-            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            alert("Đăng ký thành công! ID tài khoản của bạn là: " + newId + "\nVui lòng đăng nhập.");
             dongModal('register-modal');
         }
 
@@ -444,14 +457,33 @@
             alert("Đã đăng xuất tài khoản!");
         }
 
-        function adminCongTien() {
+        // ADMIN CỘNG TIỀN BẰNG ID TÀI KHOẢN
+        function adminCongTienTheoID() {
+            const targetId = parseInt(document.getElementById('admin-target-id').value);
             const amount = parseInt(document.getElementById('admin-add-amount').value);
+
+            if (!targetId) return alert("Vui lòng nhập ID Tài Khoản hợp lệ!");
             if (!amount || amount <= 0) return alert("Vui lòng nhập số tiền hợp lệ!");
 
-            users[currentUser].balance += amount;
+            let foundUserKey = null;
+            for (let username in users) {
+                if (users[username].id === targetId) {
+                    foundUserKey = username;
+                    break;
+                }
+            }
+
+            if (!foundUserKey) {
+                return alert("Không tìm thấy người dùng có ID: " + targetId);
+            }
+
+            users[foundUserKey].balance += amount;
             localStorage.setItem('users', JSON.stringify(users));
             capNhatGiaoDienUser();
-            alert("Đã cộng " + amount.toLocaleString('vi-VN') + "đ vào số dư Admin!");
+            alert("Đã cộng " + amount.toLocaleString('vi-VN') + "đ cho tài khoản " + foundUserKey + " (ID: " + targetId + ")!");
+            
+            document.getElementById('admin-target-id').value = '';
+            document.getElementById('admin-add-amount').value = '';
         }
 
         function moModal(id) { document.getElementById(id).style.display = 'flex'; }
