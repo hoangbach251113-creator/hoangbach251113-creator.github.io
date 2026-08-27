@@ -1,254 +1,601 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bảng Quản Trị Admin (Online Cloud)</title>
-  
-  <!-- Firebase App (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP6S2000.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
+    <!-- SDK Firebase Cloud Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-    .admin-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 500px;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
+    <style>
+        :root { --primary: #ef4444; --bg: #f8fafc; --sidebar-width: 250px; --border: #e2e8f0; --text: #334155; --text-muted: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
-    .admin-title {
-      color: #d9534f;
-      margin-top: 0;
-      font-size: 18px;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-    }
+        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        .logo-box { padding: 10px 5px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
+        .logo-box div { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 13px; }
+        .menu-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 5px; }
+        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13.5px; font-weight: 500; margin-bottom: 4px; cursor: pointer; }
+        .menu-item:hover, .menu-item.active { background: #fee2e2; color: #ef4444; font-weight: 600; }
+        .menu-item .left { display: flex; align-items: center; gap: 10px; }
+        .submenu { margin-left: 15px; border-left: 2px solid #fecaca; padding-left: 10px; }
+        .submenu .menu-item { font-size: 13px; padding: 8px 10px; }
 
-    .section-title {
-      font-size: 15px;
-      color: #333;
-      margin: 15px 0 10px 0;
-    }
+        .main-content { flex-grow: 1; padding: 25px 35px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header-title { font-size: 20px; font-weight: 700; color: #0f172a; }
+        .user-auth-area { display: flex; align-items: center; gap: 10px; }
+        .balance-badge { background: #fff; padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); font-weight: 700; font-size: 14px; color: #16a34a; }
 
-    .input-group {
-      margin-bottom: 12px;
-    }
+        .welcome-card { background: #fff; border: 1px solid var(--border); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-    .input-control {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      font-size: 14px;
-      outline: none;
-    }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+        .btn-submit { width: 100%; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
-    .input-control:focus {
-      border-color: #0275d8;
-    }
+        .btn-auth { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+        .btn-login { background: #ef4444; color: #fff; }
+        .btn-register { background: #e2e8f0; color: #334155; }
+        .btn-logout { background: #f87171; color: #fff; margin-left: 8px; }
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 15px; }
+        .product-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        .product-img { width: 100%; height: 140px; object-fit: cover; background: #1e293b; }
+        .product-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
+        .product-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .product-price { font-size: 17px; font-weight: 800; color: #ef4444; margin-bottom: 8px; }
+        .btn-buy-product { width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto; }
+        .btn-delete-product { width: 100%; background: #ef4444; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; }
 
-    .btn:hover {
-      opacity: 0.9;
-    }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 10000; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 400px; position: relative; }
+        .close-modal { position: absolute; top: 12px; right: 15px; font-size: 18px; cursor: pointer; }
 
-    .btn-red {
-      background-color: #d9534f;
-      color: white;
-    }
+        .admin-box { background: #fff; border: 2px dashed #ef4444; border-radius: 12px; padding: 20px; margin-top: 25px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    .btn-blue {
-      background-color: #0275d8;
-      color: white;
-    }
-
-    .divider {
-      border: 0;
-      border-top: 1px dashed #ccc;
-      margin: 20px 0;
-    }
-
-    .result-box {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .result-box p {
-      margin: 6px 0;
-    }
-
-    .details-pre {
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
-      white-space: pre-wrap;
-      word-break: break-all;
-      margin-top: 5px;
-      max-height: 180px;
-      overflow-y: auto;
-      font-size: 13px;
-    }
-  </style>
+        .order-result-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .order-result-content { background: #fff; border: 1px dashed #16a34a; padding: 12px; border-radius: 6px; margin-top: 10px; word-break: break-all; font-family: monospace; color: #15803d; font-weight: 700; }
+        
+        /* Thông báo hỗ trợ nạp tiền */
+        .support-alert { background: #fef2f2; border: 1px dashed #ef4444; color: #991b1b; padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; font-weight: 600; text-align: center; }
+        
+        /* Khung thông báo mã đơn hàng & hỗ trợ nhanh trong Modal thành công */
+        .order-id-badge { background: #e0f2fe; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 13px; display: inline-block; margin-bottom: 8px; border: 1px solid #bae6fd; }
+        .order-footer-support { margin-top: 12px; font-size: 12.5px; color: #475569; text-align: center; font-weight: 600; }
+    </style>
 </head>
 <body>
 
-  <div class="admin-card">
-    <h3 class="admin-title">👤 BẢNG QUẢN TRỊ ADMIN (ONLINE CLOUD)</h3>
+    <div class="sidebar">
+        <div class="logo-box"><div>HỆ THỐNG DỊCH VỤ GAME<br><small style="font-weight: 400;">Vip6s2000.com</small></div></div>
+        <div class="menu-title">DASHBOARD</div>
+        <div class="menu-item active" onclick="chonDichVu('trangchu', this)"><div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div></div>
+        
+        <div class="menu-title">CHUYÊN MỤC GAME</div>
+        <div class="submenu">
+            <div class="menu-item" onclick="chonDichVu('menu_ff', this)"><div class="left"><i class="fa-solid fa-bars-staggered"></i> Menu FF</div></div>
+            <div class="menu-item" onclick="chonDichVu('file_ios_adr', this)"><div class="left"><i class="fa-solid fa-file-arrow-down"></i> File iOS-ADR</div></div>
+            <div class="menu-item" onclick="chonDichVu('aimlock', this)"><div class="left"><i class="fa-solid fa-crosshairs"></i> Aimlock</div></div>
+        </div>
 
-    <!-- 1. CỘNG TIỀN -->
-    <div class="section-title"><b>1. Cộng số dư theo ID Tài Khoản:</b></div>
-    <div class="input-group">
-      <input type="number" id="admin-target-id" class="input-control" placeholder="Nhập ID Khách (VD: 1001)">
+        <div class="menu-title">DỊCH VỤ FREE</div>
+        <div class="submenu">
+            <div class="menu-item" onclick="chonDichVu('free_file_ios_adr', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> File iOS&ADR</div></div>
+            <div class="menu-item" onclick="chonDichVu('free_menu_ysm_v8', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> Menu YSM V8</div></div>
+            <div class="menu-item" onclick="chonDichVu('free_tool_dame_fb', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> Tool Dame Facebook</div></div>
+        </div>
+
+        <div class="menu-title">DỊCH VỤ KIẾM TIỀN</div>
+        <div class="menu-item" onclick="chonDichVu('mmo', this)"><div class="left" style="font-weight: 700; color: #2563eb;"><i class="fa-solid fa-coins"></i> MMO</div></div>
     </div>
-    <div class="input-group">
-      <input type="number" id="admin-add-amount" class="input-control" placeholder="Số tiền cộng (VNĐ)">
+
+    <div class="main-content">
+        <div class="header-bar">
+            <div class="header-title" id="page-title">Trang Chủ</div>
+            <div class="user-auth-area">
+                <div class="balance-badge">Số dư: <span id="user-balance">0đ</span></div>
+                <div id="auth-buttons">
+                    <button class="btn-auth btn-login" onclick="moModal('login-modal')">Đăng nhập</button>
+                    <button class="btn-auth btn-register" onclick="moModal('register-modal')">Đăng ký</button>
+                </div>
+                <div id="user-info" style="display: none; align-items: center;">
+                    <span style="font-weight: 600; font-size: 14px;"><i class="fa-solid fa-user-gear" style="color: #ef4444;"></i> <span id="display-username">admin</span> (ID: <span id="display-id" style="color:#ef4444;">1000</span>)</span>
+                    <button class="btn-auth btn-logout" onclick="dangXuat()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2 id="welcome-heading">Chào mừng trở lại!</h2>
+            <p id="welcome-sub">Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.</p>
+        </div>
+
+        <div class="grid-container" id="default-view">
+            <div class="card">
+                <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
+                <div class="form-group"><label>Chọn gói/máy chủ:</label><select class="form-control" id="server-select" onchange="tinhTien()"></select></div>
+                <div class="form-group"><label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label><input type="text" class="form-control" id="order-input-target" placeholder="Dán ID hoặc thông tin tại đây..."></div>
+                <div class="form-group"><label>Số lượng:</label><input type="number" class="form-control" id="quantity" value="1" min="1" oninput="tinhTien()"></div>
+                <div class="form-group" style="margin-top: 20px;"><p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">0đ</span></p></div>
+                <button class="btn-submit" id="btn-submit-order" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> MUA NGAY</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#0068ff;"></i> Nạp Tiền Qua ZaloPay</div>
+                <div style="text-align: center;">
+                    <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://zalopay.vn/qr/p/m4p6v7" width="180px">
+                    <div style="font-size: 13px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px;">
+                        <p><strong>Ví điện tử:</strong> ZaloPay</p>
+                        <p><strong>Chủ tài khoản:</strong> DANG TRAN HOANG BACH</p>
+                        <p><strong>Nội dung ck:</strong> <span id="deposit-memo" style="color:#ef4444; font-weight:700;">NAP [Đăng nhập để xem ID]</span></p>
+                    </div>
+
+                    <!-- THÔNG BÁO HỖ TRỢ NẠP TIỀN -->
+                    <div class="support-alert">
+                        <i class="fa-solid fa-headset" style="color:#ef4444; margin-right: 4px;"></i> 
+                        Nếu nạp tiền mà không vô, vui lòng liên hệ Zalo/SĐT: <a href="https://zalo.me/0973350113" target="_blank" style="color:#ef4444; font-weight:800; text-decoration: underline;">0973350113</a> (Hoàng Bách) để được hỗ trợ!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-grid" id="mmo-product-view" style="display: none;"></div>
+
+        <!-- BẢNG QUẢN TRỊ ADMIN -->
+        <div class="admin-box" id="admin-panel" style="display: none;">
+            <h3 style="color:#ef4444; margin-bottom:12px;"><i class="fa-solid fa-user-shield"></i> BẢNG QUẢN TRỊ ADMIN (ONLINE CLOUD)</h3>
+            <div class="admin-grid">
+                <div>
+                    <strong>1. Cộng số dư theo ID Tài Khoản:</strong>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 1001)">
+                        <input type="number" id="admin-add-amount" class="form-control" placeholder="Số tiền cộng (VNĐ)">
+                        <button class="btn-auth btn-login" onclick="adminCongTienTheoID()"><i class="fa-solid fa-plus"></i> Cộng Tiền Cloud</button>
+                    </div>
+                </div>
+                <div>
+                    <strong>2. Thêm Sản Phẩm MMO Mới:</strong>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <input type="text" id="mmo-title-input" class="form-control" placeholder="Tên sản phẩm (VD: Tài khoản FB Clone)">
+                        <input type="number" id="mmo-price-input" class="form-control" placeholder="Giá tiền (VNĐ)">
+                        <input type="text" id="mmo-img-input" class="form-control" placeholder="Link ảnh (Để trống nếu dùng mặc định)">
+                        <button class="btn-auth btn-login" style="background:#10b981;" onclick="adminThemMMO()"><i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Cloud</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <button class="btn btn-red" onclick="adminCongTienTheoID()">+ Cộng Tiền Cloud</button>
 
-    <hr class="divider">
+    <!-- MODAL HIỂN THỊ KẾT QUẢ GIAO DỊCH / NHẬN HÀNG -->
+    <div class="modal" id="order-success-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('order-success-modal')">&times;</span>
+            <div style="font-size:20px; font-weight:800; color:#16a34a; text-align:center; margin-bottom: 10px;">
+                <i class="fa-solid fa-circle-check" style="font-size:32px; display:block; margin-bottom:8px;"></i>
+                GIAO DỊCH THÀNH CÔNG!
+            </div>
+            
+            <div class="order-result-box">
+                <!-- Mã đơn hàng hiển thị tại đây -->
+                <div style="text-align: center;">
+                    <span class="order-id-badge"><i class="fa-solid fa-receipt"></i> Mã đơn hàng: <span id="display-order-id">#DH10000</span></span>
+                </div>
+                
+                <p style="font-size: 13px; font-weight: 700; color: #166534;" id="result-title">Thông tin sản phẩm:</p>
+                <div class="order-result-content" id="result-content">VIP6S-KEY-XXXXX-YYYYY</div>
+            </div>
 
-    <!-- 2. CHECK ĐƠN HÀNG -->
-    <div class="section-title"><b>2. Tra cứu chi tiết đơn hàng:</b></div>
-    <div class="input-group">
-      <input type="text" id="admin-check-order-id" class="input-control" placeholder="Nhập Mã đơn hàng...">
+            <button class="btn-submit" style="background: #10b981; margin-top: 15px;" onclick="saoChepHang()"><i class="fa-solid fa-copy"></i> Sao Chép Nội Dung</button>
+            
+            <!-- THÔNG BÁO HỖ TRỢ NHANH Ở DƯỚI BẢNG -->
+            <div class="order-footer-support">
+                <i class="fa-solid fa-headset" style="color: #ef4444;"></i> Vui lòng liên hệ <a href="https://zalo.me/0973350113" target="_blank" style="color: #ef4444; font-weight: 800; text-decoration: underline;">0973350113</a> để được hỗ trợ nhanh nhất!
+            </div>
+        </div>
     </div>
-    <button class="btn btn-blue" onclick="adminCheckDonHang()">🔍 Kiểm Tra Đơn Hàng</button>
 
-    <!-- Kết quả hiển thị đơn hàng -->
-    <div id="admin-order-result" class="result-box">
-      <p><b>Mã đơn:</b> <span id="res-order-id" style="color: #0275d8;"></span></p>
-      <p><b>ID Khách mua:</b> <span id="res-user-id" style="color: #d9534f; font-weight: bold;"></span></p>
-      <p><b>Sản phẩm / Dịch vụ:</b> <span id="res-product-name" style="font-weight: bold;"></span></p>
-      <p><b>Giá tiền:</b> <span id="res-price" style="color: #5cb85c; font-weight: bold;"></span> VNĐ</p>
-      <p><b>Thời gian mua:</b> <span id="res-time"></span></p>
-      <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #dee2e6;">
-        <b>Nội dung / Chi tiết đơn hàng:</b>
-        <pre id="res-details" class="details-pre"></pre>
-      </div>
+    <!-- MODAL DANG NHAP -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('login-modal')">&times;</span>
+            <div style="font-size:18px; font-weight:700; margin-bottom:15px; text-align:center;">Đăng Nhập</div>
+            <div class="form-group"><label>Tài khoản:</label><input type="text" id="login-user" class="form-control"></div>
+            <div class="form-group"><label>Mật khẩu:</label><input type="password" id="login-pass" class="form-control"></div>
+            <button class="btn-submit" onclick="xuLyDangNhap()">ĐĂNG NHẬP</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // ================= 1. CẤU HÌNH FIREBASE =================
-    // Thay đổi thông tin cấu hình Firebase của bạn vào đây
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    <!-- MODAL DANG KY -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('register-modal')">&times;</span>
+            <div style="font-size:18px; font-weight:700; margin-bottom:15px; text-align:center;">Đăng Ký Tài Khoản</div>
+            <div class="form-group"><label>Tên tài khoản:</label><input type="text" id="reg-user" class="form-control"></div>
+            <div class="form-group"><label>Mật khẩu:</label><input type="password" id="reg-pass" class="form-control"></div>
+            <button class="btn-submit" onclick="xuLyDangKy()">ĐĂNG KÝ ONLINE</button>
+        </div>
+    </div>
 
-    // Khởi tạo Firebase
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEgTw4uVIOEvYlwBVQtlVBhYQLac9lTxs",
+            authDomain: "sub1s2001-db.firebaseapp.com",
+            databaseURL: "https://sub1s2001-db-default-rtdb.firebaseio.com",
+            projectId: "sub1s2001-db",
+            storageBucket: "sub1s2001-db.firebasestorage.app",
+            messagingSenderId: "124812432783",
+            appId: "1:124812432783:web:c39c87c9859acb7c6967fa",
+            measurementId: "G-2ZJ11FM7ZX"
+        };
 
-    // Biến lưu thông tin danh sách users
-    let users = {};
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-    // Lắng nghe dữ liệu users từ Firebase Realtime Database
-    db.ref('users').on('value', (snapshot) => {
-      users = snapshot.val() || {};
-    });
+        let users = {};
+        let mmoProducts = {};
+        let currentUser = localStorage.getItem('currentUser') || null;
 
-    // ================= 2. HÀM CỘNG TIỀN =================
-    function adminCongTienTheoID() {
-      const targetId = parseInt(document.getElementById('admin-target-id').value);
-      const amount = parseInt(document.getElementById('admin-add-amount').value);
+        const dichVuData = {
+            'menu_ff': {
+                title: 'Dịch Vụ Menu FF (Mod VIP)',
+                labelInput: 'Nhập ID Nhân Vật Free Fire:',
+                servers: [
+                    { name: 'Server 1: Menu VIP Auto Headshot (1 Ngày) - 20,000đ', price: 20000, content: 'KEY-MENU-FF-1DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 2: Menu VIP Chống Ban FULL (7 Ngày) - 100,000đ', price: 100000, content: 'KEY-MENU-FF-7DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 3: Menu Super VVIP (30 Ngày) - 300,000đ', price: 300000, content: 'KEY-MENU-FF-30DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) }
+                ]
+            },
+            'file_ios_adr': {
+                title: 'Dịch Vụ File iOS - Android',
+                labelInput: 'Nhập ID Game / Loại Thiết Bị:',
+                servers: [
+                    { name: 'Server 1: File Regedit Android (Khóa Tâm) - 30,000đ', price: 30000, content: 'https://vip6s2000.com/download/regedit-android-vip.zip' },
+                    { name: 'Server 2: File IPA iOS (Không Cần Cài Cắm) - 50,000đ', price: 50000, content: 'https://vip6s2000.com/download/ff-ios-vip.ipa' },
+                    { name: 'Server 3: Combo File iOS + ADR VVIP - 120,000đ', price: 120000, content: 'https://vip6s2000.com/download/combo-ios-android-vvip.zip' }
+                ]
+            },
+            'aimlock': {
+                title: 'Dịch Vụ Aimlock Siêu Chuẩn',
+                labelInput: 'Nhập ID Nhân Vật Free Fire:',
+                servers: [
+                    { name: 'Server 1: Aimlock 80% (An Toàn) - 25,000đ', price: 25000, content: 'AIMLOCK-80-KEY: AL80-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 2: Aimlock 100% Đạn Đuổi - 60,000đ', price: 60000, content: 'AIMLOCK-100-KEY: AL100-' + Math.floor(100000 + Math.random() * 900000) }
+                ]
+            },
+            'free_file_ios_adr': {
+                title: 'Dịch Vụ Miễn Phí: File iOS & ADR',
+                labelInput: 'Nhập Email / Link Tải Của Bạn:',
+                servers: [
+                    { name: 'Gói Miễn Phí: File Regedit Free iOS & Android - 0đ', price: 0, content: 'https://vip6s2000.com/free/regedit-free-ios-android.zip' }
+                ]
+            },
+            'free_menu_ysm_v8': {
+                title: 'Dịch Vụ Miễn Phí: Menu YSM V8',
+                labelInput: 'Nhập ID Game / Email Nhận Key:',
+                servers: [
+                    { name: 'Gói Miễn Phí: Menu YSM V8 (Bản Free) - 0đ', price: 0, content: 'KEY-YSM-V8-FREE: YSM8-FREE-' + Math.floor(1000 + Math.random() * 9000) }
+                ]
+            },
+            'free_tool_dame_fb': {
+                title: 'Dịch Vụ Miễn Phí: Tool Dame Facebook',
+                labelInput: 'Nhập Link/ID Facebook Cần Dame:',
+                servers: [
+                    { name: 'Gói Miễn Phí: Tool Dame Facebook Spam Link - 0đ', price: 0, content: 'https://vip6s2000.com/free/tool-dame-fb-v1.exe' }
+                ]
+            }
+        };
 
-      if (!targetId || !amount || amount <= 0) {
-        return alert("Vui lòng nhập ID và Số tiền hợp lệ!");
-      }
+        let currentCategory = 'trangchu';
 
-      let foundUserKey = null;
-      for (let username in users) {
-        if (users[username] && parseInt(users[username].id) === targetId) {
-          foundUserKey = username;
-          break;
+        db.ref('users').on('value', snapshot => {
+            users = snapshot.val() || {};
+            if (!users['admin']) {
+                db.ref('users/admin').set({ id: 1000, pass: 'admin123', balance: 108909999, isAdmin: true });
+            }
+            capNhatGiaoDienUser();
+        });
+
+        db.ref('mmo_products').on('value', snapshot => {
+            mmoProducts = snapshot.val() || {};
+            if (Object.keys(mmoProducts).length === 0) {
+                const macDinh = {
+                    p1: { name: 'Tài Khoản Facebook Clone Veri Phone', price: 5000, img: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' },
+                    p2: { name: 'Tài Khoản TikTok 1k Follow (Bật Livestream)', price: 45000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=400' },
+                    p3: { name: 'VPS US 2 Core - 4GB RAM (1 Tháng)', price: 80000, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400' },
+                    p4: { name: 'Proxy IPv4 Dùng Riêng (1 Tháng)', price: 30000, img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400' }
+                };
+                db.ref('mmo_products').set(macDinh);
+            } else {
+                if (currentCategory === 'mmo') hienThiMMO();
+            }
+        });
+
+        function chonDichVu(key, element) {
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+            currentCategory = key;
+
+            const defaultView = document.getElementById('default-view');
+            const mmoView = document.getElementById('mmo-product-view');
+            const btnSubmit = document.getElementById('btn-submit-order');
+
+            if (key === 'mmo') {
+                defaultView.style.display = 'none';
+                mmoView.style.display = 'grid';
+                document.getElementById('page-title').innerText = 'Dịch Vụ Kiếm Tiền (MMO)';
+                document.getElementById('welcome-heading').innerText = 'Kho Sản Phẩm MMO VIP';
+                document.getElementById('welcome-sub').innerText = 'Tự động giao dịch - Nhận tài khoản ngay lập tức!';
+                hienThiMMO();
+            } else if (dichVuData[key]) {
+                defaultView.style.display = 'grid';
+                mmoView.style.display = 'none';
+
+                const data = dichVuData[key];
+                document.getElementById('page-title').innerText = data.title;
+                document.getElementById('welcome-heading').innerText = data.title;
+                document.getElementById('welcome-sub').innerText = key.startsWith('free_') ? 'Dịch vụ hoàn toàn miễn phí - Điền thông tin để nhận!' : 'Điền đúng ID/Thông tin để hệ thống xử lý nhanh nhất.';
+                document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn: ${data.title}`;
+                document.getElementById('input-label').innerText = data.labelInput;
+
+                if (key.startsWith('free_')) {
+                    btnSubmit.innerHTML = `<i class="fa-solid fa-gift"></i> NHẬN MIỄN PHÍ NGAY`;
+                    btnSubmit.style.background = '#16a34a';
+                } else {
+                    btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> MUA NGAY`;
+                    btnSubmit.style.background = '#ef4444';
+                }
+
+                const select = document.getElementById('server-select');
+                select.innerHTML = '';
+                data.servers.forEach((srv, index) => {
+                    let opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = srv.name;
+                    select.appendChild(opt);
+                });
+                tinhTien();
+            } else {
+                defaultView.style.display = 'grid';
+                mmoView.style.display = 'none';
+                document.getElementById('page-title').innerText = 'Trang Chủ';
+                document.getElementById('welcome-heading').innerText = 'Chào mừng trở lại!';
+                document.getElementById('welcome-sub').innerText = 'Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.';
+                document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ`;
+                document.getElementById('input-label').innerText = 'ID Nhân Vật Free Fire / Link Profile:';
+
+                btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> MUA NGAY`;
+                btnSubmit.style.background = '#ef4444';
+
+                const select = document.getElementById('server-select');
+                select.innerHTML = '<option value="">-- Vui lòng chọn chuyên mục ở menu trái --</option>';
+                document.getElementById('total-price').innerText = '0đ';
+            }
         }
-      }
 
-      if (!foundUserKey) {
-        return alert("Không tìm thấy ID " + targetId + " trên hệ thống Cloud!");
-      }
+        function hienThiMMO() {
+            const container = document.getElementById('mmo-product-view');
+            container.innerHTML = '';
 
-      let newBalance = (users[foundUserKey].balance || 0) + amount;
-      db.ref('users/' + foundUserKey + '/balance').set(newBalance).then(() => {
-        alert("Cộng tiền thành công cho tài khoản: " + foundUserKey + " (ID: " + targetId + ")");
-        document.getElementById('admin-target-id').value = '';
-        document.getElementById('admin-add-amount').value = '';
-      }).catch((error) => {
-        console.error(error);
-        alert("Lỗi khi cộng tiền!");
-      });
-    }
+            const isAdmin = currentUser && users[currentUser] && users[currentUser].isAdmin;
 
-    // ================= 3. HÀM CHECK ĐƠN HÀNG =================
-    function adminCheckDonHang() {
-      const orderId = document.getElementById('admin-check-order-id').value.trim();
-      const resultBox = document.getElementById('admin-order-result');
+            for (let key in mmoProducts) {
+                let prod = mmoProducts[key];
+                let imgUrl = prod.img || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400';
+                
+                let adminDeleteBtn = isAdmin ? `<button class="btn-delete-product" onclick="adminXoaMMO('${key}')"><i class="fa-solid fa-trash"></i> Xóa sản phẩm</button>` : '';
 
-      if (!orderId) {
-        alert("Vui lòng nhập Mã đơn hàng!");
-        return;
-      }
-
-      db.ref('orders/' + orderId).once('value').then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-
-          document.getElementById('res-order-id').innerText = orderId;
-          document.getElementById('res-user-id').innerText = data.userId || data.idKhach || 'Không xác định';
-          document.getElementById('res-product-name').innerText = data.productName || data.tenSanPham || 'Đơn hàng';
-          document.getElementById('res-price').innerText = (data.price || data.gia || 0).toLocaleString('vi-VN');
-          document.getElementById('res-time').innerText = data.time || data.thoiGian || 'Không rõ';
-
-          const details = data.details || data.noiDung || data.code || JSON.stringify(data, null, 2);
-          document.getElementById('res-details').innerText = details;
-
-          resultBox.style.display = 'block';
-        } else {
-          alert("Không tìm thấy đơn hàng với mã này trên Cloud!");
-          resultBox.style.display = 'none';
+                container.innerHTML += `
+                    <div class="product-card">
+                        <img src="${imgUrl}" class="product-img">
+                        <div class="product-body">
+                            <div class="product-title">${prod.name}</div>
+                            <div class="product-price">${Number(prod.price).toLocaleString('vi-VN')}đ</div>
+                            <button class="btn-buy-product" onclick="muaMMO(${prod.price}, '${prod.name}')"><i class="fa-solid fa-cart-arrow-down"></i> Mua Ngay</button>
+                            ${adminDeleteBtn}
+                        </div>
+                    </div>
+                `;
+            }
         }
-      }).catch((error) => {
-        console.error(error);
-        alert("Lỗi kết nối CSDL khi tra cứu!");
-      });
-    }
-  </script>
+
+        function tinhTien() {
+            if (!dichVuData[currentCategory]) return;
+            const srvIndex = document.getElementById('server-select').value;
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            if (srvIndex !== '') {
+                const unitPrice = dichVuData[currentCategory].servers[srvIndex].price;
+                const total = unitPrice * quantity;
+                document.getElementById('total-price').innerText = total.toLocaleString('vi-VN') + 'đ';
+            }
+        }
+
+        function hienThiGiaoDienNhanHang(title, content) {
+            // Tạo mã đơn hàng ngẫu nhiên #DHxxxxxx
+            const randomOrderId = '#DH' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('display-order-id').innerText = randomOrderId;
+
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-content').innerText = content;
+            moModal('order-success-modal');
+        }
+
+        function saoChepHang() {
+            const orderId = document.getElementById('display-order-id').innerText;
+            const text = document.getElementById('result-content').innerText;
+            const copyContent = "Mã đơn hàng: " + orderId + "\n" + text;
+
+            navigator.clipboard.writeText(copyContent).then(() => {
+                alert('Đã sao chép mã đơn hàng và nội dung sản phẩm vào bộ nhớ tạm!');
+            });
+        }
+
+        function xacNhanDatHang() {
+            if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện đặt đơn!");
+            if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
+
+            const targetInput = document.getElementById('order-input-target').value.trim();
+            if (!targetInput) return alert("Vui lòng nhập ID/Thông tin trước khi tiếp tục!");
+
+            const srvIndex = document.getElementById('server-select').value;
+            const selectedSrv = dichVuData[currentCategory].servers[srvIndex];
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const total = selectedSrv.price * quantity;
+
+            let userBal = users[currentUser].balance || 0;
+            if (userBal < total) {
+                alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
+            } else {
+                let newBal = userBal - total;
+                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+                    const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
+                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
+                });
+            }
+        }
+
+        function muaMMO(price, name) {
+            if (!currentUser) return alert("Vui lòng đăng nhập để mua sản phẩm!");
+            let userBal = users[currentUser].balance || 0;
+            if (userBal < price) {
+                alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
+            } else {
+                let newBal = userBal - price;
+                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+                    let randomAccount = "TK: clone_" + Math.floor(Math.random()*899999+100000) + " | PASS: vip6s2000@" + Math.floor(Math.random()*899+100) + " | 2FA: " + Math.random().toString(36).substring(2, 10).toUpperCase();
+                    hienThiGiaoDienNhanHang('Nội dung sản phẩm (' + name + '):', randomAccount);
+                });
+            }
+        }
+
+        function xuLyDangKy() {
+            const user = document.getElementById('reg-user').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+
+            if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
+            if (users[user]) return alert("Tài khoản đã tồn tại!");
+
+            let maxId = 1000;
+            for (let u in users) {
+                if (users[u].id && users[u].id > maxId) maxId = users[u].id;
+            }
+            let newId = maxId + 1;
+
+            db.ref('users/' + user).set({
+                id: newId,
+                pass: pass,
+                balance: 0,
+                isAdmin: false
+            }).then(() => {
+                alert("Đăng ký thành công!\nTài khoản: " + user + "\nID Cloud của bạn: " + newId);
+                document.getElementById('reg-user').value = '';
+                document.getElementById('reg-pass').value = '';
+                dongModal('register-modal');
+            });
+        }
+
+        function xuLyDangNhap() {
+            const user = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+
+            if (users[user] && users[user].pass === pass) {
+                currentUser = user;
+                localStorage.setItem('currentUser', currentUser);
+                alert("Đăng nhập thành công!");
+                dongModal('login-modal');
+                capNhatGiaoDienUser();
+            } else {
+                alert("Sai tài khoản hoặc mật khẩu!");
+            }
+        }
+
+        function adminCongTienTheoID() {
+            const targetId = parseInt(document.getElementById('admin-target-id').value);
+            const amount = parseInt(document.getElementById('admin-add-amount').value);
+
+            if (!targetId || !amount || amount <= 0) return alert("Vui lòng nhập ID và Số tiền hợp lệ!");
+
+            let foundUserKey = null;
+            for (let username in users) {
+                if (parseInt(users[username].id) === targetId) {
+                    foundUserKey = username;
+                    break;
+                }
+            }
+
+            if (!foundUserKey) return alert("Không tìm thấy ID " + targetId + " trên hệ thống Cloud!");
+
+            let newBalance = (users[foundUserKey].balance || 0) + amount;
+            db.ref('users/' + foundUserKey + '/balance').set(newBalance).then(() => {
+                alert("Cộng tiền thành công cho tài khoản: " + foundUserKey + " (ID: " + targetId + ")");
+                document.getElementById('admin-target-id').value = '';
+                document.getElementById('admin-add-amount').value = '';
+            });
+        }
+
+        function adminThemMMO() {
+            const title = document.getElementById('mmo-title-input').value.trim();
+            const price = parseInt(document.getElementById('mmo-price-input').value);
+            const img = document.getElementById('mmo-img-input').value.trim();
+
+            if (!title || !price || price <= 0) return alert("Vui lòng nhập Tên sản phẩm và Giá tiền hợp lệ!");
+
+            const newRef = db.ref('mmo_products').push();
+            newRef.set({
+                name: title,
+                price: price,
+                img: img || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+            }).then(() => {
+                alert("Thêm sản phẩm MMO mới thành công!");
+                document.getElementById('mmo-title-input').value = '';
+                document.getElementById('mmo-price-input').value = '';
+                document.getElementById('mmo-img-input').value = '';
+            });
+        }
+
+        function adminXoaMMO(key) {
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi Cloud?")) {
+                db.ref('mmo_products/' + key).remove().then(() => {
+                    alert("Đã xóa sản phẩm!");
+                });
+            }
+        }
+
+        function capNhatGiaoDienUser() {
+            if (currentUser && users[currentUser]) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-info').style.display = 'flex';
+                document.getElementById('display-username').innerText = currentUser;
+                document.getElementById('display-id').innerText = users[currentUser].id;
+                document.getElementById('user-balance').innerText = (users[currentUser].balance || 0).toLocaleString('vi-VN') + 'đ';
+                document.getElementById('deposit-memo').innerText = 'NAP ' + users[currentUser].id;
+                document.getElementById('admin-panel').style.display = users[currentUser].isAdmin ? 'block' : 'none';
+            } else {
+                document.getElementById('auth-buttons').style.display = 'flex';
+                document.getElementById('user-info').style.display = 'none';
+                document.getElementById('user-balance').innerText = '0đ';
+                document.getElementById('deposit-memo').innerText = 'NAP [Đăng nhập để xem ID]';
+                document.getElementById('admin-panel').style.display = 'none';
+            }
+            if (currentCategory === 'mmo') hienThiMMO();
+        }
+
+        function dangXuat() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            capNhatGiaoDienUser();
+        }
+
+        function moModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function dongModal(id) { document.getElementById(id).style.display = 'none'; }
+    </script>
 </body>
 </html>
