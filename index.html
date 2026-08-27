@@ -684,5 +684,96 @@ db.ref('mmo_products/' + key).remove().then(() => {
     alert("Lỗi kết nối CSDL!");
   });
 } </script>
+    // 1. HÀM MUA HÀNG - LƯU TRỰC TIẾP LÊN FIREBASE ORDERS
+function xacNhanDatHang() {
+  if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện đặt đơn!");
+  
+  const targetInput = document.getElementById('order-input-target') ? document.getElementById('order-input-target').value.trim() : "";
+  if (!targetInput) return alert("Vui lòng nhập ID/Thông tin trước khi tiếp tục!");
+
+  const srvSelect = document.getElementById('server-select');
+  const selectedText = srvSelect ? srvSelect.options[srvSelect.selectedIndex].text : "Dịch vụ Game";
+  const quantity = parseInt(document.getElementById('quantity').value) || 1;
+
+  // Tạo Mã đơn hàng ngẫu nhiên dạng DHxxxxxx
+  const maDon = "DH" + Math.floor(100000 + Math.random() * 900000);
+  const noiDungKey = "AIMLOCK-80-KEY: AL80-" + Math.floor(100000 + Math.random() * 900000);
+
+  const database = (typeof db !== 'undefined') ? db : firebase.database();
+
+  // Ép ghi dữ liệu đơn hàng vào đúng đường dẫn 'orders/'
+  database.ref('orders/' + maDon).set({
+    userId: currentUser || "1001",
+    productName: selectedText,
+    target: targetInput,
+    quantity: quantity,
+    price: 25000 * quantity,
+    time: new Date().toLocaleString('vi-VN'),
+    details: noiDungKey
+  }).then(() => {
+    // Hiển thị mã đơn lên màn hình
+    const displayId = document.getElementById('display-order-id');
+    if (displayId) displayId.innerText = "#" + maDon;
+
+    // Gọi popup hiển thị thông tin nhận hàng
+    if (typeof hienThiGiaoDienNhanHang === 'function') {
+      hienThiGiaoDienNhanHang('Nội dung nhận hàng:', noiDungKey);
+    } else {
+      alert("Đặt hàng thành công! Mã đơn của bạn là: #" + maDon);
+    }
+  }).catch((err) => {
+    alert("Lỗi lưu đơn hàng: " + err.message);
+  });
+}
+
+// 2. HÀM CHECK ĐƠN HÀNG ADMIN (ĐÃ ĐỒNG BỘ CSDL)
+function adminCheckDonHangBaoMat() {
+  const database = (typeof db !== 'undefined') ? db : firebase.database();
+
+  const passInput = document.getElementById('admin-pass-check');
+  const orderInput = document.getElementById('admin-check-order-id');
+  const resultBox = document.getElementById('admin-order-result');
+
+  if (!passInput || !orderInput) {
+    alert("Lỗi: Không tìm thấy ô nhập liệu!");
+    return;
+  }
+
+  const pass = passInput.value;
+  let orderId = orderInput.value.trim().replace(/^#/, '');
+
+  if (pass !== 'hoangbach251113@') {
+    alert("Sai mật khẩu Admin!");
+    return;
+  }
+
+  if (!orderId) {
+    alert("Vui lòng nhập Mã đơn hàng!");
+    return;
+  }
+
+  // Tra cứu chính xác trong 'orders/'
+  database.ref('orders/' + orderId).once('value').then((snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      
+      document.getElementById('res-order-id').innerText = orderId;
+      document.getElementById('res-user-id').innerText = data.userId || '1001';
+      document.getElementById('res-product-name').innerText = data.productName || 'Dịch vụ';
+      document.getElementById('res-price').innerText = (data.price || 0).toLocaleString('vi-VN');
+      document.getElementById('res-time').innerText = data.time || 'Không rõ';
+      
+      const details = data.details || JSON.stringify(data, null, 2);
+      document.getElementById('res-details').innerText = details;
+
+      resultBox.style.display = 'block';
+    } else {
+      alert("Không tìm thấy đơn hàng với mã: " + orderId);
+      resultBox.style.display = 'none';
+    }
+  }).catch((error) => {
+    alert("Lỗi kết nối CSDL: " + error.message);
+  });
+}
 </body>
 </html>
