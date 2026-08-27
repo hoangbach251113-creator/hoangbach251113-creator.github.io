@@ -172,36 +172,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 3. CHECK MÃ ĐƠN HÀNG (BẢO MẬT ADMIN) -->
-<div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc;">
-  <p style="font-weight: bold; margin-top: 0; margin-bottom: 10px; font-size: 13px; color: #0275d8;">
-    3. Check Đơn Hàng (Chỉ Admin):
-  </p>
-  
-  <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-    <input type="password" id="admin-pass-check" placeholder="Nhập mật khẩu Admin..." 
-           style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
-    <input type="text" id="admin-check-order-id" placeholder="Nhập Mã đơn hàng..." 
-           style="flex: 2; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
-  </div>
-
-  <button onclick="adminCheckDonHangBaoMat()" 
-          style="width: 100%; padding: 10px; background-color: #0275d8; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-    🔍 Kiểm Tra Đơn Hàng
-  </button>
-
-  <div id="admin-order-result" style="display: none; margin-top: 10px; padding: 12px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; text-align: left;">
-    <p style="margin: 4px 0;"><b>Mã đơn:</b> <span id="res-order-id" style="color: #0275d8;"></span></p>
-    <p style="margin: 4px 0;"><b>ID Khách mua:</b> <span id="res-user-id" style="color: red; font-weight: bold;"></span></p>
-    <p style="margin: 4px 0;"><b>Sản phẩm / Dịch vụ:</b> <span id="res-product-name" style="font-weight: bold;"></span></p>
-    <p style="margin: 4px 0;"><b>Giá tiền:</b> <span id="res-price" style="color: green; font-weight: bold;"></span> VNĐ</p>
-    <p style="margin: 4px 0;"><b>Thời gian:</b> <span id="res-time"></span></p>
-    <div style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px;">
-      <b>Chi tiết đơn hàng:</b>
-      <pre id="res-details" style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; white-space: pre-wrap; word-break: break-all; margin: 5px 0 0 0; max-height: 150px; overflow-y: auto;"></pre>
-    </div>
-  </div>
-</div>
         </div>
     </div>
 
@@ -484,31 +454,11 @@ if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch v�
             if (userBal < total) {
                 alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
             } else {
-               let newBal = userBal - total;
-      
-      // 1. Tự tạo mã đơn hàng dạng DHxxxxxx
-      const maDon = "DH" + Math.floor(100000 + Math.random() * 900000);
-      const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
-
-      // 2. Trừ tiền tài khoản
-      db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
-        
-        // 3. LƯU ĐƠN HÀNG VÀO FIREBASE ĐỂ ADMIN TRA CỨU
-        db.ref('orders/' + maDon).set({
-          userId: currentUser,
-          productName: selectedSrv.name,
-          target: targetInput,
-          quantity: quantity,
-          price: total,
-          time: new Date().toLocaleString('vi-VN'),
-          details: content
-        }).then(() => {
-          // 4. Hiển thị Popup báo mã đơn và nhận hàng cho khách
-          document.getElementById('display-order-id').innerText = "#" + maDon;
-          hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
-        });
-
-      });
+                let newBal = userBal - total;
+                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+                    const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
+                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
+                });
             }
         }
 
@@ -646,43 +596,6 @@ db.ref('mmo_products/' + key).remove().then(() => {
 
         function moModal(id) { document.getElementById(id).style.display = 'flex'; }
         function dongModal(id) { document.getElementById(id).style.display = 'none'; }
-   function adminCheckDonHangBaoMat() {
-  const pass = document.getElementById('admin-pass-check').value;
-  const orderId = document.getElementById('admin-check-order-id').value.trim();
-  const resultBox = document.getElementById('admin-order-result');
-
-  if (pass !== 'hoangbach251113@') {
-    alert("Sai mật khẩu Admin!");
-    return;
-  }
-
-  if (!orderId) {
-    alert("Vui lòng nhập Mã đơn hàng!");
-    return;
-  }
-
-  db.ref('orders/' + orderId).once('value').then((snapshot) => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      
-      document.getElementById('res-order-id').innerText = orderId;
-      document.getElementById('res-user-id').innerText = data.userId || data.idKhach || 'Không xác định';
-      document.getElementById('res-product-name').innerText = data.productName || data.tenSanPham || 'Đơn hàng';
-      document.getElementById('res-price').innerText = (data.price || data.gia || 0).toLocaleString('vi-VN');
-      document.getElementById('res-time').innerText = data.time || data.thoiGian || 'Không rõ';
-      
-      const details = data.details || data.noiDung || data.code || JSON.stringify(data, null, 2);
-      document.getElementById('res-details').innerText = details;
-
-      resultBox.style.display = 'block';
-    } else {
-      alert("Không tìm thấy đơn hàng với mã này!");
-      resultBox.style.display = 'none';
-    }
-  }).catch((error) => {
-    console.error(error);
-    alert("Lỗi kết nối CSDL!");
-  });
-</script>
+    </script>
 </body>
 </html>
