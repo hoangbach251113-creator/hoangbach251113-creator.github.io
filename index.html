@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bách Shop</title>
+<title>Bách Shop - Shop Game & Tool Uy Tín</title>
+
+<!-- Favicon Icon Con Mèo -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2308a85a'/><path d='M30 35 L20 15 L40 25 Z' fill='%23ff9800'/><path d='M70 35 L80 15 L60 25 Z' fill='%23ff9800'/><circle cx='50' cy='55' r='30' fill='%23ffffff'/><circle cx='38' cy='50' r='5' fill='%23333'/><circle cx='62' cy='50' r='5' fill='%23333'/><polygon points='50,58 45,63 55,63' fill='%23ff4081'/></svg>">
 
 <style>
 * {
@@ -13,61 +16,116 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     background: #f5f6f8;
     color: #111;
 }
 
 /* HEADER */
 header {
-    height: 72px;
+    height: 75px;
     background: white;
     border-bottom: 1px solid #e5e5e5;
     display: flex;
     align-items: center;
-    padding: 0 8%;
-    gap: 35px;
+    padding: 0 5%;
+    gap: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
-.logo {
-    font-size: 26px;
+.logo-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.cat-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #08a85a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #08a85a;
+    overflow: hidden;
+}
+
+.logo-text {
+    font-size: 24px;
     font-weight: 800;
     color: #08a85a;
 }
 
-.logo span {
+.logo-text span {
     color: #111;
 }
 
 nav {
     display: flex;
-    gap: 25px;
+    gap: 20px;
 }
 
 nav a {
     text-decoration: none;
-    color: #111;
+    color: #333;
     font-weight: 600;
     font-size: 14px;
+    transition: 0.2s;
 }
 
-.login {
+nav a:hover {
+    color: #08a85a;
+}
+
+.auth-box {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-auth {
     border: 1px solid #08a85a;
     color: #078c4d;
     background: white;
-    padding: 9px 20px;
-    border-radius: 5px;
+    padding: 8px 18px;
+    border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+    font-size: 14px;
 }
 
-/* MAIN */
+.btn-auth:hover {
+    background: #08a85a;
+    color: white;
+}
+
+.user-display {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: #08a85a;
+}
+
+.btn-logout {
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* MAIN CONTAINER */
 .container {
     max-width: 1200px;
-    margin: 30px auto;
+    margin: 25px auto;
     display: grid;
-    grid-template-columns: 170px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 20px;
     padding: 0 15px;
 }
@@ -75,15 +133,18 @@ nav a {
 /* SIDEBAR */
 .sidebar {
     background: white;
-    padding: 14px;
-    min-height: 600px;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    height: fit-content;
 }
 
 .sidebar label {
     display: block;
-    font-size: 14px;
-    margin-bottom: 8px;
-    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: #555;
 }
 
 .sidebar input,
@@ -91,12 +152,12 @@ nav a {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 7px;
+    border-radius: 6px;
     margin-bottom: 15px;
     outline: none;
 }
 
-/* PRODUCTS */
+/* PRODUCT LIST */
 .products {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -105,28 +166,28 @@ nav a {
 
 .product {
     background: white;
-    border-radius: 7px;
+    border-radius: 10px;
     overflow: hidden;
     transition: 0.2s;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .product:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .product-img {
     width: 100%;
-    height: 190px;
+    height: 180px;
     object-fit: cover;
-    display: block;
     background-color: #eee;
 }
 
 .product-info {
-    padding: 16px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -135,14 +196,15 @@ nav a {
 .product-name {
     font-size: 15px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    line-height: 1.3;
 }
 
 .price {
     color: #ff3025;
     font-size: 17px;
     font-weight: 800;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
 }
 
 .price-free {
@@ -151,41 +213,42 @@ nav a {
 
 .category {
     display: inline-block;
-    color: #58bd36;
-    border: 1px solid #8cdb72;
-    padding: 3px 7px;
+    color: #08a85a;
+    background: #eefaf2;
+    padding: 3px 8px;
     border-radius: 4px;
     font-size: 11px;
-    margin: 5px 0 12px;
+    margin-bottom: 10px;
     align-self: flex-start;
+    font-weight: 600;
 }
 
 .rating {
     color: #ffc400;
-    font-size: 14px;
-    margin-bottom: 14px;
+    font-size: 13px;
+    margin-bottom: 12px;
     margin-top: auto;
 }
 
 .sold {
     color: #888;
-    font-size: 13px;
-    margin-left: 5px;
+    margin-left: 4px;
 }
 
 .buy-btn {
     width: 100%;
     padding: 10px;
-    border-radius: 7px;
+    border-radius: 6px;
     border: 1px solid #08a85a;
-    background: linear-gradient(90deg, #effff2, #eefaff);
-    color: #111;
-    font-size: 15px;
+    background: #eefaf2;
+    color: #08a85a;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     display: block;
+    transition: 0.2s;
 }
 
 .buy-btn:hover {
@@ -193,17 +256,7 @@ nav a {
     color: white;
 }
 
-.free-btn {
-    border-color: #0288d1;
-    background: linear-gradient(90deg, #e1f5fe, #e0f7fa);
-}
-
-.free-btn:hover {
-    background: #0288d1;
-    color: white;
-}
-
-/* POPUP THANH TOÁN ZALOPAY */
+/* MODAL OVERLAY */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -214,85 +267,110 @@ nav a {
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 999;
+    z-index: 1000;
 }
 
 .modal {
     background: white;
     width: 90%;
-    max-width: 420px;
+    max-width: 400px;
     border-radius: 12px;
     padding: 24px;
-    text-align: center;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 .close-btn {
     position: absolute;
     top: 12px;
     right: 16px;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
     color: #888;
 }
 
-.zalopay-header {
+/* AUTH FORM */
+.auth-tabs {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 15px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 8px 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #888;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+}
+
+.tab-btn.active {
+    color: #08a85a;
+    border-bottom-color: #08a85a;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #08a85a;
+    color: white;
+    border: none;
+    padding: 11px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* PAYMENT POPUP */
+.pay-header {
+    text-align: center;
     color: #0068ff;
     font-weight: 800;
     font-size: 18px;
     margin-bottom: 10px;
 }
 
-.qr-box img {
-    width: 210px;
-    height: 210px;
+.qr-container {
+    text-align: center;
+    margin: 12px 0;
+}
+
+.qr-container img {
+    width: 200px;
+    height: 200px;
     border: 2px solid #0068ff;
     border-radius: 10px;
     padding: 5px;
-    margin: 10px 0;
 }
 
-.pay-info {
+.pay-details {
     background: #f0f7ff;
     padding: 12px;
     border-radius: 8px;
-    margin: 10px 0;
-    font-size: 14px;
-    text-align: left;
+    font-size: 13px;
+    margin-bottom: 15px;
 }
 
-.pay-info div {
+.pay-details div {
     margin-bottom: 6px;
 }
 
-.pay-info span {
+.pay-details span {
     font-weight: bold;
     color: #d32f2f;
 }
 
-.confirm-btn {
-    width: 100%;
-    background: #0068ff;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.confirm-btn:hover {
-    background: #0052cc;
-}
-
-/* RESPONSIVE */
 @media (max-width: 800px) {
     nav { display: none; }
     .container { grid-template-columns: 1fr; }
@@ -306,22 +384,45 @@ nav a {
 
 <body>
 
+<!-- HEADER -->
 <header>
-    <div class="logo">BÁCH <span>SHOP</span></div>
+    <a href="#" class="logo-box">
+        <div class="cat-avatar">
+            <!-- SVG Con Mèo Ngủ Dễ Thương -->
+            <svg width="35" height="35" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#ffb74d"/>
+                <polygon points="20,35 10,10 40,20" fill="#f57c00"/>
+                <polygon points="80,35 90,10 60,20" fill="#f57c00"/>
+                <circle cx="50" cy="55" r="30" fill="#ffffff"/>
+                <path d="M 35 50 Q 40 55 45 50" stroke="#333" stroke-width="3" fill="none"/>
+                <path d="M 55 50 Q 60 55 65 50" stroke="#333" stroke-width="3" fill="none"/>
+                <polygon points="50,57 46,62 54,62" fill="#ff4081"/>
+            </svg>
+        </div>
+        <div class="logo-text">BÁCH <span>SHOP</span></div>
+    </a>
+
     <nav>
         <a href="#">TRANG CHỦ</a>
         <a href="#">SẢN PHẨM</a>
         <a href="#">KHUYẾN MÃI</a>
         <a href="#">LIÊN HỆ</a>
     </nav>
-    <button class="login">Đăng nhập</button>
+
+    <div class="auth-box">
+        <button class="btn-auth" id="loginBtn" onclick="openAuthModal()">Đăng nhập</button>
+        <div class="user-display" id="userDisplay">
+            <span>👋 Chào, <b id="usernameText">User</b></span>
+            <button class="btn-logout" onclick="logout()">Thoát</button>
+        </div>
+    </div>
 </header>
 
+<!-- MAIN CONTAINER -->
 <div class="container">
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <label>Tìm kiếm</label>
-        <input type="text" id="search" placeholder="Tìm sản phẩm...">
+        <input type="text" id="search" placeholder="Nhập tên sản phẩm...">
 
         <label>Danh mục</label>
         <select id="category">
@@ -331,31 +432,29 @@ nav a {
             <option value="file">File Free</option>
         </select>
 
-        <label>Sắp xếp</label>
+        <label>Sắp xếp giá</label>
         <select id="sort">
             <option value="default">Mặc định</option>
-            <option value="cheap">Giá thấp → cao</option>
-            <option value="expensive">Giá cao → thấp</option>
+            <option value="cheap">Từ thấp → cao</option>
+            <option value="expensive">Từ cao → thấp</option>
         </select>
     </aside>
 
-    <!-- PRODUCT LIST -->
     <main>
         <div class="products" id="products">
-
-            <!-- SẢN PHẨM 1 -->
+            <!-- SP 1 -->
             <div class="product" data-category="tool" data-price="35000">
-                <img class="product-img" src="./sp1.jpg" alt="tool dame facebook pro 4 che do">
+                <img class="product-img" src="./sp1.jpg" alt="tool dame facebook pro">
                 <div class="product-info">
                     <div class="product-name">tool dame facebook pro 4 che do</div>
                     <div class="price">35.000 đ</div>
                     <span class="category">Tool</span>
                     <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 12</span></div>
-                    <button class="buy-btn" onclick="openPayment('tool dame facebook pro 4 che do', '35.000')">→ Mua ngay</button>
+                    <button class="buy-btn" onclick="openPayment('tool dame facebook pro 4 che do', 35000)">→ Mua ngay</button>
                 </div>
             </div>
 
-            <!-- SẢN PHẨM 2 -->
+            <!-- SP 2 -->
             <div class="product" data-category="game" data-price="15000">
                 <img class="product-img" src="./sp2.jpg" alt="menu hack ff">
                 <div class="product-info">
@@ -363,11 +462,11 @@ nav a {
                     <div class="price">15.000 đ</div>
                     <span class="category">Sản phẩm Game</span>
                     <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 28</span></div>
-                    <button class="buy-btn" onclick="openPayment('menu hack ff', '15.000')">→ Mua ngay</button>
+                    <button class="buy-btn" onclick="openPayment('menu hack ff', 15000)">→ Mua ngay</button>
                 </div>
             </div>
 
-            <!-- SẢN PHẨM 3 -->
+            <!-- SP 3 -->
             <div class="product" data-category="game" data-price="25000">
                 <img class="product-img" src="./sp3.jpg" alt="menu hack ff vip">
                 <div class="product-info">
@@ -375,11 +474,11 @@ nav a {
                     <div class="price">25.000 đ</div>
                     <span class="category">Sản phẩm Game</span>
                     <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 45</span></div>
-                    <button class="buy-btn" onclick="openPayment('menu hack ff vip', '25.000')">→ Mua ngay</button>
+                    <button class="buy-btn" onclick="openPayment('menu hack ff vip', 25000)">→ Mua ngay</button>
                 </div>
             </div>
 
-            <!-- SẢN PHẨM 4 -->
+            <!-- SP 4 -->
             <div class="product" data-category="game" data-price="20000">
                 <img class="product-img" src="./sp4.jpg" alt="random hack ff">
                 <div class="product-info">
@@ -387,82 +486,180 @@ nav a {
                     <div class="price">20.000 đ</div>
                     <span class="category">Sản phẩm Game</span>
                     <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán 19</span></div>
-                    <button class="buy-btn" onclick="openPayment('random hack ff', '20.000')">→ Mua ngay</button>
+                    <button class="buy-btn" onclick="openPayment('random hack ff', 20000)">→ Mua ngay</button>
                 </div>
             </div>
 
-            <!-- SẢN PHẨM 5 (Mở Zalo) -->
+            <!-- SP 5 -->
             <div class="product" data-category="file" data-price="0">
                 <a href="https://zalo.me/g/qe0xsuzluo0h15rs3foh" target="_blank">
-                    <img class="product-img" src="./sp5.jpg" alt="Nhận File Free Cho Cả Android và iOS">
+                    <img class="product-img" src="./sp5.jpg" alt="Nhận File Free">
                 </a>
                 <div class="product-info">
                     <div class="product-name">Nhận File Free Cho Cả Android và iOS</div>
                     <div class="price price-free">MIỄN PHÍ (0đ)</div>
                     <span class="category">File Free</span>
                     <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã nhận 102</span></div>
-                    <a href="https://zalo.me/g/qe0xsuzluo0h15rs3foh" target="_blank" class="buy-btn free-btn">
+                    <a href="https://zalo.me/g/qe0xsuzluo0h15rs3foh" target="_blank" class="buy-btn" style="background:#e1f5fe; color:#0288d1; border-color:#0288d1;">
                         → Nhận Free Qua Zalo
                     </a>
                 </div>
             </div>
-
         </div>
     </main>
 </div>
 
-<!-- POP-UP THANH TOÁN ZALOPAY -->
-<div class="modal-overlay" id="paymentModal">
+<!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+<div class="modal-overlay" id="authModal">
     <div class="modal">
-        <span class="close-btn" onclick="closePayment()">&times;</span>
-        <div class="zalopay-header">
-            💳 THANH TOÁN ZALOPAY
+        <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+        <div class="auth-tabs">
+            <div class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Đăng nhập</div>
+            <div class="tab-btn" id="tabRegister" onclick="switchTab('register')">Đăng ký</div>
         </div>
 
-        <p style="font-size: 13px; color: #555;">Quét mã QR bằng ứng dụng <b>ZaloPay</b> hoặc <b>App Ngân hàng</b></p>
+        <form class="auth-form" id="formLogin" onsubmit="handleLogin(event)">
+            <input type="text" id="loginUser" placeholder="Tên tài khoản" required>
+            <input type="password" id="loginPass" placeholder="Mật khẩu" required>
+            <button type="submit" class="btn-submit">Đăng Nhập</button>
+        </form>
 
-        <div class="qr-box">
-            <!-- Mã QR ZaloPay DANG TRAN HOANG BACH -->
-            <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://u.zalopay.vn/qr/p/01020000000000000000" alt="Mã QR ZaloPay DANG TRAN HOANG BACH">
+        <form class="auth-form" id="formRegister" style="display:none;" onsubmit="handleRegister(event)">
+            <input type="text" id="regUser" placeholder="Tạo tên tài khoản" required>
+            <input type="password" id="regPass" placeholder="Tạo mật khẩu" required>
+            <button type="submit" class="btn-submit">Đăng ký ngay</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL THANH TOÁN ZALOPAY -->
+<div class="modal-overlay" id="payModal">
+    <div class="modal">
+        <span class="close-btn" onclick="closePayModal()">&times;</span>
+        <div class="pay-header">💳 THANH TOÁN ZALOPAY</div>
+        <p style="font-size:12px; color:#666; text-align:center;">Quét QR bằng ZaloPay hoặc App Ngân hàng bất kỳ</p>
+        
+        <div class="qr-container">
+            <img id="qrImg" src="" alt="Mã QR Thanh Toán">
         </div>
 
-        <div class="pay-info">
-            <div>Chủ tài khoản: <b>DANG TRAN HOANG BACH</b></div>
-            <div>Sản phẩm: <b id="payProdName">...</b></div>
-            <div>Số tiền: <span id="payAmount">0 đ</span></div>
-            <div>Nội dung CK: <b id="payMemo">BACHSHOP MUA HANG</b></div>
+        <div class="pay-details">
+            <div>Chủ TK: <b>DANG TRAN HOANG BACH</b></div>
+            <div>Sản phẩm: <b id="payProd">...</b></div>
+            <div>Số tiền: <span id="payPrice">0 đ</span></div>
+            <div>Mã đơn hàng: <b id="payCode" style="color:#0068ff;">...</b></div>
         </div>
 
-        <button class="confirm-btn" onclick="sendToZalo()">
-            ✅ Đã Chuyển Khoản (Nhận Hàng Qua Zalo)
+        <button class="btn-submit" style="background:#0068ff;" onclick="confirmPaid()">
+            ✅ Tôi Đã Chuyển Khoản (Xác Nhận Qua Zalo)
         </button>
     </div>
 </div>
 
 <script>
-/* POPUP THANH TOÁN */
-const modal = document.getElementById("paymentModal");
-const payProdName = document.getElementById("payProdName");
-const payAmount = document.getElementById("payAmount");
-const payMemo = document.getElementById("payMemo");
+/* --- HỆ THỐNG ĐĂNG NHẬP / ĐĂNG KÝ (LOCALSTORAGE) --- */
+const authModal = document.getElementById("authModal");
+const formLogin = document.getElementById("formLogin");
+const formRegister = document.getElementById("formRegister");
+const tabLogin = document.getElementById("tabLogin");
+const tabRegister = document.getElementById("tabRegister");
+
+function openAuthModal() { authModal.style.display = "flex"; }
+function closeAuthModal() { authModal.style.display = "none"; }
+
+function switchTab(tab) {
+    if (tab === 'login') {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        formLogin.style.display = 'block';
+        formRegister.style.display = 'none';
+    } else {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        formRegister.style.display = 'block';
+        formLogin.style.display = 'none';
+    }
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    const user = document.getElementById("regUser").value.trim();
+    const pass = document.getElementById("regPass").value.trim();
+
+    let users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (users[user]) {
+        alert("Tên tài khoản này đã tồn tại!");
+        return;
+    }
+
+    users[user] = pass;
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Đăng ký thành công! Vui lòng đăng nhập.");
+    switchTab('login');
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value.trim();
+
+    let users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (users[user] && users[user] === pass) {
+        localStorage.setItem("currentUser", user);
+        checkUserSession();
+        closeAuthModal();
+        alert("Đăng nhập thành công!");
+    } else {
+        alert("Sai tên tài khoản hoặc mật khẩu!");
+    }
+}
+
+function checkUserSession() {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) {
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("userDisplay").style.display = "flex";
+        document.getElementById("usernameText").innerText = currentUser;
+    } else {
+        document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("userDisplay").style.display = "none";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("currentUser");
+    checkUserSession();
+}
+
+checkUserSession();
+
+/* --- HỆ THỐNG THANH TOÁN ZALOPAY QUÉT QR --- */
+const payModal = document.getElementById("payModal");
+let currentOrderCode = "";
 
 function openPayment(name, price) {
-    payProdName.innerText = name;
-    payAmount.innerText = price + " đ";
-    payMemo.innerText = "BS " + name.toUpperCase();
-    modal.style.display = "flex";
+    const orderCode = "BACH" + Math.floor(1000 + Math.random() * 9000);
+    currentOrderCode = orderCode;
+
+    document.getElementById("payProd").innerText = name;
+    document.getElementById("payPrice").innerText = price.toLocaleString('vi-VN') + " đ";
+    document.getElementById("payCode").innerText = orderCode;
+
+    // QR ZaloPay sinh động
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://u.zalopay.vn/qr/p/01020000000000000000?amount=${price}&note=${orderCode}`;
+    document.getElementById("qrImg").src = qrUrl;
+
+    payModal.style.display = "flex";
 }
 
-function closePayment() {
-    modal.style.display = "none";
-}
+function closePayModal() { payModal.style.display = "none"; }
 
-function sendToZalo() {
-    alert("Đang chuyển tới Zalo Admin để xác nhận đơn hàng!");
+function confirmPaid() {
+    alert("Đang chuyển sang Zalo Admin để duyệt đơn hàng: " + currentOrderCode);
     window.open("https://zalo.me/g/qe0xsuzluo0h15rs3foh", "_blank");
 }
 
-/* BỘ LỌC SẢN PHẨM */
+/* --- BỘ LỌC TÌM KIẾM SẢN PHẨM --- */
 const search = document.getElementById("search");
 const category = document.getElementById("category");
 const sort = document.getElementById("sort");
@@ -470,24 +667,24 @@ const productsBox = document.getElementById("products");
 
 function filterProducts() {
     const keyword = search.value.toLowerCase();
-    const selectedCategory = category.value;
+    const selectedCat = category.value;
     const products = Array.from(productsBox.querySelectorAll(".product"));
 
     products.forEach(product => {
         const name = product.querySelector(".product-name").textContent.toLowerCase();
-        const productCategory = product.dataset.category;
+        const cat = product.dataset.category;
         const matchName = name.includes(keyword);
-        const matchCategory = selectedCategory === "all" || productCategory === selectedCategory;
-        product.style.display = (matchName && matchCategory) ? "" : "none";
+        const matchCat = selectedCat === "all" || cat === selectedCat;
+        product.style.display = (matchName && matchCat) ? "" : "none";
     });
 
     if (sort.value === "cheap") {
         products.sort((a,b) => Number(a.dataset.price) - Number(b.dataset.price));
-    }
-    if (sort.value === "expensive") {
+    } else if (sort.value === "expensive") {
         products.sort((a,b) => Number(b.dataset.price) - Number(a.dataset.price));
     }
-    products.forEach(product => productsBox.appendChild(product));
+
+    products.forEach(p => productsBox.appendChild(p));
 }
 
 search.addEventListener("input", filterProducts);
