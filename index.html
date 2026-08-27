@@ -689,7 +689,27 @@ function filterProducts() {
 }
 
 checkUserSession();
-</script>
+function closeNoticeModal() {
+    document.getElementById("noticeModal").style.display = "none";
+}</script>
 
-</body>
+<!-- POPUP THÔNG BÁO TỰ ĐỘNG -->
+<div class="modal-overlay" id="noticeModal" style="display: flex;">
+    <div class="modal" style="max-width: 500px;">
+        <span class="close-btn" onclick="closeNoticeModal()">&times;</span>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <h3 style="color: #08a85a; font-size: 20px;">🔔 THÔNG BÁO TỪ SHOP MMO-HACK FF</h3>
+        </div>
+        <div style="font-size: 14px; line-height: 1.6; color: #333; max-height: 350px; overflow-y: auto; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+            <p>👋 <b>Chào mừng bạn đến với Shop MMO-HACK FF!</b></p><br>
+            <p>📌 <b>Lưu ý khi mua hàng:</b></p>
+            <p>* Tự động hỗ trợ 24/7 qua Zalo Admin.</p>
+            <p>* Mọi thắc mắc hoặc cần cài đặt vui lòng liên hệ Zalo: <b>0973 350 113</b> (Hoàng Bách).</p>
+            <p>* Chúc các bạn trải nghiệm dịch vụ vui vẻ!</p>
+        </div>
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <button class="btn-submit" onclick="closeNoticeModal()" style="background: #08a85a;">Đã hiểu</button>
+        </div>
+    </div>
+</div>
 </html>
