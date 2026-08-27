@@ -3,160 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Tăng Tương Tác - SUB1S</title>
+    <title>SUB1S2001.COM - Tăng Tương Tác Mạng Xã Hội</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #4f46e5;
-            --primary-light: #eef2ff;
+            --primary-soft: #eef2ff;
             --bg: #f8fafc;
-            --sidebar-width: 250px;
-            --border: #e2e8f0;
-            --text: #1e293b;
-            --text-muted: #64748b;
+            --sidebar-width: 260px;
+            --border: #f1f5f9;
+            --text: #334155;
+            --text-muted: #94a3b8;
+            --badge-hot: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
         /* SIDEBAR */
-        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 20px 15px; flex-shrink: 0; }
-        .logo { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .menu-group { margin-bottom: 20px; }
-        .menu-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
-        .menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text); text-decoration: none; border-radius: 8px; font-size: 14px; margin-bottom: 4px; cursor: pointer; }
-        .menu-item:hover, .menu-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid #e2e8f0; padding: 15px; flex-shrink: 0; overflow-y: auto; height: 100vh; position: sticky; top: 0; }
+        .logo-box { padding: 10px 5px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
+        .logo-box img { max-width: 100%; height: auto; border-radius: 6px; }
+
+        .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 8px; letter-spacing: 0.5px; }
+        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; color: var(--text); text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 2px; cursor: pointer; transition: all 0.2s; }
+        .menu-item:hover, .menu-item.active { background: #eef2ff; color: var(--primary); font-weight: 600; }
+        .menu-item .left { display: flex; align-items: center; gap: 10px; }
+        .menu-item i { font-size: 15px; width: 20px; text-align: center; }
+
+        .badge-hot { background: var(--badge-hot); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+
+        /* TOPBAR & MAIN */
+        .wrapper { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
+        header { background: #fff; border-bottom: 1px solid #e2e8f0; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; position: sticky; top: 0; z-index: 90; }
+        .toggle-btn { font-size: 18px; color: var(--text-muted); cursor: pointer; }
+        .user-nav { display: flex; align-items: center; gap: 15px; position: relative; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #818cf8; cursor: pointer; }
+
+        /* USER DROPDOWN (Cấu trúc ảnh 5) */
+        .user-dropdown { position: absolute; top: 50px; right: 0; width: 220px; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 15px; display: none; z-index: 100; }
+        .user-dropdown.show { display: block; }
+        .user-profile-header { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; margin-bottom: 10px; }
+        .user-profile-header img { width: 42px; height: 42px; border-radius: 50%; }
+        .user-name { font-weight: 700; font-size: 14px; color: #0f172a; }
+        .user-balance { font-size: 13px; color: var(--primary); font-weight: 700; }
+        .drop-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--text); text-decoration: none; font-weight: 500; cursor: pointer; }
+        .drop-item:hover { color: var(--primary); }
+        .drop-item.logout { color: #ef4444; border-top: 1px solid #f1f5f9; margin-top: 5px; padding-top: 10px; }
 
         /* MAIN CONTENT */
-        .main { flex-grow: 1; padding: 25px; overflow-y: auto; }
+        main { padding: 25px; overflow-y: auto; flex-grow: 1; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* CARDS & STATS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
-        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-        .stat-val { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 5px; }
+        /* STATS (Ảnh 1) */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; position: relative; }
+        .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .stat-val { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 6px; }
+        .stat-badge { position: absolute; top: 18px; right: 18px; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: var(--text-muted); }
 
-        /* FORMS & TABLES */
-        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; }
-        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; background: var(--primary); color: #fff; width: 100%; }
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
-        th { background: #f1f5f9; color: var(--text-muted); font-weight: 600; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-        .badge-canceled { background: #fee2e2; color: #ef4444; }
+        /* NẠP TIỀN TAB (Ảnh 2) */
+        .deposit-type-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-type { padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; background: #f1f5f9; color: var(--text-muted); }
+        .btn-type.active { background: #4f46e5; color: #fff; }
+
+        .bank-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .bank-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; background: #fff; }
+        .bank-logo { width: 40px; height: 40px; border-radius: 8px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); font-size: 12px; }
+        .bank-info h4 { font-size: 13px; color: #0f172a; }
+        .bank-info p { font-size: 11px; color: var(--text-muted); }
+        .bank-info span { font-size: 11px; color: var(--primary); font-weight: 700; }
+
+        .deposit-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #f1f5f9; }
+        th { color: var(--text-muted); font-weight: 600; }
+        .badge-pending { background: #fef3c7; color: #d97706; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+
+        .guide-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+        .guide-header { background: #3b82f6; color: #fff; padding: 12px 15px; font-size: 13px; font-weight: 700; }
+        .guide-step { display: flex; gap: 12px; padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+        .step-num { width: 20px; height: 20px; background: #e0e7ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (Cấu trúc ảnh 1, 3, 4) -->
     <div class="sidebar">
-        <div class="logo"><i class="fa-solid fa-rocket"></i> SUB1S PANEL</div>
-        <div class="menu-group">
-            <div class="menu-title">Dashboard</div>
-            <a class="menu-item active" onclick="switchTab('tab-home', this)"><i class="fa-solid fa-house"></i> Trang chủ</a>
-            <a class="menu-item" onclick="switchTab('tab-order', this)"><i class="fa-solid fa-cart-plus"></i> Đặt hàng ngay</a>
-            <a class="menu-item" onclick="switchTab('tab-history', this)"><i class="fa-solid fa-clock-history"></i> Lịch sử đơn hàng</a>
+        <div class="logo-box">
+            <div style="background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 12px;">
+                TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><span style="color: #818cf8; font-size: 10px;">sub1s2001.com</span>
+            </div>
         </div>
-        <div class="menu-group">
-            <div class="menu-title">Quản trị Admin</div>
-            <a class="menu-item" id="adminTab" style="color: #d97706;" onclick="switchTab('tab-admin', this)"><i class="fa-solid fa-sliders"></i> Quản lý dịch vụ</a>
-        </div>
+
+        <div class="menu-title">DASHBOARD</div>
+        <a class="menu-item active" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-house" style="color: #6366f1;"></i> Trang chủ</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-deposit', this)">
+            <div class="left"><i class="fa-solid fa-wallet" style="color: #6366f1;"></i> Nạp Tiền</div>
+        </a>
+
+        <div class="menu-title">DỊCH VỤ</div>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-fire" style="color: #f97316;"></i> Dịch Vụ Miễn Phí</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-gamepad" style="color: #06b6d4;"></i> Free Fire</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-bullseye" style="color: #f59e0b;"></i> Dịch Vụ Khác Độc Quyền🔥</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-tiktok" style="color: #000;"></i> Tiktok</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-telegram" style="color: #229ed9;"></i> Telegram</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Youtube</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-x-twitter" style="color: #000;"></i> X - Twitter</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-at" style="color: #000;"></i> Threads</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-brands fa-google" style="color: #ea4335;"></i> Google</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        </a>
+
+        <a class="menu-item" style="margin-top: 10px;" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-clock-history"></i> Lịch Sử Đơn Hàng</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-shield-halved"></i> Bảo Hành Dịch Vụ</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-award"></i> Cấp Bậc & Dịch Vụ</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-rotate"></i> Cập Nhật Dịch Vụ</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-calendar-check"></i> Điểm Danh</div>
+            <span class="badge-hot">Hot</span>
+        </a>
+
+        <div class="menu-title">KHÁC</div>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-users"></i> Tiếp thị liên kết</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-server"></i> Tạo Website Riêng</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-code"></i> Tài liệu API</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-file-contract"></i> Điều khoản website</div>
+        </a>
+        <a class="menu-item" onclick="switchTab('tab-home', this)">
+            <div class="left"><i class="fa-solid fa-headset"></i> Hỗ Trợ</div>
+        </a>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main">
-        <!-- TRANG CHỦ THỐNG KÊ -->
-        <div id="tab-home" class="tab-content active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">SỐ DƯ KHẢ DỤNG</div>
-                    <div class="stat-val" id="userBalance">24.999đ</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">TỔNG ĐƠN HÀNG</div>
-                    <div class="stat-val" id="totalOrdersCount">1</div>
-                </div>
-            </div>
-            <div class="card">
-                <h3>Tạo đơn hàng nhanh</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin: 10px 0 15px;">Chọn dịch vụ phù hợp và theo dõi tiến độ thực hiện ngay trên trang này.</p>
-                <button class="btn" style="width: auto;" onclick="switchTab('tab-order')">Đặt dịch vụ ngay</button>
-            </div>
-        </div>
+    <!-- WRAPPER CONTENT -->
+    <div class="wrapper">
+        <header>
+            <div class="toggle-btn"><i class="fa-solid fa-bars"></i></div>
+            <div class="user-nav">
+                <i class="fa-solid fa-globe" style="color: var(--text-muted); cursor: pointer;"></i>
+                <i class="fa-solid fa-dollar-sign" style="color: var(--text-muted); cursor: pointer;"></i>
+                <img src="https://via.placeholder.com/36/818cf8/ffffff?text=BD" class="user-avatar" onclick="toggleUserMenu()">
 
-        <!-- FORM ĐẶT HÀNG -->
-        <div id="tab-order" class="tab-content">
-            <div class="card">
-                <h3 style="margin-bottom: 15px;">Tạo Đơn Hàng Mới</h3>
-                <div class="form-group">
-                    <label>Chọn dịch vụ</label>
-                    <select id="serviceSelect" class="form-control" onchange="calculateTotal()"></select>
+                <!-- DROPDOWN USER (Ảnh 5) -->
+                <div class="user-dropdown" id="userMenu">
+                    <div class="user-profile-header">
+                        <img src="https://via.placeholder.com/42/818cf8/ffffff?text=BD" alt="Avatar">
+                        <div>
+                            <div class="user-name">Bách Đặng</div>
+                            <div class="user-balance">24.999đ</div>
+                        </div>
+                    </div>
+                    <a class="drop-item"><i class="fa-regular fa-user" style="color: #3b82f6;"></i> Hồ sơ cá nhân</a>
+                    <a class="drop-item" onclick="switchTab('tab-deposit')"><i class="fa-solid fa-wallet" style="color: #10b981;"></i> Nạp tiền</a>
+                    <a class="drop-item"><i class="fa-solid fa-dollar-sign" style="color: #06b6d4;"></i> Dòng tiền</a>
+                    <a class="drop-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>
                 </div>
-                <div class="form-group">
-                    <label>Liên Kết / UID Cần Tăng</label>
-                    <input type="text" id="targetInput" class="form-control" placeholder="Nhập liên kết hoặc UID...">
-                </div>
-                <div class="form-group">
-                    <label>Số Lượng</label>
-                    <input type="number" id="quantityInput" class="form-control" value="1000" oninput="calculateTotal()">
-                </div>
-                <div style="background: var(--primary-light); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    Tổng tiền cần thanh toán: <b id="totalPay" style="color: var(--primary); font-size: 18px;">0đ</b>
-                </div>
-                <button class="btn" onclick="processOrder()">Đặt Hàng</button>
             </div>
-        </div>
+        </header>
 
-        <!-- LỊCH SỬ ĐƠN HÀNG -->
-        <div id="tab-history" class="tab-content">
-            <div class="card">
-                <h3>Lịch Sử Đơn Hàng</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mã đơn</th>
-                            <th>Dịch vụ</th>
-                            <th>Số lượng</th>
-                            <th>Thanh toán</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTable"></tbody>
-                </table>
-            </div>
-        </div>
+        <main>
+            <!-- TRANG CHỦ THỐNG KÊ (Ảnh 1) -->
+            <div id="tab-home" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">SỐ DƯ KHẢ DỤNG</div>
+                        <div class="stat-val">24.999đ</div>
+                        <div class="stat-badge">Số dư</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">TIỀN NẠP THÁNG NÀY</div>
+                        <div class="stat-val">0đ</div>
+                        <div class="stat-badge">Tháng này</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">TỔNG ĐƠN HÀNG</div>
+                        <div class="stat-val">1</div>
+                        <div class="stat-badge">Đơn hàng</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">SẢN PHẨM ĐÃ MUA</div>
+                        <div class="stat-val">0</div>
+                        <div class="stat-badge">Sản phẩm</div>
+                    </div>
+                </div>
 
-        <!-- PANEL QUẢN TRỊ ADMIN -->
-        <div id="tab-admin" class="tab-content">
-            <div class="card">
-                <h3>Admin: Thêm / Chỉnh Sửa Dịch Vụ</h3>
-                <div class="form-group" style="margin-top: 15px;">
-                    <label>Tên Dịch Vụ</label>
-                    <input type="text" id="admName" class="form-control" placeholder="VD: Theo Dõi Tây | Nhanh">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3 style="font-size: 14px; margin-bottom: 15px;">Biểu đồ thống kê</h3>
+                        <canvas id="statChart" style="width:100%; max-height:220px;"></canvas>
+                    </div>
+
+                    <div>
+                        <div class="card" style="background: #3b82f6; color: #fff;">
+                            <div style="font-size: 11px; opacity: 0.8; font-weight: 700;">DỊCH VỤ</div>
+                            <h3 style="font-size: 16px; margin: 5px 0 10px;">Tạo đơn hàng ngay</h3>
+                            <p style="font-size: 12px; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">Chọn dịch vụ phù hợp và theo dõi tiến độ thực hiện ngay trên trang này.</p>
+                            <button style="background: #fff; color: #3b82f6; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;">Đặt dịch vụ &rarr;</button>
+                        </div>
+
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h4 style="font-size: 13px;">Đơn gần đây</h4>
+                                <a style="font-size: 11px; color: #3b82f6; text-decoration: none;" href="#">Xem tất cả &gt;</a>
+                            </div>
+                            <div style="font-size: 12px;">
+                                <span style="color: #3b82f6; font-weight: 700;">#3263663</span> <span style="color: var(--text-muted);">4 ngày trước</span>
+                                <div style="margin-top: 4px; font-size: 11px;">Theo Dõi Tây | Nhanh4 | Cài Là Lên Luôn | 10K/Ngày | Ôn Định</div>
+                                <div style="color: #ef4444; font-weight: 700; margin-top: 4px;">24.982đ <span style="float: right; background: #fee2e2; padding: 1px 6px; border-radius: 4px; font-size: 10px;">Canceled</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Đơn Giá (trên 1 số lượng)</label>
-                    <input type="number" id="admRate" class="form-control" placeholder="VD: 25 (nghĩa là 25đ/sub)">
-                </div>
-                <button class="btn" style="background: #d97706;" onclick="addService()">Thêm Dịch Vụ</button>
             </div>
-        </div>
+
+            <!-- TAB NẠP TIỀN (Ảnh 2) -->
+            <div id="tab-deposit" class="tab-content">
+                <div class="deposit-type-btns">
+                    <button class="btn-type active">Chuyển khoản</button>
+                    <button class="btn-type">Nạp thẻ cào</button>
+                </div>
+
+                <div class="bank-cards">
+                    <div class="bank-card">
+                        <div class="bank-logo">MB</div>
+                        <div class="bank-info">
+                            <h4>Mb Bank</h4>
+                            <p>NGUYEN NHU VIET CHINH</p>
+                            <span>2715092001</span>
+                        </div>
+                    </div>
+                    <div class="bank-card">
+                        <div class="bank-logo" style="background: #e0f2fe; color: #0284c7;">ACB</div>
+                        <div class="bank-info">
+                            <h4>ACB</h4>
+                            <p>NGUYEN NHU VIET CHINH</p>
+                            <span>8711591</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="deposit-grid">
+                    <div class="card">
+                        <h4 style="font-size: 13px; margin-bottom: 15px;"><i class="fa-solid fa-receipt"></i> Lịch sử hoá đơn</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CỔNG</th>
+                                    <th>MÃ HOÁ ĐƠN</th>
+                                    <th>SỐ TIỀN</th>
+                                    <th>KHUYẾN MÃI</th>
+                                    <th>THỰC NHẬN</th>
+                                    <th>TRẠNG THÁI</th>
+                                    <th>THỜI GIAN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><div class="bank-logo" style="width:24px; height:24px; font-size:9px;">MB</div></td>
+                                    <td><b>676444J</b></td>
+                                    <td>25.000đ</td>
+                                    <td>--</td>
+                                    <td>0đ</td>
+                                    <td><span class="badge-pending">Đang chờ</span></td>
+                                    <td>23/08/2026 01:19</td>
+                                </tr>
+                                <tr>
+                                    <td><div class="bank-logo" style="width:24px; height:24px; font-size:9px;">MB</div></td>
+                                    <td><b>1964883</b></td>
+                                    <td>50.000đ</td>
+                                    <td style="color: #10b981;">+2.500đ<br><small>5%</small></td>
+                                    <td>0đ</td>
+                                    <td><span class="badge-pending">Đang chờ</span></td>
+                                    <td>18/08/2026 15:08</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <div class="card" style="background: #3b82f6; color: #fff; padding: 12px 15px;">
+                            <h4 style="font-size: 13px;"><i class="fa-solid fa-gift"></i> Khuyến mãi nạp tiền</h4>
+                            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px;">
+                                <span>Nạp từ 10.000đ</span>
+                                <span style="background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 4px;">+10%</span>
+                            </div>
+                        </div>
+
+                        <div class="guide-box">
+                            <div class="guide-header"><i class="fa-circle-info fa-solid"></i> Hướng dẫn nạp tiền</div>
+                            <div class="guide-step"><div class="step-num">1</div><div><b>Chọn cổng nạp</b></div></div>
+                            <div class="guide-step"><div class="step-num">2</div><div><b>Nhập thông tin</b> – số tiền hoặc mã thẻ</div></div>
+                            <div class="guide-step"><div class="step-num">3</div><div><b>Gửi yêu cầu</b> – hệ thống tự động xử lý</div></div>
+                            <div class="guide-step"><div class="step-num">4</div><div><b>Nhận tiền</b> – tiền được cộng vào tài khoản after confirm</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        let balance = 24999;
-        let services = JSON.parse(localStorage.getItem('smm_services')) || [
-            { id: 3263663, name: "Theo Dõi Tây | Nhanh | Cài Là Lên", rate: 24.982 / 317 }
-        ];
-        let orders = JSON.parse(localStorage.getItem('smm_orders')) || [
-            { id: 3263663, service: "Theo Dõi Tây | Nhanh | Cài Là Lên", qty: 317, pay: "24.982đ", status: "Đã hủy" }
-        ];
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('show');
+        }
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -165,91 +358,29 @@
             if (element) element.classList.add('active');
         }
 
-        function loadServices() {
-            const select = document.getElementById('serviceSelect');
-            select.innerHTML = '';
-            services.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s.id;
-                opt.innerText = `${s.name} - (${s.rate.toFixed(2)}đ/sp)`;
-                select.appendChild(opt);
-            });
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            const sId = document.getElementById('serviceSelect').value;
-            const qty = document.getElementById('quantityInput').value || 0;
-            const service = services.find(s => s.id == sId);
-            if (service) {
-                const total = Math.round(service.rate * qty);
-                document.getElementById('totalPay').innerText = total.toLocaleString('vi-VN') + 'đ';
-            }
-        }
-
-        function processOrder() {
-            const sId = document.getElementById('serviceSelect').value;
-            const qty = parseInt(document.getElementById('quantityInput').value);
-            const target = document.getElementById('targetInput').value;
-            const service = services.find(s => s.id == sId);
-
-            if (!target) { alert('Vui lòng nhập UID/Link!'); return; }
-            const cost = Math.round(service.rate * qty);
-
-            if (balance < cost) {
-                alert('Số dư không đủ thanh toán!');
-                return;
-            }
-
-            balance -= cost;
-            document.getElementById('userBalance').innerText = balance.toLocaleString('vi-VN') + 'đ';
-
-            const newOrder = {
-                id: Math.floor(1000000 + Math.random() * 9000000),
-                service: service.name,
-                qty: qty,
-                pay: cost.toLocaleString('vi-VN') + 'đ',
-                status: "Đang xử lý"
-            };
-
-            orders.unshift(newOrder);
-            localStorage.setItem('smm_orders', JSON.stringify(orders));
-            renderHistory();
-            alert('Đặt hàng thành công!');
-            switchTab('tab-history');
-        }
-
-        function renderHistory() {
-            const tbody = document.getElementById('historyTable');
-            tbody.innerHTML = '';
-            orders.forEach(o => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>#${o.id}</td>
-                        <td>${o.service}</td>
-                        <td>${o.qty}</td>
-                        <td>${o.pay}</td>
-                        <td><span class="badge ${o.status === 'Đã hủy' ? 'badge-canceled' : ''}">${o.status}</span></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('totalOrdersCount').innerText = orders.length;
-        }
-
-        function addService() {
-            const name = document.getElementById('admName').value;
-            const rate = parseFloat(document.getElementById('admRate').value);
-            if (!name || !rate) { alert('Nhập đủ thông tin!'); return; }
-
-            services.push({ id: Date.now(), name, rate });
-            localStorage.setItem('smm_services', JSON.stringify(services));
-            loadServices();
-            alert('Đã thêm dịch vụ mới!');
-        }
-
-        // Khởi chạy
-        loadServices();
-        renderHistory();
+        // BIỂU ĐỒ THỐNG KÊ (Ảnh 1)
+        const ctx = document.getElementById('statChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'],
+                datasets: [{
+                    label: 'Số đơn hàng',
+                    data: [-1, -1, -1, -1, -1, 0.8],
+                    borderColor: '#f97316',
+                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Tiền nạp',
+                    data: [0, 0, 0, 0, 0, 0],
+                    borderColor: '#10b981',
+                    fill: false,
+                    tension: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
     </script>
 </body>
 </html>
