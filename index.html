@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIP6S2000.COM - Quản Lý Dịch Vụ</title>
   
-  <!-- Firebase App & Database (Compat SDKs) -->
+  <!-- Firebase App & Database -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -15,14 +15,14 @@
     
     .app-container { display: flex; min-height: 100vh; }
     
-    /* Sidebar Links */
-    .sidebar { width: 220px; background: #fff; border-right: 1px solid #e9ecef; padding: 15px; flex-shrink: 0; }
+    /* Sidebar Menu */
+    .sidebar { width: 230px; background: #fff; border-right: 1px solid #e9ecef; padding: 15px; flex-shrink: 0; }
     .brand-box { background: #d9534f; color: white; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
-    .brand-box h2 { margin: 0; font-size: 14px; text-transform: uppercase; }
-    .brand-box p { margin: 3px 0 0; font-size: 11px; opacity: 0.8; }
+    .brand-box h2 { margin: 0; font-size: 15px; font-weight: bold; text-transform: uppercase; }
+    .brand-box p { margin: 3px 0 0; font-size: 11px; opacity: 0.9; }
     
     .menu-title { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; margin: 15px 0 8px 0; }
-    .menu-item { display: block; padding: 8px 12px; color: #555; text-decoration: none; border-radius: 6px; font-size: 13px; margin-bottom: 4px; }
+    .menu-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #555; text-decoration: none; border-radius: 6px; font-size: 13px; margin-bottom: 4px; }
     .menu-item.active { background: #fcebe8; color: #d9534f; font-weight: bold; }
     .menu-item:hover:not(.active) { background: #f8f9fa; }
 
@@ -90,7 +90,7 @@
 
     <div class="menu-title">CHUYÊN MỤC GAME</div>
     <a href="#" class="menu-item">≡ Menu FF</a>
-    <a href="#" class="menu-item">📥 File iOS-ADR</a>
+    <a href="#" class="menu-item">🕹️ File iOS-ADR</a>
     <a href="#" class="menu-item">🎯 Aimlock</a>
 
     <div class="menu-title">DỊCH VỤ FREE</div>
@@ -121,7 +121,7 @@
       <p style="margin: 0; color: #666; font-size: 13px;">Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.</p>
     </div>
 
-    <!-- NỘI DUNG ĐẶT ĐƠN & NAP TIEN -->
+    <!-- NỘI DUNG ĐẶT ĐƠN & NẠP TIỀN -->
     <div class="grid-2">
       <!-- ĐẶT ĐƠN HÀNG DỊCH VỤ -->
       <div class="card">
@@ -202,7 +202,7 @@
       <!-- 3. CHECK MÃ ĐƠN HÀNG (YÊU CẦU MẬT KHẨU ADMIN) -->
       <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc;">
         <p style="font-weight: bold; margin-top: 0; margin-bottom: 10px; font-size: 13px; color: #0275d8;">
-          3. Check Đơn Hàng (Bảo Mật Admin):
+          3. Check Đơn Hàng (Chỉ Admin):
         </p>
         
         <div class="flex-inputs" style="margin-bottom: 10px;">
@@ -233,7 +233,7 @@
 
 <!-- JAVASCRIPT HỆ THỐNG -->
 <script>
-  // Cấu hình Firebase Database
+  // Cấu hình Firebase Database chính xác của dự án bạn
   const firebaseConfig = {
     databaseURL: "https://hoangbach251113-creator-default-rtdb.firebaseio.com"
   };
@@ -301,7 +301,7 @@
     const orderId = document.getElementById('admin-check-order-id').value.trim();
     const resultBox = document.getElementById('admin-order-result');
 
-    // Mật khẩu bắt buộc
+    // Mật khẩu Admin
     if (pass !== 'hoangbach251113@') {
       alert("Sai mật khẩu Admin! Bạn không có quyền tra cứu.");
       return;
