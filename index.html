@@ -58,7 +58,6 @@
         .qr-container img { border: 1px solid var(--border); border-radius: 8px; padding: 5px; background: #fff; }
         .bank-info { font-size: 13px; line-height: 1.6; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px; }
 
-        /* EDIT MODE NOTIFICATION */
         #edit-bar { display: none; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; }
     </style>
 </head>
@@ -66,7 +65,7 @@
 
     <div id="edit-bar"><i class="fa-solid fa-pen-to-square"></i> ĐANG BẬT CHẾ ĐỘ SỬA MÀN HÌNH (Nhấn F2 để hoàn tất & khóa lại)</div>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR MENU -->
     <div class="sidebar">
         <div class="logo-box">
             <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><small style="font-weight: 400; opacity: 0.8;">sub1s2001.com</small></div>
@@ -109,14 +108,12 @@
         </div>
 
         <div class="grid-container">
-            <!-- MỤC ĐẶT HÀNG DỊCH VỤ -->
             <div class="card">
                 <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary);"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 
                 <div class="form-group">
                     <label>Chọn dịch vụ/máy chủ:</label>
                     <select class="form-control" id="server-select" onchange="tinhTien()">
-                        <!-- Javascript sẽ tự động load các gói tương ứng -->
                     </select>
                 </div>
 
@@ -137,7 +134,6 @@
                 <button class="btn-submit" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> TẠO ĐƠN HÀNG NGAY</button>
             </div>
 
-            <!-- MỤC NẠP TIỀN TỰ ĐỘNG -->
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-qrcode" style="color:#16a34a;"></i> Nạp Tiền Qua VietQR (Tự Động)</div>
                 
@@ -155,9 +151,8 @@
         </div>
     </div>
 
-    <!-- SCRIPT CHUYỂN ĐỔI MỤC VÀ TÍNH TIỀN -->
+    <!-- JAVASCRIPT XỬ LÝ CHUYỂN MỤC -->
     <script>
-        // Danh sách dịch vụ tương ứng với từng mục
         const serviceData = {
             trangchu: {
                 title: "Trang Chủ",
@@ -174,7 +169,7 @@
             freefire: {
                 title: "Dịch Vụ Free Fire",
                 heading: "Dịch Vụ Game Free Fire",
-                sub: "Tăng lượt thích hồ sơ, tăng lượt xem kênh và các dịch vụ Free Fire.",
+                sub: "Tăng lượt thích hồ sơ, tăng lượt xem trận đấu và các dịch vụ Free Fire.",
                 label: "Nhập ID Nhân Vật Free Fire:",
                 servers: [
                     { name: "Server 1 - Tăng Lượt Thích Hồ Sơ (50đ / lượt)", price: 50 },
@@ -216,22 +211,18 @@
             }
         };
 
-        // Hàm chuyển đổi dịch vụ khi nhấp vào menu
         function chonDichVu(type, element) {
-            // Đổi class active ở menu
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
 
             const data = serviceData[type];
             if (!data) return;
 
-            // Cập nhật giao diện
             document.getElementById('page-title').innerText = data.title;
             document.getElementById('welcome-heading').innerText = data.heading;
             document.getElementById('welcome-sub').innerText = data.sub;
             document.getElementById('input-label').innerText = data.label;
 
-            // Load lại danh sách máy chủ
             const selectEl = document.getElementById('server-select');
             selectEl.innerHTML = '';
             data.servers.forEach(s => {
@@ -244,10 +235,8 @@
             tinhTien();
         }
 
-        // Tự động load trang chủ ban đầu
         chonDichVu('trangchu', document.querySelector('.menu-item.active'));
 
-        // Hàm tính tổng tiền đơn hàng
         function tinhTien() {
             const donGia = parseInt(document.getElementById('server-select').value) || 0;
             const soLuong = parseInt(document.getElementById('quantity').value) || 0;
@@ -255,12 +244,10 @@
             document.getElementById('total-price').innerText = tongTien.toLocaleString('vi-VN') + 'đ';
         }
 
-        // Xử lý nút Đặt Hàng
         function xacNhanDatHang() {
             alert("Đã gửi đơn hàng thành công! Hệ thống đang xử lý.");
         }
 
-        // Bật/tắt chế độ sửa màn hình trực tiếp bằng phím F2
         let isEdit = false;
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F2') {
