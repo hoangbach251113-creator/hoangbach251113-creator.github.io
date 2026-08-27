@@ -3,384 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUB1S2001.COM - Tăng Tương Tác Mạng Xã Hội</title>
+    <title>SUB1S2001.COM - Quản Lý Dịch Vụ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #4f46e5;
             --primary-soft: #eef2ff;
             --bg: #f8fafc;
             --sidebar-width: 260px;
-            --border: #f1f5f9;
+            --border: #e2e8f0;
             --text: #334155;
             --text-muted: #94a3b8;
-            --badge-hot: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
-        /* SIDEBAR */
-        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid #e2e8f0; padding: 15px; flex-shrink: 0; overflow-y: auto; height: 100vh; position: sticky; top: 0; }
+        /* SIDEBAR STYLES */
+        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; overflow-y: auto; height: 100vh; position: sticky; top: 0; }
         .logo-box { padding: 10px 5px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
-        .logo-box img { max-width: 100%; height: auto; border-radius: 6px; }
+        .logo-box div { background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 12px; }
 
         .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 8px; letter-spacing: 0.5px; }
-        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; color: var(--text); text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 2px; cursor: pointer; transition: all 0.2s; }
-        .menu-item:hover, .menu-item.active { background: #eef2ff; color: var(--primary); font-weight: 600; }
+        
+        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 2px; cursor: pointer; transition: all 0.2s; user-select: none; }
+        .menu-item:hover, .menu-item.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
         .menu-item .left { display: flex; align-items: center; gap: 10px; }
-        .menu-item i { font-size: 15px; width: 20px; text-align: center; }
+        .menu-item i.arrow { font-size: 10px; transition: transform 0.3s; color: var(--text-muted); }
+        .menu-item.open i.arrow { transform: rotate(90deg); color: var(--primary); }
 
-        .badge-hot { background: var(--badge-hot); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+        /* SUBMENU STYLES */
+        .submenu { display: none; padding-left: 15px; margin-bottom: 5px; }
+        .submenu.show { display: block; }
+        .submenu-item { display: flex; align-items: center; padding: 8px 12px; font-size: 12px; color: #64748b; text-decoration: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .submenu-item:hover, .submenu-item.active { color: var(--primary); background: #f1f5f9; font-weight: 600; }
 
-        /* TOPBAR & MAIN */
-        .wrapper { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
-        header { background: #fff; border-bottom: 1px solid #e2e8f0; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; position: sticky; top: 0; z-index: 90; }
-        .toggle-btn { font-size: 18px; color: var(--text-muted); cursor: pointer; }
-        .user-nav { display: flex; align-items: center; gap: 15px; position: relative; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #818cf8; cursor: pointer; }
+        /* CONTENT AREA */
+        .wrapper { flex-grow: 1; display: flex; flex-direction: column; }
+        header { background: #fff; border-bottom: 1px solid var(--border); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+        main { padding: 25px; flex-grow: 1; }
 
-        /* USER DROPDOWN (Cấu trúc ảnh 5) */
-        .user-dropdown { position: absolute; top: 50px; right: 0; width: 220px; background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 15px; display: none; z-index: 100; }
-        .user-dropdown.show { display: block; }
-        .user-profile-header { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; margin-bottom: 10px; }
-        .user-profile-header img { width: 42px; height: 42px; border-radius: 50%; }
-        .user-name { font-weight: 700; font-size: 14px; color: #0f172a; }
-        .user-balance { font-size: 13px; color: var(--primary); font-weight: 700; }
-        .drop-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--text); text-decoration: none; font-weight: 500; cursor: pointer; }
-        .drop-item:hover { color: var(--primary); }
-        .drop-item.logout { color: #ef4444; border-top: 1px solid #f1f5f9; margin-top: 5px; padding-top: 10px; }
-
-        /* MAIN CONTENT */
-        main { padding: 25px; overflow-y: auto; flex-grow: 1; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* STATS (Ảnh 1) */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; position: relative; }
-        .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .stat-val { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 6px; }
-        .stat-badge { position: absolute; top: 18px; right: 18px; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: var(--text-muted); }
-
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-
-        /* NẠP TIỀN TAB (Ảnh 2) */
-        .deposit-type-btns { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-type { padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; background: #f1f5f9; color: var(--text-muted); }
-        .btn-type.active { background: #4f46e5; color: #fff; }
-
-        .bank-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
-        .bank-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; background: #fff; }
-        .bank-logo { width: 40px; height: 40px; border-radius: 8px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); font-size: 12px; }
-        .bank-info h4 { font-size: 13px; color: #0f172a; }
-        .bank-info p { font-size: 11px; color: var(--text-muted); }
-        .bank-info span { font-size: 11px; color: var(--primary); font-weight: 700; }
-
-        .deposit-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #f1f5f9; }
-        th { color: var(--text-muted); font-weight: 600; }
-        .badge-pending { background: #fef3c7; color: #d97706; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
-
-        .guide-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
-        .guide-header { background: #3b82f6; color: #fff; padding: 12px 15px; font-size: 13px; font-weight: 700; }
-        .guide-step { display: flex; gap: 12px; padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
-        .step-num { width: 20px; height: 20px; background: #e0e7ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #1e293b; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+        .form-control:focus { border-color: var(--primary); }
+        .btn-submit { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR (Cấu trúc ảnh 1, 3, 4) -->
+    <!-- SIDEBAR NAVIGATION -->
     <div class="sidebar">
         <div class="logo-box">
-            <div style="background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 12px;">
-                TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><span style="color: #818cf8; font-size: 10px;">sub1s2001.com</span>
-            </div>
+            <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><span style="color: #818cf8; font-size: 10px;">sub1s2001.com</span></div>
         </div>
 
         <div class="menu-title">DASHBOARD</div>
-        <a class="menu-item active" onclick="switchTab('tab-home', this)">
+        <div class="menu-item active" onclick="showDashboard()">
             <div class="left"><i class="fa-solid fa-house" style="color: #6366f1;"></i> Trang chủ</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-deposit', this)">
-            <div class="left"><i class="fa-solid fa-wallet" style="color: #6366f1;"></i> Nạp Tiền</div>
-        </a>
+        </div>
 
         <div class="menu-title">DỊCH VỤ</div>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-fire" style="color: #f97316;"></i> Dịch Vụ Miễn Phí</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-gamepad" style="color: #06b6d4;"></i> Free Fire</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-bullseye" style="color: #f59e0b;"></i> Dịch Vụ Khác Độc Quyền🔥</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-tiktok" style="color: #000;"></i> Tiktok</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-telegram" style="color: #229ed9;"></i> Telegram</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Youtube</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-x-twitter" style="color: #000;"></i> X - Twitter</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-at" style="color: #000;"></i> Threads</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-brands fa-google" style="color: #ea4335;"></i> Google</div><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
-        </a>
 
-        <a class="menu-item" style="margin-top: 10px;" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-clock-history"></i> Lịch Sử Đơn Hàng</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-shield-halved"></i> Bảo Hành Dịch Vụ</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-award"></i> Cấp Bậc & Dịch Vụ</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-rotate"></i> Cập Nhật Dịch Vụ</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-calendar-check"></i> Điểm Danh</div>
-            <span class="badge-hot">Hot</span>
-        </a>
+        <!-- FREE FIRE -->
+        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ff')">
+            <div class="left"><i class="fa-solid fa-gamepad" style="color: #06b6d4;"></i> Free Fire</div>
+            <i class="fa-solid fa-chevron-right arrow"></i>
+        </div>
+        <div class="submenu" id="sub-ff">
+            <div class="submenu-item" onclick="openService('Free Fire', 'Nạp Kim Cương')">Nạp Kim Cương</div>
+            <div class="submenu-item" onclick="openService('Free Fire', 'Cày Cấp / Thách Đấu')">Cày Cấp / Thách Đấu</div>
+        </div>
 
-        <div class="menu-title">KHÁC</div>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-users"></i> Tiếp thị liên kết</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-server"></i> Tạo Website Riêng</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-code"></i> Tài liệu API</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-file-contract"></i> Điều khoản website</div>
-        </a>
-        <a class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-headset"></i> Hỗ Trợ</div>
-        </a>
+        <!-- FACEBOOK -->
+        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-fb')">
+            <div class="left"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</div>
+            <i class="fa-solid fa-chevron-right arrow"></i>
+        </div>
+        <div class="submenu" id="sub-fb">
+            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Like Bài Viết')">Tăng Like Bài Viết</div>
+            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Theo Dõi (Follow)')">Tăng Theo Dõi (Follow)</div>
+            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Mắt Livestream')">Tăng Mắt Livestream</div>
+        </div>
+
+        <!-- TIKTOK -->
+        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-tiktok')">
+            <div class="left"><i class="fa-brands fa-tiktok" style="color: #000;"></i> Tiktok</div>
+            <i class="fa-solid fa-chevron-right arrow"></i>
+        </div>
+        <div class="submenu" id="sub-tiktok">
+            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Tim Video')">Tăng Tim Video</div>
+            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Follow TikTok')">Tăng Follow TikTok</div>
+            <div class="submenu-item" onclick="openService('TikTok', 'Tăng View Video')">Tăng View Video</div>
+        </div>
+
+        <!-- INSTAGRAM -->
+        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ig')">
+            <div class="left"><i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</div>
+            <i class="fa-solid fa-chevron-right arrow"></i>
+        </div>
+        <div class="submenu" id="sub-ig">
+            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Like Instagram')">Tăng Like Instagram</div>
+            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Follow Instagram')">Tăng Follow Instagram</div>
+        </div>
     </div>
 
-    <!-- WRAPPER CONTENT -->
+    <!-- MAIN WORKSPACE -->
     <div class="wrapper">
         <header>
-            <div class="toggle-btn"><i class="fa-solid fa-bars"></i></div>
-            <div class="user-nav">
-                <i class="fa-solid fa-globe" style="color: var(--text-muted); cursor: pointer;"></i>
-                <i class="fa-solid fa-dollar-sign" style="color: var(--text-muted); cursor: pointer;"></i>
-                <img src="https://via.placeholder.com/36/818cf8/ffffff?text=BD" class="user-avatar" onclick="toggleUserMenu()">
-
-                <!-- DROPDOWN USER (Ảnh 5) -->
-                <div class="user-dropdown" id="userMenu">
-                    <div class="user-profile-header">
-                        <img src="https://via.placeholder.com/42/818cf8/ffffff?text=BD" alt="Avatar">
-                        <div>
-                            <div class="user-name">Bách Đặng</div>
-                            <div class="user-balance">24.999đ</div>
-                        </div>
-                    </div>
-                    <a class="drop-item"><i class="fa-regular fa-user" style="color: #3b82f6;"></i> Hồ sơ cá nhân</a>
-                    <a class="drop-item" onclick="switchTab('tab-deposit')"><i class="fa-solid fa-wallet" style="color: #10b981;"></i> Nạp tiền</a>
-                    <a class="drop-item"><i class="fa-solid fa-dollar-sign" style="color: #06b6d4;"></i> Dòng tiền</a>
-                    <a class="drop-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>
-                </div>
-            </div>
+            <h3 id="header-title" style="font-size: 16px;">Trang Chủ</h3>
+            <div style="font-size: 13px; font-weight: 700; color: var(--primary);">Số dư: 24.999đ</div>
         </header>
 
-        <main>
-            <!-- TRANG CHỦ THỐNG KÊ (Ảnh 1) -->
-            <div id="tab-home" class="tab-content active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">SỐ DƯ KHẢ DỤNG</div>
-                        <div class="stat-val">24.999đ</div>
-                        <div class="stat-badge">Số dư</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">TIỀN NẠP THÁNG NÀY</div>
-                        <div class="stat-val">0đ</div>
-                        <div class="stat-badge">Tháng này</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">TỔNG ĐƠN HÀNG</div>
-                        <div class="stat-val">1</div>
-                        <div class="stat-badge">Đơn hàng</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">SẢN PHẨM ĐÃ MUA</div>
-                        <div class="stat-val">0</div>
-                        <div class="stat-badge">Sản phẩm</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
-                    <div class="card">
-                        <h3 style="font-size: 14px; margin-bottom: 15px;">Biểu đồ thống kê</h3>
-                        <canvas id="statChart" style="width:100%; max-height:220px;"></canvas>
-                    </div>
-
-                    <div>
-                        <div class="card" style="background: #3b82f6; color: #fff;">
-                            <div style="font-size: 11px; opacity: 0.8; font-weight: 700;">DỊCH VỤ</div>
-                            <h3 style="font-size: 16px; margin: 5px 0 10px;">Tạo đơn hàng ngay</h3>
-                            <p style="font-size: 12px; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">Chọn dịch vụ phù hợp và theo dõi tiến độ thực hiện ngay trên trang này.</p>
-                            <button style="background: #fff; color: #3b82f6; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;">Đặt dịch vụ &rarr;</button>
-                        </div>
-
-                        <div class="card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <h4 style="font-size: 13px;">Đơn gần đây</h4>
-                                <a style="font-size: 11px; color: #3b82f6; text-decoration: none;" href="#">Xem tất cả &gt;</a>
-                            </div>
-                            <div style="font-size: 12px;">
-                                <span style="color: #3b82f6; font-weight: 700;">#3263663</span> <span style="color: var(--text-muted);">4 ngày trước</span>
-                                <div style="margin-top: 4px; font-size: 11px;">Theo Dõi Tây | Nhanh4 | Cài Là Lên Luôn | 10K/Ngày | Ôn Định</div>
-                                <div style="color: #ef4444; font-weight: 700; margin-top: 4px;">24.982đ <span style="float: right; background: #fee2e2; padding: 1px 6px; border-radius: 4px; font-size: 10px;">Canceled</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB NẠP TIỀN (Ảnh 2) -->
-            <div id="tab-deposit" class="tab-content">
-                <div class="deposit-type-btns">
-                    <button class="btn-type active">Chuyển khoản</button>
-                    <button class="btn-type">Nạp thẻ cào</button>
-                </div>
-
-                <div class="bank-cards">
-                    <div class="bank-card">
-                        <div class="bank-logo">MB</div>
-                        <div class="bank-info">
-                            <h4>Mb Bank</h4>
-                            <p>NGUYEN NHU VIET CHINH</p>
-                            <span>2715092001</span>
-                        </div>
-                    </div>
-                    <div class="bank-card">
-                        <div class="bank-logo" style="background: #e0f2fe; color: #0284c7;">ACB</div>
-                        <div class="bank-info">
-                            <h4>ACB</h4>
-                            <p>NGUYEN NHU VIET CHINH</p>
-                            <span>8711591</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="deposit-grid">
-                    <div class="card">
-                        <h4 style="font-size: 13px; margin-bottom: 15px;"><i class="fa-solid fa-receipt"></i> Lịch sử hoá đơn</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>CỔNG</th>
-                                    <th>MÃ HOÁ ĐƠN</th>
-                                    <th>SỐ TIỀN</th>
-                                    <th>KHUYẾN MÃI</th>
-                                    <th>THỰC NHẬN</th>
-                                    <th>TRẠNG THÁI</th>
-                                    <th>THỜI GIAN</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><div class="bank-logo" style="width:24px; height:24px; font-size:9px;">MB</div></td>
-                                    <td><b>676444J</b></td>
-                                    <td>25.000đ</td>
-                                    <td>--</td>
-                                    <td>0đ</td>
-                                    <td><span class="badge-pending">Đang chờ</span></td>
-                                    <td>23/08/2026 01:19</td>
-                                </tr>
-                                <tr>
-                                    <td><div class="bank-logo" style="width:24px; height:24px; font-size:9px;">MB</div></td>
-                                    <td><b>1964883</b></td>
-                                    <td>50.000đ</td>
-                                    <td style="color: #10b981;">+2.500đ<br><small>5%</small></td>
-                                    <td>0đ</td>
-                                    <td><span class="badge-pending">Đang chờ</span></td>
-                                    <td>18/08/2026 15:08</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div>
-                        <div class="card" style="background: #3b82f6; color: #fff; padding: 12px 15px;">
-                            <h4 style="font-size: 13px;"><i class="fa-solid fa-gift"></i> Khuyến mãi nạp tiền</h4>
-                            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px;">
-                                <span>Nạp từ 10.000đ</span>
-                                <span style="background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 4px;">+10%</span>
-                            </div>
-                        </div>
-
-                        <div class="guide-box">
-                            <div class="guide-header"><i class="fa-circle-info fa-solid"></i> Hướng dẫn nạp tiền</div>
-                            <div class="guide-step"><div class="step-num">1</div><div><b>Chọn cổng nạp</b></div></div>
-                            <div class="guide-step"><div class="step-num">2</div><div><b>Nhập thông tin</b> – số tiền hoặc mã thẻ</div></div>
-                            <div class="guide-step"><div class="step-num">3</div><div><b>Gửi yêu cầu</b> – hệ thống tự động xử lý</div></div>
-                            <div class="guide-step"><div class="step-num">4</div><div><b>Nhận tiền</b> – tiền được cộng vào tài khoản after confirm</div></div>
-                        </div>
-                    </div>
-                </div>
+        <main id="main-content">
+            <div class="card">
+                <h3>Chào mừng trở lại!</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Chọn một dịch vụ ở menu bên trái để bắt đầu chỉnh sửa và đặt đơn hàng.</p>
             </div>
         </main>
     </div>
 
     <script>
-        function toggleUserMenu() {
-            document.getElementById('userMenu').classList.toggle('show');
+        // Xử lý ẩn/hHiện Submenu
+        function toggleSubmenu(element, subId) {
+            const submenu = document.getElementById(subId);
+            const isOpen = submenu.classList.contains('show');
+
+            // Đóng tất cả submenu khác
+            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('open'));
+
+            // Mở mục được click nếu chưa mở
+            if (!isOpen) {
+                submenu.classList.add('show');
+                element.classList.add('open');
+            }
         }
 
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            if (element) element.classList.add('active');
+        // Tải form tạo đơn hàng tương ứng khi bấm vào dịch vụ con
+        function openService(platform, serviceName) {
+            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('header-title').innerText = `${platform} - ${serviceName}`;
+
+            const mainContent = document.getElementById('main-content');
+            mainContent.innerHTML = `
+                <div class="card">
+                    <h3 style="margin-bottom: 15px; font-size: 16px;">Tạo Đơn Hàng: ${serviceName}</h3>
+                    <div class="form-group">
+                        <label>Nhập Link / ID Cần Trợ Lực:</label>
+                        <input type="text" class="form-control" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Chọn Máy Chủ (Server):</label>
+                        <select class="form-control">
+                            <option>Server 1 (Tốc độ nhanh - Cực ổn định) - 25đ/lượt</option>
+                            <option>Server 2 (Giá rẻ - Hoàn thành trong 24h) - 10đ/lượt</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Số Lượng Cần Mua:</label>
+                        <input type="number" class="form-control" value="1000" min="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Ghi Chú Đơn Hàng:</label>
+                        <textarea class="form-control" rows="2" placeholder="Nhập ghi chú nếu có..."></textarea>
+                    </div>
+                    <button class="btn-submit">Tạo Đơn Hàng Ngay</button>
+                </div>
+            `;
         }
 
-        // BIỂU ĐỒ THỐNG KÊ (Ảnh 1)
-        const ctx = document.getElementById('statChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'],
-                datasets: [{
-                    label: 'Số đơn hàng',
-                    data: [-1, -1, -1, -1, -1, 0.8],
-                    borderColor: '#f97316',
-                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }, {
-                    label: 'Tiền nạp',
-                    data: [0, 0, 0, 0, 0, 0],
-                    borderColor: '#10b981',
-                    fill: false,
-                    tension: 0
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
+        function showDashboard() {
+            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('open', 'active'));
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('header-title').innerText = "Trang Chủ";
+            document.getElementById('main-content').innerHTML = `
+                <div class="card">
+                    <h3>Chào mừng trở lại!</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Chọn một dịch vụ ở menu bên trái để bắt đầu chỉnh sửa và đặt đơn hàng.</p>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
