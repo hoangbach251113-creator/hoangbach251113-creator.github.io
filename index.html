@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUB1S2001.COM - Quản Lý Dịch Vụ Tăng Tương Tác</title>
+    <title>SUB1S2001.COM - Quản Lý Dịch Vụ Hack FF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,14 +22,17 @@
         /* SIDEBAR STYLES */
         .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
         .logo-box { padding: 10px 5px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
-        .logo-box div { background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
+        .logo-box div { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
 
         .menu-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 5px; letter-spacing: 0.5px; }
 
         .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13.5px; font-weight: 500; margin-bottom: 4px; cursor: pointer; transition: 0.2s; }
-        .menu-item:hover, .menu-item.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+        .menu-item:hover, .menu-item.active { background: #fee2e2; color: #ef4444; font-weight: 600; }
         .menu-item .left { display: flex; align-items: center; gap: 10px; }
-        .menu-item i.arrow { font-size: 10px; transition: transform 0.3s; color: var(--text-muted); }
+
+        /* SUBMENU STYLES */
+        .submenu { margin-left: 15px; border-left: 2px solid #fecaca; padding-left: 10px; }
+        .submenu .menu-item { font-size: 13px; padding: 8px 10px; }
 
         /* MAIN CONTENT STYLES */
         .main-content { flex-grow: 1; padding: 25px 35px; }
@@ -49,9 +52,9 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; }
         .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-        .form-control:focus { border-color: var(--primary); }
+        .form-control:focus { border-color: #ef4444; }
 
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-submit { width: 100%; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-submit:hover { opacity: 0.9; }
 
         .qr-container { text-align: center; }
@@ -68,7 +71,7 @@
     <!-- SIDEBAR MENU -->
     <div class="sidebar">
         <div class="logo-box">
-            <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><small style="font-weight: 400; opacity: 0.8;">sub1s2001.com</small></div>
+            <div>HỆ THỐNG DỊCH VỤ GAME<br><small style="font-weight: 400; opacity: 0.8;">sub1s2001.com</small></div>
         </div>
 
         <div class="menu-title">DASHBOARD</div>
@@ -76,22 +79,22 @@
             <div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div>
         </div>
 
-        <div class="menu-title">DỊCH VỤ</div>
-        <div class="menu-item" onclick="chonDichVu('freefire', this)">
-            <div class="left"><i class="fa-solid fa-gamepad" style="color:#ef4444;"></i> Free Fire</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
+        <div class="menu-title">CHUYÊN MỤC GAME</div>
+        <div class="menu-item" style="cursor: default;">
+            <div class="left" style="font-weight: 700; color: #ef4444;"><i class="fa-solid fa-fire"></i> HACK FF</div>
         </div>
-        <div class="menu-item" onclick="chonDichVu('facebook', this)">
-            <div class="left"><i class="fa-brands fa-facebook" style="color:#2563eb;"></i> Facebook</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item" onclick="chonDichVu('tiktok', this)">
-            <div class="left"><i class="fa-brands fa-tiktok" style="color:#000;"></i> Tiktok</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item" onclick="chonDichVu('instagram', this)">
-            <div class="left"><i class="fa-brands fa-instagram" style="color:#db2777;"></i> Instagram</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
+        
+        <!-- 3 MỤC CON BÊN TRONG HACK FF -->
+        <div class="submenu">
+            <div class="menu-item" onclick="chonDichVu('menu_ff', this)">
+                <div class="left"><i class="fa-solid fa-bars-staggered"></i> Menu</div>
+            </div>
+            <div class="menu-item" onclick="chonDichVu('file_ios_adr', this)">
+                <div class="left"><i class="fa-solid fa-file-arrow-down"></i> File iOS-ADR</div>
+            </div>
+            <div class="menu-item" onclick="chonDichVu('aimlock', this)">
+                <div class="left"><i class="fa-solid fa-crosshairs"></i> Aimlock</div>
+            </div>
         </div>
     </div>
 
@@ -104,34 +107,34 @@
 
         <div class="welcome-card">
             <h2 id="welcome-heading">Chào mừng trở lại!</h2>
-            <p id="welcome-sub">Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.</p>
+            <p id="welcome-sub">Chọn một gói Hack FF ở danh mục bên trái để bắt đầu cài đặt.</p>
         </div>
 
         <div class="grid-container">
             <div class="card">
-                <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:var(--primary);"></i> Đặt Đơn Hàng Dịch Vụ</div>
+                <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 
                 <div class="form-group">
-                    <label>Chọn dịch vụ/máy chủ:</label>
+                    <label>Chọn gói/máy chủ:</label>
                     <select class="form-control" id="server-select" onchange="tinhTien()">
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label id="input-label">Link / ID Tài khoản nhận:</label>
-                    <input type="text" class="form-control" placeholder="Dán link bài viết hoặc ID tại đây...">
+                    <label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label>
+                    <input type="text" class="form-control" placeholder="Dán ID game hoặc Link tại đây...">
                 </div>
 
                 <div class="form-group">
-                    <label>Số lượng cần mua:</label>
-                    <input type="number" class="form-control" id="quantity" value="1000" min="100" oninput="tinhTien()">
+                    <label>Số lượng / Thời hạn (mặc định 1):</label>
+                    <input type="number" class="form-control" id="quantity" value="1" min="1" oninput="tinhTien()">
                 </div>
 
                 <div class="form-group" style="margin-top: 20px;">
-                    <p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">100.000đ</span></p>
+                    <p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">0đ</span></p>
                 </div>
 
-                <button class="btn-submit" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> TẠO ĐƠN HÀNG NGAY</button>
+                <button class="btn-submit" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> MUA NGAY</button>
             </div>
 
             <div class="card">
@@ -151,62 +154,51 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT XỬ LÝ CHUYỂN MỤC -->
+    <!-- JAVASCRIPT XỬ LÝ DỮ LIỆU CÁC MỤC -->
     <script>
         const serviceData = {
             trangchu: {
                 title: "Trang Chủ",
-                heading: "Chào mừng trở lại!",
-                sub: "Chọn một dịch vụ ở menu bên trái hoặc tạo đơn hàng nhanh bên dưới.",
-                label: "Link / ID Tài khoản nhận:",
+                heading: "Tổng Hợp Hack Free Fire",
+                sub: "Vui lòng chọn mục Menu, File iOS-ADR hoặc Aimlock để chọn bản phù hợp.",
+                label: "ID Game / Thông tin nhận:",
                 servers: [
-                    { name: "Tiktok - Tăng Like Video (100đ / lượt)", price: 100 },
-                    { name: "Tiktok - Tăng Follower (200đ / lượt)", price: 200 },
-                    { name: "Facebook - Tăng Like Bài Viết (150đ / lượt)", price: 150 },
-                    { name: "Free Fire - Tăng Lượt Thích (50đ / lượt)", price: 50 }
+                    { name: "Menu Hack FF VIP - 1 Ngày (50.000đ)", price: 50000 },
+                    { name: "File Hack iOS-Android VIP (100.000đ)", price: 100000 },
+                    { name: "Aimlock Kéo Tâm Auto Headshot (80.000đ)", price: 80000 }
                 ]
             },
-            freefire: {
-                title: "Dịch Vụ Free Fire",
-                heading: "Dịch Vụ Game Free Fire",
-                sub: "Tăng lượt thích hồ sơ, tăng lượt xem trận đấu và các dịch vụ Free Fire.",
+            menu_ff: {
+                title: "Hack FF - Menu VIP",
+                heading: "Các Bản Menu Hack Free Fire",
+                sub: "Menu nổi bật, tích hợp Antiban và chống khóa nick.",
+                label: "Nhập ID Nhân Vật / Email Nhận Key:",
+                servers: [
+                    { name: "Menu VVIP V1 - 1 Ngày (30.000đ)", price: 30000 },
+                    { name: "Menu VVIP V1 - 7 Ngày (100.000đ)", price: 100000 },
+                    { name: "Menu VVIP V1 - 30 Ngày (250.000đ)", price: 250000 }
+                ]
+            },
+            file_ios_adr: {
+                title: "Hack FF - File iOS & Android",
+                heading: "File Mod OBB / IPA Cho iOS & Android",
+                sub: "Cài trực tiếp qua file, không cần root máy hay jailbreak.",
+                label: "Nhập Email / Link Zalo Để Nhận File Link:",
+                servers: [
+                    { name: "File OBB Mod Headshot Android (50.000đ)", price: 50000 },
+                    { name: "File IPA Direct Install iOS (120.000đ)", price: 120000 },
+                    { name: "Combo File iOS + Android Full Tính Năng (150.000đ)", price: 150000 }
+                ]
+            },
+            aimlock: {
+                title: "Hack FF - Aimlock Kéo Tâm",
+                heading: "Hỗ Trợ Kéo Tâm Auto Headshot 100%",
+                sub: "Khóa tâm cực chuẩn, không rung ngắm, tối ưu hóa mọi dòng máy.",
                 label: "Nhập ID Nhân Vật Free Fire:",
                 servers: [
-                    { name: "Server 1 - Tăng Lượt Thích Hồ Sơ (50đ / lượt)", price: 50 },
-                    { name: "Server 2 - Tăng Lượt Thích SVIP (80đ / lượt)", price: 80 },
-                    { name: "Server 3 - Buff Lượt Xem Trận Đấu (30đ / lượt)", price: 30 }
-                ]
-            },
-            facebook: {
-                title: "Dịch Vụ Facebook",
-                heading: "Tăng Tương Tác Facebook",
-                sub: "Hỗ trợ buff Like, Follow, Comment bài viết và Trang cá nhân.",
-                label: "Link Bài Viết / Link Profile Facebook:",
-                servers: [
-                    { name: "Server 1 - Tăng Like Bài Viết (150đ / lượt)", price: 150 },
-                    { name: "Server 2 - Tăng Theo Dõi Cá Nhân (250đ / lượt)", price: 250 },
-                    { name: "Server 3 - Tăng Like Fanpage (200đ / lượt)", price: 200 }
-                ]
-            },
-            tiktok: {
-                title: "Dịch Vụ TikTok",
-                heading: "Tăng Tương Tác TikTok",
-                sub: "Hỗ trợ buff View, Like, Follower cho tài khoản TikTok.",
-                label: "Link Video / Link Profile TikTok:",
-                servers: [
-                    { name: "Server 1 - Tăng Like Video (100đ / lượt)", price: 100 },
-                    { name: "Server 2 - Tăng Follower (200đ / lượt)", price: 200 },
-                    { name: "Server 3 - Tăng View Video (10đ / lượt)", price: 10 }
-                ]
-            },
-            instagram: {
-                title: "Dịch Vụ Instagram",
-                heading: "Tăng Tương Tác Instagram",
-                sub: "Hỗ trợ buff Like, Follower Instagram tốc độ cao.",
-                label: "Link Bài Viết / Link Instagram:",
-                servers: [
-                    { name: "Server 1 - Tăng Like Bài Viết (120đ / lượt)", price: 120 },
-                    { name: "Server 2 - Tăng Follower (220đ / lượt)", price: 220 }
+                    { name: "Aimlock Tâm Đỏ 80% Headshot (60.000đ)", price: 60000 },
+                    { name: "Aimlock VIP Full Headshot + Chống Khóa (100.000đ)", price: 100000 },
+                    { name: "Aimlock Siêu Nhạy Chuyên Đua Top (200.000đ)", price: 200000 }
                 ]
             }
         };
@@ -245,7 +237,7 @@
         }
 
         function xacNhanDatHang() {
-            alert("Đã gửi đơn hàng thành công! Hệ thống đang xử lý.");
+            alert("Gửi yêu cầu mua thành công! Hệ thống đang khởi tạo dịch vụ.");
         }
 
         let isEdit = false;
