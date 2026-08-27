@@ -689,7 +689,12 @@ function filterProducts() {
 }
 
 checkUserSession();
-</script>
+</* LỌC SẢN PHẨM KHUYẾN MÃI / FREE */
+function filterKM() {
+    document.getElementById("category").value = "file";
+    filterProducts();
+    document.querySelector('.container').scrollIntoView({behavior: 'smooth'});
+}>
 
 </body>
 </html>
