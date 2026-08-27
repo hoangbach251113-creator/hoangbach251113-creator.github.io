@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUB1S2001.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
+    <title>VIP6S2000.COM - Quản Lý Dịch Vụ Hack FF & MMO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- SDK Firebase Cloud Database -->
@@ -66,15 +66,24 @@
 <body>
 
     <div class="sidebar">
-        <div class="logo-box"><div>HỆ THỐNG DỊCH VỤ GAME<br><small style="font-weight: 400;">sub1s2001.com</small></div></div>
+        <div class="logo-box"><div>HỆ THỐNG DỊCH VỤ GAME<br><small style="font-weight: 400;">Vip6s2000.com</small></div></div>
         <div class="menu-title">DASHBOARD</div>
         <div class="menu-item active" onclick="chonDichVu('trangchu', this)"><div class="left"><i class="fa-solid fa-house"></i> Trang chủ</div></div>
+        
         <div class="menu-title">CHUYÊN MỤC GAME</div>
         <div class="submenu">
             <div class="menu-item" onclick="chonDichVu('menu_ff', this)"><div class="left"><i class="fa-solid fa-bars-staggered"></i> Menu FF</div></div>
             <div class="menu-item" onclick="chonDichVu('file_ios_adr', this)"><div class="left"><i class="fa-solid fa-file-arrow-down"></i> File iOS-ADR</div></div>
             <div class="menu-item" onclick="chonDichVu('aimlock', this)"><div class="left"><i class="fa-solid fa-crosshairs"></i> Aimlock</div></div>
         </div>
+
+        <div class="menu-title">DỊCH VỤ FREE</div>
+        <div class="submenu">
+            <div class="menu-item" onclick="chonDichVu('free_file_ios_adr', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> File iOS&ADR</div></div>
+            <div class="menu-item" onclick="chonDichVu('free_menu_ysm_v8', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> Menu YSM V8</div></div>
+            <div class="menu-item" onclick="chonDichVu('free_tool_dame_fb', this)"><div class="left" style="color: #16a34a;"><i class="fa-solid fa-gift"></i> Tool Dame Facebook</div></div>
+        </div>
+
         <div class="menu-title">DỊCH VỤ KIẾM TIỀN</div>
         <div class="menu-item" onclick="chonDichVu('mmo', this)"><div class="left" style="font-weight: 700; color: #2563eb;"><i class="fa-solid fa-coins"></i> MMO</div></div>
     </div>
@@ -104,10 +113,10 @@
             <div class="card">
                 <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 <div class="form-group"><label>Chọn gói/máy chủ:</label><select class="form-control" id="server-select" onchange="tinhTien()"></select></div>
-                <div class="form-group"><label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label><input type="text" class="form-control" placeholder="Dán ID game tại đây..."></div>
+                <div class="form-group"><label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label><input type="text" class="form-control" placeholder="Dán ID hoặc thông tin tại đây..."></div>
                 <div class="form-group"><label>Số lượng:</label><input type="number" class="form-control" id="quantity" value="1" min="1" oninput="tinhTien()"></div>
                 <div class="form-group" style="margin-top: 20px;"><p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">0đ</span></p></div>
-                <button class="btn-submit" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> MUA NGAY</button>
+                <button class="btn-submit" id="btn-submit-order" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> MUA NGAY</button>
             </div>
 
             <div class="card">
@@ -217,12 +226,32 @@
                     { name: 'Server 1: Aimlock 80% (An Toàn) - 25,000đ', price: 25000 },
                     { name: 'Server 2: Aimlock 100% Đạn Đuổi - 60,000đ', price: 60000 }
                 ]
+            },
+            'free_file_ios_adr': {
+                title: 'Dịch Vụ Miễn Phí: File iOS & ADR',
+                labelInput: 'Nhập Email / Link Tải Của Bạn:',
+                servers: [
+                    { name: 'Gói Miễn Phí: File Regedit Free iOS & Android - 0đ', price: 0 }
+                ]
+            },
+            'free_menu_ysm_v8': {
+                title: 'Dịch Vụ Miễn Phí: Menu YSM V8',
+                labelInput: 'Nhập ID Game / Email Nhận Key:',
+                servers: [
+                    { name: 'Gói Miễn Phí: Menu YSM V8 (Bản Free) - 0đ', price: 0 }
+                ]
+            },
+            'free_tool_dame_fb': {
+                title: 'Dịch Vụ Miễn Phí: Tool Dame Facebook',
+                labelInput: 'Nhập Link/ID Facebook Cần Dame:',
+                servers: [
+                    { name: 'Gói Miễn Phí: Tool Dame Facebook Spam Link - 0đ', price: 0 }
+                ]
             }
         };
 
         let currentCategory = 'trangchu';
 
-        // Lắng nghe dữ liệu Người dùng từ Firebase
         db.ref('users').on('value', snapshot => {
             users = snapshot.val() || {};
             if (!users['admin']) {
@@ -231,10 +260,8 @@
             capNhatGiaoDienUser();
         });
 
-        // Lắng nghe dữ liệu Sản phẩm MMO từ Firebase
         db.ref('mmo_products').on('value', snapshot => {
             mmoProducts = snapshot.val() || {};
-            // Nếu chưa có sản phẩm nào thì khởi tạo dữ liệu mẫu
             if (Object.keys(mmoProducts).length === 0) {
                 const macDinh = {
                     p1: { name: 'Tài Khoản Facebook Clone Veri Phone', price: 5000, img: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' },
@@ -255,6 +282,7 @@
 
             const defaultView = document.getElementById('default-view');
             const mmoView = document.getElementById('mmo-product-view');
+            const btnSubmit = document.getElementById('btn-submit-order');
 
             if (key === 'mmo') {
                 defaultView.style.display = 'none';
@@ -270,9 +298,17 @@
                 const data = dichVuData[key];
                 document.getElementById('page-title').innerText = data.title;
                 document.getElementById('welcome-heading').innerText = data.title;
-                document.getElementById('welcome-sub').innerText = 'Điền đúng ID/Thông tin để hệ thống xử lý nhanh nhất.';
+                document.getElementById('welcome-sub').innerText = key.startsWith('free_') ? 'Dịch vụ hoàn toàn miễn phí - Điền thông tin để nhận!' : 'Điền đúng ID/Thông tin để hệ thống xử lý nhanh nhất.';
                 document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn: ${data.title}`;
                 document.getElementById('input-label').innerText = data.labelInput;
+
+                if (key.startsWith('free_')) {
+                    btnSubmit.innerHTML = `<i class="fa-solid fa-gift"></i> NHẬN MIỄN PHÍ NGAY`;
+                    btnSubmit.style.background = '#16a34a';
+                } else {
+                    btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> MUA NGAY`;
+                    btnSubmit.style.background = '#ef4444';
+                }
 
                 const select = document.getElementById('server-select');
                 select.innerHTML = '';
@@ -291,6 +327,9 @@
                 document.getElementById('welcome-sub').innerText = 'Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.';
                 document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ`;
                 document.getElementById('input-label').innerText = 'ID Nhân Vật Free Fire / Link Profile:';
+
+                btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> MUA NGAY`;
+                btnSubmit.style.background = '#ef4444';
 
                 const select = document.getElementById('server-select');
                 select.innerHTML = '<option value="">-- Vui lòng chọn chuyên mục ở menu trái --</option>';
@@ -336,7 +375,7 @@
         }
 
         function xacNhanDatHang() {
-            if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện mua hàng!");
+            if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện đặt đơn!");
             if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
 
             const srvIndex = document.getElementById('server-select').value;
@@ -349,7 +388,11 @@
             } else {
                 let newBal = userBal - total;
                 db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
-                    alert("Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.");
+                    if (total === 0) {
+                        alert("Nhận dịch vụ miễn phí thành công! Yêu cầu của bạn đang được xử lý.");
+                    } else {
+                        alert("Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.");
+                    }
                 });
             }
         }
@@ -408,7 +451,6 @@
             }
         }
 
-        // CHỨC NĂNG ADMIN: CỘNG TIỀN
         function adminCongTienTheoID() {
             const targetId = parseInt(document.getElementById('admin-target-id').value);
             const amount = parseInt(document.getElementById('admin-add-amount').value);
@@ -433,7 +475,6 @@
             });
         }
 
-        // CHỨC NĂNG ADMIN: THÊM SẢN PHẨM MMO
         function adminThemMMO() {
             const title = document.getElementById('mmo-title-input').value.trim();
             const price = parseInt(document.getElementById('mmo-price-input').value);
@@ -454,7 +495,6 @@
             });
         }
 
-        // CHỨC NĂNG ADMIN: XÓA SẢN PHẨM MMO
         function adminXoaMMO(key) {
             if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi Cloud?")) {
                 db.ref('mmo_products/' + key).remove().then(() => {
