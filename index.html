@@ -1,643 +1,1489 @@
 <!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop MMO-HACK FF - Shop Game Uy Tín</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
 
-        body {
-            background-color: #f4f6f9;
-            color: #333;
-        }
+<meta charset="UTF-8">
 
-        header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #e1e8ed;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
+<title>Shop MMO-HACK FF - Shop Game & Tool Uy Tín</title>
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: #08a85a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
 
-        .logo-text {
-            font-size: 22px;
-            font-weight: bold;
-            color: #08a85a;
-        }
 
-        .logo-text span {
-            color: #333;
-        }
+<!-- Favicon Icon Con Mèo -->
 
-        nav {
-            display: flex;
-            gap: 20px;
-        }
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2308a85a'/><path d='M30 35 L20 15 L40 25 Z' fill='%23ff9800'/><path d='M70 35 L80 15 L60 25 Z' fill='%23ff9800'/><circle cx='50' cy='55' r='30' fill='%23ffffff'/><circle cx='38' cy='50' r='5' fill='%23333'/><circle cx='62' cy='50' r='5' fill='%23333'/><polygon points='50,58 45,63 55,63' fill='%23ff4081'/></svg>">
 
-        nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
 
-        nav a:hover {
-            color: #08a85a;
-        }
 
-        .auth-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+<style>
 
-        .btn-auth, .btn-admin-panel {
-            background-color: #08a85a;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
+* {
 
-        .btn-admin-panel {
-            background-color: #ff9800;
-        }
+    box-sizing: border-box;
 
-        .btn-auth:hover { background-color: #068a49; }
-        .btn-admin-panel:hover { background-color: #e68a00; }
+    margin: 0;
 
-        .btn-logout {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 5px;
-        }
+    padding: 0;
 
-        .user-display {
-            display: none;
-            align-items: center;
-            font-size: 14px;
-        }
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 15px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 25px;
-        }
 
-        .sidebar {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            height: fit-content;
-        }
 
-        .sidebar label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #666;
-            margin-top: 15px;
-            display: block;
-        }
+body {
 
-        .sidebar label:first-child { margin-top: 0; }
+    font-family: 'Segoe UI', Arial, sans-serif;
 
-        .sidebar input, .sidebar select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            outline: none;
-            font-size: 14px;
-        }
+    background: #f5f6f8;
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
+    color: #111;
 
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+}
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
 
-        .product-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #eee;
-        }
 
-        .product-info {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
+/* HEADER */
 
-        .product-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #222;
-        }
+header {
 
-        .product-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: #d32f2f;
-            margin-bottom: 5px;
-        }
+    height: 75px;
 
-        .product-tag {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #08a85a;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            width: fit-content;
-        }
+    background: white;
 
-        .rating {
-            color: #ffc107;
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
+    border-bottom: 1px solid #e5e5e5;
 
-        .btn-buy {
-            background-color: #08a85a;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-            margin-top: auto;
-            transition: background 0.2s;
-        }
+    display: flex;
 
-        .btn-buy:hover {
-            background-color: #068a49;
-        }
+    align-items: center;
 
-        .delete-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
+    padding: 0 5%;
 
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+    gap: 25px;
 
-        .modal {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #888;
-        }
+}
 
-        .modal h3 { margin-bottom: 15px; }
 
-        .modal input, .modal select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
 
-        .btn-submit {
-            width: 100%;
-            background: #08a85a;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.logo-box {
 
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-            header { flex-direction: column; gap: 15px; }
-        }
-    </style>
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-decoration: none;
+
+}
+
+
+
+.cat-avatar {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    background: #08a85a;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 2px solid #08a85a;
+
+    overflow: hidden;
+
+}
+
+
+
+.logo-text {
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    color: #08a85a;
+
+}
+
+
+
+.logo-text span {
+
+    color: #111;
+
+}
+
+
+
+nav {
+
+    display: flex;
+
+    gap: 20px;
+
+}
+
+
+
+nav a {
+
+    text-decoration: none;
+
+    color: #333;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+
+}
+
+
+
+nav a:hover {
+
+    color: #08a85a;
+
+}
+
+
+
+.auth-box {
+
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+
+.btn-auth {
+
+    border: 1px solid #08a85a;
+
+    color: #078c4d;
+
+    background: white;
+
+    padding: 8px 18px;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+}
+
+
+
+.btn-auth:hover {
+
+    background: #08a85a;
+
+    color: white;
+
+}
+
+
+
+.btn-admin-panel {
+
+    background: #ff9800;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    display: none;
+
+}
+
+
+
+.user-display {
+
+    display: none;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-weight: bold;
+
+    color: #08a85a;
+
+}
+
+
+
+.btn-logout {
+
+    background: #ff4d4f;
+
+    color: white;
+
+    border: none;
+
+    padding: 6px 12px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+}
+
+
+
+/* MAIN CONTAINER */
+
+.container {
+
+    max-width: 1200px;
+
+    margin: 25px auto;
+
+    display: grid;
+
+    grid-template-columns: 200px 1fr;
+
+    gap: 20px;
+
+    padding: 0 15px;
+
+}
+
+
+
+/* SIDEBAR */
+
+.sidebar {
+
+    background: white;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+    height: fit-content;
+
+}
+
+
+
+.sidebar label {
+
+    display: block;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+
+    font-weight: 700;
+
+    color: #555;
+
+}
+
+
+
+.sidebar input,
+
+.sidebar select {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    margin-bottom: 15px;
+
+    outline: none;
+
+}
+
+
+
+/* PRODUCT LIST */
+
+.products {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+}
+
+
+
+.product {
+
+    background: white;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    transition: 0.2s;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+    position: relative;
+
+}
+
+
+
+.product:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+}
+
+
+
+.product-img {
+
+    width: 100%;
+
+    height: 180px;
+
+    object-fit: cover;
+
+    background-color: #eee;
+
+}
+
+
+
+.product-info {
+
+    padding: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex-grow: 1;
+
+}
+
+
+
+.product-name {
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+    line-height: 1.3;
+
+}
+
+
+
+.price {
+
+    color: #ff3025;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    margin-bottom: 6px;
+
+}
+
+
+
+.price-free {
+
+    color: #08a85a;
+
+}
+
+
+
+.category {
+
+    display: inline-block;
+
+    color: #08a85a;
+
+    background: #eefaf2;
+
+    padding: 3px 8px;
+
+    border-radius: 4px;
+
+    font-size: 11px;
+
+    margin-bottom: 10px;
+
+    align-self: flex-start;
+
+    font-weight: 600;
+
+}
+
+
+
+.rating {
+
+    color: #ffc400;
+
+    font-size: 13px;
+
+    margin-bottom: 12px;
+
+    margin-top: auto;
+
+}
+
+
+
+.sold {
+
+    color: #888;
+
+    margin-left: 4px;
+
+}
+
+
+
+.buy-btn {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid #08a85a;
+
+    background: #08a85a;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    display: block;
+
+    transition: 0.2s;
+
+}
+
+
+
+.buy-btn:hover {
+
+    background: #068748;
+
+}
+
+
+
+.btn-delete-prod {
+
+    position: absolute;
+
+    top: 8px;
+
+    right: 8px;
+
+    background: #ff4d4f;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 50%;
+
+    width: 26px;
+
+    height: 26px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    display: none;
+
+}
+
+
+
+/* MODAL OVERLAY */
+
+.modal-overlay {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0,0,0,0.6);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 1000;
+
+}
+
+
+
+.modal {
+
+    background: white;
+
+    width: 90%;
+
+    max-width: 420px;
+
+    border-radius: 12px;
+
+    padding: 24px;
+
+    position: relative;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+}
+
+
+
+.close-btn {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 16px;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    color: #888;
+
+}
+
+
+
+/* AUTH FORM */
+
+.auth-tabs {
+
+    display: flex;
+
+    gap: 15px;
+
+    border-bottom: 2px solid #eee;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.tab-btn {
+
+    padding: 8px 5px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: #888;
+
+    border-bottom: 2px solid transparent;
+
+    margin-bottom: -2px;
+
+}
+
+
+
+.tab-btn.active {
+
+    color: #08a85a;
+
+    border-bottom-color: #08a85a;
+
+}
+
+
+
+.auth-form input, .auth-form select {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    margin-bottom: 12px;
+
+    outline: none;
+
+}
+
+
+
+.btn-submit {
+
+    width: 100%;
+
+    background: #08a85a;
+
+    color: white;
+
+    border: none;
+
+    padding: 11px;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 5px;
+
+}
+
+
+
+/* KHUNG HIỂN THỊ SĐT MUA HÀNG */
+
+.contact-box {
+
+    text-align: center;
+
+    padding: 10px 0;
+
+}
+
+
+
+.phone-number {
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    color: #08a85a;
+
+    margin: 15px 0;
+
+    background: #eefaf2;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    border: 1px dashed #08a85a;
+
+}
+
+
+
+@media (max-width: 800px) {
+
+    nav { display: none; }
+
+    .container { grid-template-columns: 1fr; }
+
+    .products { grid-template-columns: repeat(2, 1fr); }
+
+}
+
+@media (max-width: 500px) {
+
+    .products { grid-template-columns: 1fr; }
+
+}
+
+</style>
+
 </head>
+
+
+
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <a href="#" class="logo">
-            <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            </div>
-            <div class="logo-text">MMO-HACK <span>FF</span></div>
-        </a>
 
-        <nav>
-            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">TRANG CHỦ</a>
-            <a href="#" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'}); return false;">SẢN PHẨM</a>
-            <a href="#" onclick="openDepositModal(); return false;" style="color: #08a85a; font-weight: bold;">💳 NẠP TIỀN</a>
-            <a href="#" onclick="filterKM(); return false;">KHUYẾN MÃI</a>
-            <a href="#" onclick="openBuyModal('Hỗ Trợ Liên Hệ', 0); return false;">LIÊN HỆ</a>
-        </nav>
 
-        <div class="auth-box">
-            <button class="btn-admin-panel" id="adminBtn" onclick="openAdminModal()">⚙️ Thêm SP Mới</button>
-            <button class="btn-auth" id="loginBtn" onclick="openAuthModal()">Đăng nhập</button>
-            <div class="user-display" id="userDisplay">
-                <span>👋 Chào, <b id="userNameText">User</b></span>
-                <button class="btn-logout" onclick="logout()">Thoát</button>
-            </div>
-        </div>
-    </header>
+<!-- HEADER -->
 
-    <!-- MAIN CONTAINER -->
-    <div class="container">
-        <aside class="sidebar">
-            <label>Tìm kiếm</label>
-            <input type="text" id="search" placeholder="Nhập tên sản phẩm..." autocomplete="off">
+<header>
 
-            <label>Danh mục</label>
-            <select id="categoryFilter">
-                <option value="all">Tất cả</option>
-                <option value="File Free">File Free</option>
-                <option value="Tool">Tool</option>
-                <option value="Acc">Acc</option>
-            </select>
+    <a href="#" class="logo-box">
 
-            <label>Sắp xếp giá</label>
-            <select id="priceSort">
-                <option value="default">Mặc định</option>
-                <option value="asc">Giá: Thấp đến Cao</option>
-                <option value="desc">Giá: Cao đến Thấp</option>
-            </select>
-        </aside>
+        <div class="cat-avatar">
 
-        <main>
-            <div class="products-grid" id="productGrid"></div>
-        </main>
-    </div>
+            <svg width="35" height="35" viewBox="0 0 100 100">
 
-    <!-- MODAL THÊM SẢN PHẨM -->
-    <div class="modal-overlay" id="adminModal">
-        <div class="modal">
-            <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-            <h3>Thêm Sản Phẩm Mới</h3>
-            <input type="text" id="pTitle" placeholder="Tên sản phẩm">
-            <input type="number" id="pPrice" placeholder="Giá tiền (Đồng)">
-            <input type="text" id="pImg" placeholder="Link ảnh (URL)">
-            <select id="pTag">
-                <option value="File Free">File Free</option>
-                <option value="Tool">Tool</option>
-                <option value="Acc">Acc</option>
-            </select>
-            <button class="btn-submit" onclick="addProduct()">TẠO SẢN PHẨM</button>
-        </div>
-    </div>
+                <circle cx="50" cy="50" r="45" fill="#ffb74d"/>
 
-    <!-- MODAL ĐĂNG NHẬP -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal">
-            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
-            <h3>Đăng Nhập Tài Khoản</h3>
-            <input type="text" id="loginUser" placeholder="Tên tài khoản" autocomplete="off">
-            <input type="password" id="loginPass" placeholder="Mật khẩu" autocomplete="off">
-            <button class="btn-submit" onclick="login()">ĐẮNG NHẬP</button>
-        </div>
-    </div>
+                <polygon points="20,35 10,10 40,20" fill="#f57c00"/>
 
-    <!-- MODAL MUA HÀNG -->
-    <div class="modal-overlay" id="buyModal">
-        <div class="modal">
-            <span class="close-btn" onclick="closeBuyModal()">&times;</span>
-            <h3 id="buyTitle">Xác Nhận Mua Hàng</h3>
-            <p style="margin-bottom: 10px; font-weight: bold; color: #d32f2f;" id="buyPrice"></p>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Vui lòng nhập tên của bạn hoặc chụp màn hình bill thanh toán gửi Zalo Admin!</p>
-            <input type="text" id="buyerNote" placeholder="Tên / Số Zalo của bạn">
-            <button class="btn-submit" onclick="confirmBuy()">XÁC NHẬN MUA</button>
-        </div>
-    </div>
+                <polygon points="80,35 90,10 60,20" fill="#f57c00"/>
 
-    <!-- MODAL NẠP TIỀN -->
-    <div class="modal-overlay" id="depositModal" style="display: none;">
-        <div class="modal" style="max-width: 500px; text-align: center;">
-            <span class="close-btn" onclick="closeDepositModal()">&times;</span>
-            <h3 style="color: #08a85a; margin-bottom: 15px;">💳 NẠP TIỀN VÀO TÀI KHOẢN</h3>
-            
-            <div style="border: 2px solid #08a85a; padding: 12px; border-radius: 8px; background: #eefaf2; margin-bottom: 15px;">
-                <b>Ngân hàng: MB Bank</b><br>
-                <span>Chủ TK: <b>HOANG THI BACH</b></span><br>
-                <span style="color: #d32f2f; font-weight: bold; font-size: 18px;">STK: 0973350113</span>
-            </div>
+                <circle cx="50" cy="55" r="30" fill="#ffffff"/>
 
-            <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                <p style="font-weight: bold; margin-bottom: 8px;">Quét mã QR để chuyển khoản nhanh:</p>
-                <img src="https://img.vietqr.io/image/MB-0973350113-compact2.png?amount=50000&addInfo=NAP%20TIEN%20WEB" alt="QR Nap Tien" style="max-width: 180px; border-radius: 8px; border: 1px solid #ddd;">
-                <p style="font-size: 12px; color: #666; margin-top: 5px;">Cú pháp chuyển khoản: <b>NAP TIEN [Tên tài khoản]</b></p>
-            </div>
+                <path d="M 35 50 Q 40 55 45 50" stroke="#333" stroke-width="3" fill="none"/>
 
-            <p style="font-size: 13px; color: #555; background: #fff3cd; padding: 8px; border-radius: 6px;">
-                📌 Sau khi chuyển khoản xong, vui lòng nhắn cho Admin Hoàng Bách qua Zalo <b>0973 350 113</b> để duyệt tiền nhanh nhất!
-            </p>
+                <path d="M 55 50 Q 60 55 65 50" stroke="#333" stroke-width="3" fill="none"/>
 
-            <button class="btn-submit" onclick="closeDepositModal()" style="margin-top: 15px; background: #555;">Đóng</button>
-        </div>
-    </div>
+                <polygon points="50,57 46,62 54,62" fill="#ff4081"/>
 
-    <!-- MODAL THÔNG BÁO TỰ ĐỘNG BẬT -->
-    <div class="modal-overlay" id="noticeModal" style="display: flex;">
-        <div class="modal" style="max-width: 480px;">
-            <span class="close-btn" onclick="closeNoticeModal()">&times;</span>
-            <div style="text-align: center; margin-bottom: 15px;">
-                <h3 style="color: #08a85a; font-size: 20px;">🔔 THÔNG BÁO TỪ SHOP</h3>
-            </div>
-            <div style="font-size: 14px; line-height: 1.6; color: #333; max-height: 320px; overflow-y: auto; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                <p>👋 <b>Chào mừng bạn đến với Shop MMO-HACK FF!</b></p><br>
-                <p>📌 <b>Lưu ý khi mua hàng:</b></p>
-                <p>* Hỗ trợ nạp tiền & duyệt đơn 24/7 qua Zalo Admin.</p>
-                <p>* Mọi thắc mắc hoặc cần tư vấn vui lòng liên hệ Zalo: <b>0973 350 113</b> (Hoàng Bách).</p>
-                <p>* Chúc các bạn trải nghiệm dịch vụ vui vẻ!</p>
-            </div>
-            <div style="margin-top: 15px; display: flex; gap: 10px;">
-                <button class="btn-submit" onclick="closeNoticeModal()" style="background: #08a85a;">Đã hiểu</button>
-            </div>
-        </div>
-    </div>
+            </svg>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        const defaultProducts = [
-            { id: 1, title: "Menu antiband 99%", price: 20000, img: "https://via.placeholder.com/300x160", tag: "File Free", sold: 0 },
-            { id: 2, title: "file aimlock ios anti 90%", price: 40000, img: "https://via.placeholder.com/300x160", tag: "File Free", sold: 0 },
-            { id: 3, title: "file aimlock adr vip", price: 30000, img: "https://via.placeholder.com/300x160", tag: "File Free", sold: 0 },
-            { id: 4, title: "Menu Migul pro", price: 70000, img: "https://via.placeholder.com/300x160", tag: "File Free", sold: 0 },
-            { id: 5, title: "Mod skin nv ff", price: 20000, img: "https://via.placeholder.com/300x160", tag: "File Free", sold: 0 },
-            { id: 6, title: "Tool dame thành vinh 4 chế độ", price: 50000, img: "https://via.placeholder.com/300x160", tag: "Tool", sold: 0 }
-        ];
+        </div>
 
-        let products = JSON.parse(localStorage.getItem('mmo_products')) || defaultProducts;
-        let currentUser = localStorage.getItem('mmo_user') || null;
+        <div class="logo-text">MMO-HACK <span>FF</span></div>
 
-        function saveProducts() {
-            localStorage.setItem('mmo_products', JSON.stringify(products));
-        }
+    </a>
 
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
-            const searchInput = document.getElementById('search');
-            const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            const categoryVal = document.getElementById('categoryFilter').value;
-            const sortVal = document.getElementById('priceSort').value;
 
-            let filtered = products.filter(p => {
-                const matchSearch = p.title.toLowerCase().includes(searchVal);
-                const matchCategory = categoryVal === 'all' || p.tag === categoryVal;
-                return matchSearch && matchCategory;
-            });
 
-            if (sortVal === 'asc') {
-                filtered.sort((a, b) => a.price - b.price);
-            } else if (sortVal === 'desc') {
-                filtered.sort((a, b) => b.price - a.price);
-            }
+    <nav>
 
-            grid.innerHTML = '';
-            filtered.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <button class="delete-btn" style="display: ${currentUser === 'admin' ? 'flex' : 'none'}" onclick="deleteProduct(${p.id})">&times;</button>
-                    <img src="${p.img || 'https://via.placeholder.com/300x160'}" class="product-img" alt="${p.title}">
-                    <div class="product-info">
-                        <div class="product-title">${p.title}</div>
-                        <div class="product-price">${Number(p.price).toLocaleString('vi-VN')} đ</div>
-                        <div class="product-tag">${p.tag}</div>
-                        <div class="rating">★★★★★ <span style="color:#888;">Đã bán ${p.sold || 0}</span></div>
-                        <button class="btn-buy" onclick="openBuyModal('${p.title}', ${p.price})">Mua Hàng</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">TRANG CHỦ</a>
 
-            updateAuthUI();
-        }
+    <a href="#" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'}); return false;">SẢN PHẨM</a>
 
-        function updateAuthUI() {
-            const loginBtn = document.getElementById('loginBtn');
-            const userDisplay = document.getElementById('userDisplay');
-            const adminBtn = document.getElementById('adminBtn');
-            const userNameText = document.getElementById('userNameText');
+    <a href="#" onclick="openDepositModal(); return false;" style="color: #08a85a; font-weight: bold;">💳 NẠP TIỀN</a>
 
-            if (currentUser) {
-                loginBtn.style.display = 'none';
-                userDisplay.style.display = 'flex';
-                userNameText.innerText = currentUser;
-                if (currentUser === 'admin') {
-                    adminBtn.style.display = 'block';
-                } else {
-                    adminBtn.style.display = 'none';
-                }
-            } else {
-                loginBtn.style.display = 'block';
-                userDisplay.style.display = 'none';
-                adminBtn.style.display = 'none';
-            }
-        }
+    <a href="#" onclick="filterKM(); return false;">KHUYẾN MÃI</a>
 
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-        
-        function login() {
-            const u = document.getElementById('loginUser').value;
-            const p = document.getElementById('loginPass').value;
-            if (u === 'admin' && p === 'admin123') {
-                currentUser = 'admin';
-            } else if (u) {
-                currentUser = u;
-            } else {
-                alert('Vui lòng nhập tên tài khoản!');
-                return;
-            }
-            localStorage.setItem('mmo_user', currentUser);
-            closeAuthModal();
-            renderProducts();
-        }
+    <a href="#" onclick="openBuyModal('Hỗ Trợ Liên Hệ', 0); return false;">LIÊN HỆ</a>
 
-        function logout() {
-            localStorage.removeItem('mmo_user');
-            currentUser = null;
-            renderProducts();
-        }
+</nav>
 
-        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
-        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        function addProduct() {
-            const title = document.getElementById('pTitle').value;
-            const price = document.getElementById('pPrice').value;
-            const img = document.getElementById('pImg').value;
-            const tag = document.getElementById('pTag').value;
 
-            if (!title || !price) {
-                alert('Vui lòng điền tên và giá sản phẩm!');
-                return;
-            }
+    <div class="auth-box">
 
-            const newP = {
-                id: Date.now(),
-                title: title,
-                price: Number(price),
-                img: img || 'https://via.placeholder.com/300x160',
-                tag: tag,
-                sold: 0
-            };
+        <button class="btn-admin-panel" id="adminBtn" onclick="openAdminModal()">⚙️ Thêm SP Mới</button>
 
-            products.push(newP);
-            saveProducts();
-            renderProducts();
-            closeAdminModal();
-            
-            document.getElementById('pTitle').value = '';
-            document.getElementById('pPrice').value = '';
-            document.getElementById('pImg').value = '';
-        }
+        <button class="btn-auth" id="loginBtn" onclick="openAuthModal()">Đăng nhập</button>
 
-        function deleteProduct(id) {
-            if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-                products = products.filter(p => p.id !== id);
-                saveProducts();
-                renderProducts();
-            }
-        }
+        <div class="user-display" id="userDisplay">
 
-        let currentBuyItem = null;
-        function openBuyModal(title, price) {
-            currentBuyItem = title;
-            document.getElementById('buyTitle').innerText = title;
-            document.getElementById('buyPrice').innerText = price > 0 ? Number(price).toLocaleString('vi-VN') + ' VNĐ' : 'Miễn phí / Liên hệ';
-            document.getElementById('buyModal').style.display = 'flex';
-        }
-        function closeBuyModal() { document.getElementById('buyModal').style.display = 'none'; }
+            <span>👋 Chào, <b id="usernameText">User</b></span>
 
-        function confirmBuy() {
-            const note = document.getElementById('buyerNote').value;
-            if (!note) {
-                alert('Vui lòng điền thông tin Zalo/Tên của bạn!');
-                return;
-            }
-            alert(`Yêu cầu mua "${currentBuyItem}" đã gửi thành công!\nVui lòng liên hệ Admin Zalo: 0973 350 113 để nhận file/tài khoản.`);
-            closeBuyModal();
-        }
+            <button class="btn-logout" onclick="logout()">Thoát</button>
 
-        function openDepositModal() { document.getElementById("depositModal").style.display = "flex"; }
-        function closeDepositModal() { document.getElementById("depositModal").style.display = "none"; }
+        </div>
 
-        function closeNoticeModal() { document.getElementById("noticeModal").style.display = "none"; }
+    </div>
 
-        document.getElementById('search').addEventListener('input', renderProducts);
-        document.getElementById('categoryFilter').addEventListener('change', renderProducts);
-        document.getElementById('priceSort').addEventListener('change', renderProducts);
+</header>
 
-        function filterKM() {
-            document.getElementById('categoryFilter').value = 'File Free';
-            renderProducts();
-        }
 
-        // Tự động xóa ô tìm kiếm khi load trang để hiển thị toàn bộ SP
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('search').value = '';
-            renderProducts();
-        });
-    </script>
-</body>
+
+<!-- MAIN CONTAINER -->
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <label>Tìm kiếm</label>
+
+        <input type="text" id="search" placeholder="Nhập tên sản phẩm...">
+
+
+
+        <label>Danh mục</label>
+
+        <select id="category">
+
+            <option value="all">Tất cả</option>
+
+            <option value="game">Sản phẩm Game</option>
+
+            <option value="tool">Tool</option>
+
+            <option value="file">File Free</option>
+
+        </select>
+
+
+
+        <label>Sắp xếp giá</label>
+
+        <select id="sort">
+
+            <option value="default">Mặc định</option>
+
+            <option value="cheap">Từ thấp → cao</option>
+
+            <option value="expensive">Từ cao → thấp</option>
+
+        </select>
+
+    </aside>
+
+
+
+    <main>
+
+        <div class="products" id="products">
+
+            <!-- Sản phẩm được tự động hiển thị từ Script -->
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+
+<div class="modal-overlay" id="authModal">
+
+    <div class="modal">
+
+        <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+
+        <div class="auth-tabs">
+
+            <div class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Đăng nhập</div>
+
+            <div class="tab-btn" id="tabRegister" onclick="switchTab('register')">Đăng ký</div>
+
+        </div>
+
+
+
+        <form class="auth-form" id="formLogin" onsubmit="handleLogin(event)">
+
+            <input type="text" id="loginUser" placeholder="Tên tài khoản" required>
+
+            <input type="password" id="loginPass" placeholder="Mật khẩu" required>
+
+            <button type="submit" class="btn-submit">Đăng Nhập</button>
+
+        </form>
+
+
+
+        <form class="auth-form" id="formRegister" style="display:none;" onsubmit="handleRegister(event)">
+
+            <input type="text" id="regUser" placeholder="Tạo tên tài khoản" required>
+
+            <input type="password" id="regPass" placeholder="Tạo mật khẩu" required>
+
+            <button type="submit" class="btn-submit">Đăng ký ngay</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- MODAL QUẢN TRỊ ADMIN (THÊM SẢN PHẨM) -->
+
+<div class="modal-overlay" id="adminModal">
+
+    <div class="modal">
+
+        <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+
+        <h3 style="margin-bottom:15px; color:#ff9800;">⚙️ Thêm Sản Phẩm Mới</h3>
+
+        <form class="auth-form" onsubmit="addNewProduct(event)">
+
+            <input type="text" id="newProdName" placeholder="Tên sản phẩm" required>
+
+            <input type="number" id="newProdPrice" placeholder="Giá (VD: 25000)" required>
+
+            <input type="text" id="newProdImg" placeholder="Link hoặc Tên file ảnh" required>
+
+            <select id="newProdCat">
+
+                <option value="game">Sản phẩm Game</option>
+
+                <option value="tool">Tool</option>
+
+                <option value="file">File Free</option>
+
+            </select>
+
+            <button type="submit" class="btn-submit" style="background:#ff9800;">Thêm Ngay</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- MODAL BẢNG THÔNG BÁO SỐ ĐIỆN THOẠI HỖ TRỢ -->
+
+<div class="modal-overlay" id="buyModal">
+
+    <div class="modal">
+
+        <span class="close-btn" onclick="closeBuyModal()">&times;</span>
+
+        <div class="contact-box">
+
+            <h3 style="color:#08a85a; margin-bottom: 5px;">XÁC NHẬN MUA HÀNG</h3>
+
+            <p id="buyProdName" style="font-weight: bold; margin-bottom: 10px;"></p>
+
+            <p style="font-size: 14px; color: #555;">Vui lòng liên hệ Admin <b>Hoàng Bách</b> để hoàn tất giao dịch:</p>
+
+            
+
+            <div class="phone-number">0973 350 113</div>
+
+            
+
+            <a id="zaloLinkBtn" href="https://zalo.me/0973350113" target="_blank" class="btn-submit" style="display:block; text-decoration:none; text-align:center;">
+
+                💬 Nhắn Tin Qua Zalo Ngay
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* DỮ LIỆU SẢN PHẨM MẶC ĐỊNH */
+
+const defaultProducts = [
+
+    { id: 1, name: "tool dame facebook pro 4 che do", price: 35000, cat: "tool", img: "./sp1.jpg", sold: 12 },
+
+    { id: 2, name: "menu hack ff", price: 15000, cat: "game", img: "./sp2.jpg", sold: 28 },
+
+    { id: 3, name: "menu hack ff vip", price: 25000, cat: "game", img: "./sp3.jpg", sold: 45 },
+
+    { id: 4, name: "random hack ff", price: 20000, cat: "game", img: "./sp4.jpg", sold: 19 },
+
+    { id: 5, name: "Nhận File Free Cho Cả Android và iOS", price: 0, cat: "file", img: "./sp5.jpg", sold: 102 }
+
+];
+
+
+
+function getProducts() {
+
+    return JSON.parse(localStorage.getItem("shopProducts")) || defaultProducts;
+
+}
+
+
+
+function saveProducts(data) {
+
+    localStorage.setItem("shopProducts", JSON.stringify(data));
+
+}
+
+
+
+function renderProducts() {
+
+    const list = getProducts();
+
+    const box = document.getElementById("products");
+
+    const isAdmin = localStorage.getItem("currentUser") === "admin";
+
+    
+
+    box.innerHTML = list.map(item => `
+
+        <div class="product" data-category="${item.cat}" data-price="${item.price}">
+
+            ${isAdmin ? `<button class="btn-delete-prod" style="display:block;" onclick="deleteProduct(${item.id})">✕</button>` : ''}
+
+            <img class="product-img" src="${item.img}" alt="${item.name}">
+
+            <div class="product-info">
+
+                <div class="product-name">${item.name}</div>
+
+                <div class="price ${item.price === 0 ? 'price-free' : ''}">
+
+                    ${item.price === 0 ? 'MIỄN PHÍ (0đ)' : item.price.toLocaleString('vi-VN') + ' đ'}
+
+                </div>
+
+                <span class="category">${item.cat === 'game' ? 'Sản phẩm Game' : item.cat === 'tool' ? 'Tool' : 'File Free'}</span>
+
+                <div class="rating">★ ★ ★ ★ ★ <span class="sold">Đã bán ${item.sold}</span></div>
+
+                <button class="buy-btn" onclick="openBuyModal('${item.name}', ${item.price})">Mua Hàng</button>
+
+            </div>
+
+        </div>
+
+    `).join('');
+
+}
+
+
+
+/* XỬ LÝ NÚT MUA HÀNG VÀ HIỂN THỊ SĐT */
+
+const buyModal = document.getElementById("buyModal");
+
+
+
+function openBuyModal(productName, price) {
+
+    const priceText = price === 0 ? "Miễn Phí" : price.toLocaleString('vi-VN') + "đ";
+
+    document.getElementById("buyProdName").innerText = productName + " (" + priceText + ")";
+
+    
+
+    // Tự mở Zalo trực tiếp tới SĐT
+
+    window.open("https://zalo.me/0973350113", "_blank");
+
+    
+
+    // Hiển thị khung popup
+
+    buyModal.style.display = "flex";
+
+}
+
+
+
+function closeBuyModal() {
+
+    buyModal.style.display = "none";
+
+}
+
+
+
+/* HỆ THỐNG ĐĂNG NHẬP / ADMIN */
+
+const authModal = document.getElementById("authModal");
+
+const adminModal = document.getElementById("adminModal");
+
+
+
+function openAuthModal() { authModal.style.display = "flex"; }
+
+function closeAuthModal() { authModal.style.display = "none"; }
+
+function openAdminModal() { adminModal.style.display = "flex"; }
+
+function closeAdminModal() { adminModal.style.display = "none"; }
+
+
+
+function switchTab(tab) {
+
+    document.getElementById("tabLogin").classList.toggle('active', tab === 'login');
+
+    document.getElementById("tabRegister").classList.toggle('active', tab === 'register');
+
+    document.getElementById("formLogin").style.display = tab === 'login' ? 'block' : 'none';
+
+    document.getElementById("formRegister").style.display = tab === 'register' ? 'block' : 'none';
+
+}
+
+
+
+function handleLogin(e) {
+
+    e.preventDefault();
+
+    const user = document.getElementById("loginUser").value.trim();
+
+    const pass = document.getElementById("loginPass").value.trim();
+
+
+
+    if (user === "admin" && pass === "123456") {
+
+        localStorage.setItem("currentUser", "admin");
+
+        checkUserSession();
+
+        closeAuthModal();
+
+        alert("Chào mừng Admin Hoàng Bách! Bạn đã có quyền quản lý web.");
+
+        return;
+
+    }
+
+
+
+    let users = JSON.parse(localStorage.getItem("users") || "{}");
+
+    if (users[user] && users[user] === pass) {
+
+        localStorage.setItem("currentUser", user);
+
+        checkUserSession();
+
+        closeAuthModal();
+
+        alert("Đăng nhập thành công!");
+
+    } else {
+
+        alert("Sai tên tài khoản hoặc mật khẩu!");
+
+    }
+
+}
+
+
+
+function handleRegister(e) {
+
+    e.preventDefault();
+
+    const user = document.getElementById("regUser").value.trim();
+
+    const pass = document.getElementById("regPass").value.trim();
+
+
+
+    let users = JSON.parse(localStorage.getItem("users") || "{}");
+
+    if (users[user] || user === "admin") {
+
+        alert("Tài khoản này không thể tạo!");
+
+        return;
+
+    }
+
+
+
+    users[user] = pass;
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Đăng ký thành công!");
+
+    switchTab('login');
+
+}
+
+
+
+function checkUserSession() {
+
+    const user = localStorage.getItem("currentUser");
+
+    if (user) {
+
+        document.getElementById("loginBtn").style.display = "none";
+
+        document.getElementById("userDisplay").style.display = "flex";
+
+        document.getElementById("usernameText").innerText = user;
+
+        document.getElementById("adminBtn").style.display = (user === "admin") ? "block" : "none";
+
+    } else {
+
+        document.getElementById("loginBtn").style.display = "block";
+
+        document.getElementById("userDisplay").style.display = "none";
+
+        document.getElementById("adminBtn").style.display = "none";
+
+    }
+
+    renderProducts();
+
+}
+
+
+
+function logout() {
+
+    localStorage.removeItem("currentUser");
+
+    checkUserSession();
+
+}
+
+
+
+/* CHỨC NĂNG ADMIN */
+
+function addNewProduct(e) {
+
+    e.preventDefault();
+
+    const name = document.getElementById("newProdName").value;
+
+    const price = Number(document.getElementById("newProdPrice").value);
+
+    const img = document.getElementById("newProdImg").value;
+
+    const cat = document.getElementById("newProdCat").value;
+
+
+
+    let list = getProducts();
+
+    list.push({ id: Date.now(), name, price, cat, img, sold: 0 });
+
+    saveProducts(list);
+
+    renderProducts();
+
+    closeAdminModal();
+
+    alert("Đã thêm sản phẩm mới thành công!");
+
+}
+
+
+
+function deleteProduct(id) {
+
+    if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
+
+        let list = getProducts().filter(p => p.id !== id);
+
+        saveProducts(list);
+
+        renderProducts();
+
+    }
+
+}
+
+
+
+/* BỘ LỌC SẢN PHẨM */
+
+document.getElementById("search").addEventListener("input", filterProducts);
+
+document.getElementById("category").addEventListener("change", filterProducts);
+
+document.getElementById("sort").addEventListener("change", filterProducts);
+
+
+
+function filterProducts() {
+
+    const keyword = document.getElementById("search").value.toLowerCase();
+
+    const selectedCat = document.getElementById("category").value;
+
+    const products = Array.from(document.querySelectorAll(".product"));
+
+
+
+    products.forEach(p => {
+
+        const name = p.querySelector(".product-name").textContent.toLowerCase();
+
+        const cat = p.dataset.category;
+
+        p.style.display = (name.includes(keyword) && (selectedCat === "all" || cat === selectedCat)) ? "" : "none";
+
+    });
+
+}
+
+
+
+checkUserSession();
+
+function closeNoticeModal() {
+
+    document.getElementById("noticeModal").style.display = "none";
+
+}</script>
+
+
+
+<!-- MODAL NẠP TIỀN -->
+
+<div class="modal-overlay" id="depositModal" style="display: none;">
+
+    <div class="modal" style="max-width: 650px; text-align: left;">
+
+        <span class="close-btn" onclick="closeDepositModal()">&times;</span>
+
+        <h3 style="color: #08a85a; margin-bottom: 15px; text-align: center;">💳 NẠP TIỀN VÀO TÀI KHOẢN</h3>
+
+        
+
+        <!-- Chọn ngân hàng -->
+
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+
+            <div style="border: 2px solid #08a85a; padding: 10px; border-radius: 8px; flex: 1; background: #e8f5e9; cursor: pointer;">
+
+                <b>MB Bank</b><br>
+
+                <small>HOANG THI BACH</small><br>
+
+                <span style="color: #d32f2f; font-weight: bold;">0973350113</span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Tạo mã QR tự động VietQR -->
+
+        <div style="text-align: center; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+
+            <p style="font-weight: bold; margin-bottom: 8px;">Quét mã QR để chuyển khoản nhanh:</p>
+
+            <img id="qrCodeImg" src="https://img.vietqr.io/image/MB-0973350113-compact2.png?amount=50000&addInfo=NAP%20TIEN%20WEB" alt="QR Nap Tien" style="max-width: 200px; border-radius: 8px; border: 1px solid #ddd;">
+
+            <p style="font-size: 13px; color: #666; margin-top: 5px;">Cú pháp chuyển khoản: <b>NAP TIEN [Tên của bạn]</b></p>
+
+        </div>
+
+
+
+        <!-- Hướng dẫn -->
+
+        <div style="font-size: 13px; color: #555; background: #fff3cd; padding: 10px; border-radius: 6px;">
+
+            📌 <b>Lưu ý:</b> Sau khi chuyển khoản xong, vui lòng chụp ảnh hóa đơn và gửi cho Admin qua Zalo <b>0973 350 113</b> để được cộng tiền ngay lập tức.
+
+        </div>
+
+
+
+        <button class="btn-submit" onclick="closeDepositModal()" style="margin-top: 15px; background: #555;">Đóng</button>
+
+    </div>
+
+</div><!-- POPUP THÔNG BÁO TỰ ĐỘNG -->
+
+<div class="modal-overlay" id="noticeModal" style="display: flex;">
+
+    <div class="modal" style="max-width: 500px;">
+
+        <span class="close-btn" onclick="closeNoticeModal()">&times;</span>
+
+        <div style="text-align: center; margin-bottom: 15px;">
+
+            <h3 style="color: #08a85a; font-size: 20px;">🔔 THÔNG BÁO TỪ SHOP MMO-HACK FF</h3>
+
+        </div>
+
+        <div style="font-size: 14px; line-height: 1.6; color: #333; max-height: 350px; overflow-y: auto; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+
+            <p>👋 <b>Chào mừng bạn đến với Shop MMO-HACK FF!</b></p><br>
+
+            <p>📌 <b>Lưu ý khi mua hàng:</b></p>
+
+            <p>* Tự động hỗ trợ 24/7 qua Zalo Admin.</p>
+
+            <p>* Mọi thắc mắc hoặc cần cài đặt vui lòng liên hệ Zalo: <b>0973 350 113</b> (Hoàng Bách).</p>
+
+            <p>* Chúc các bạn trải nghiệm dịch vụ vui vẻ!</p>
+
+        </div>
+
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
+
+            <button class="btn-submit" onclick="closeNoticeModal()" style="background: #08a85a;">Đã hiểu</button>
+
+        </div>
+
+    </div>
+
+</div>
+
 </html>
