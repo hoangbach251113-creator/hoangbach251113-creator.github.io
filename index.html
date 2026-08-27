@@ -484,11 +484,31 @@ if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch v�
             if (userBal < total) {
                 alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
             } else {
-                let newBal = userBal - total;
-                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
-                    const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
-                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
-                });
+               let newBal = userBal - total;
+      
+      // 1. Tự tạo mã đơn hàng dạng DHxxxxxx
+      const maDon = "DH" + Math.floor(100000 + Math.random() * 900000);
+      const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
+
+      // 2. Trừ tiền tài khoản
+      db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+        
+        // 3. LƯU ĐƠN HÀNG VÀO FIREBASE ĐỂ ADMIN TRA CỨU
+        db.ref('orders/' + maDon).set({
+          userId: currentUser,
+          productName: selectedSrv.name,
+          target: targetInput,
+          quantity: quantity,
+          price: total,
+          time: new Date().toLocaleString('vi-VN'),
+          details: content
+        }).then(() => {
+          // 4. Hiển thị Popup báo mã đơn và nhận hàng cho khách
+          document.getElementById('display-order-id').innerText = "#" + maDon;
+          hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
+        });
+
+      });
             }
         }
 
