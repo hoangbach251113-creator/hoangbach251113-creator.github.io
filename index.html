@@ -38,6 +38,7 @@
         .main-content { flex-grow: 1; padding: 25px 35px; }
         .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .header-title { font-size: 20px; font-weight: 700; color: #0f172a; }
+        .user-auth-area { display: flex; align-items: center; gap: 10px; }
         .balance-badge { background: #fff; padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); font-weight: 700; font-size: 14px; color: #16a34a; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
         .welcome-card { background: #fff; border: 1px solid var(--border); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; }
@@ -57,6 +58,11 @@
         .btn-submit { width: 100%; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-submit:hover { opacity: 0.9; }
 
+        .btn-auth { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-login { background: #ef4444; color: #fff; }
+        .btn-register { background: #e2e8f0; color: #334155; }
+        .btn-logout { background: #f87171; color: #fff; margin-left: 8px; }
+
         .qr-container { text-align: center; }
         .qr-container img { border: 1px solid var(--border); border-radius: 8px; padding: 5px; background: #fff; }
         .bank-info { font-size: 13px; line-height: 1.6; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 10px; }
@@ -75,12 +81,22 @@
         .btn-buy-product { width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-buy-product:hover { background: #059669; }
 
+        /* MODAL POPUP */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 10000; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #0f172a; text-align: center; }
+        .close-modal { position: absolute; top: 12px; right: 15px; font-size: 18px; cursor: pointer; color: var(--text-muted); }
+
+        /* ADMIN PANEL STYLES */
+        .admin-box { background: #fff; border: 2px dashed #ef4444; border-radius: 12px; padding: 20px; margin-top: 25px; display: none; }
+        .admin-box h3 { color: #ef4444; font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
         #edit-bar { display: none; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; }
     </style>
 </head>
 <body>
 
-    <div id="edit-bar"><i class="fa-solid fa-pen-to-square"></i> ĐANG BẬT CHẾ ĐỘ SỬA MÀN HÌNH (Nhấn F2 để hoàn tất & khóa lại)</div>
+    <div id="edit-bar"><i class="fa-solid fa-pen-to-square"></i> ĐANG BẬT CHẾ ĐỘ SỬA MÀN HÌNH ADMIN (Nhấn F2 để hoàn tất & khóa lại)</div>
 
     <!-- SIDEBAR MENU -->
     <div class="sidebar">
@@ -110,7 +126,6 @@
             </div>
         </div>
 
-        <!-- MỤC TO MMO MỚI THÊM -->
         <div class="menu-title">DỊCH VỤ KIẾM TIỀN</div>
         <div class="menu-item" onclick="chonDichVu('mmo', this)">
             <div class="left" style="font-weight: 700; color: #2563eb;"><i class="fa-solid fa-coins"></i> MMO</div>
@@ -122,7 +137,17 @@
     <div class="main-content">
         <div class="header-bar">
             <div class="header-title" id="page-title">Trang Chủ</div>
-            <div class="balance-badge">Số dư: <span id="user-balance">24.999đ</span></div>
+            <div class="user-auth-area">
+                <div class="balance-badge">Số dư: <span id="user-balance">0đ</span></div>
+                <div id="auth-buttons">
+                    <button class="btn-auth btn-login" onclick="moModal('login-modal')">Đăng nhập</button>
+                    <button class="btn-auth btn-register" onclick="moModal('register-modal')">Đăng ký</button>
+                </div>
+                <div id="user-info" style="display: none; font-weight: 600; font-size: 14px;">
+                    <i class="fa-solid fa-user-gear" style="color: #ef4444;"></i> <span id="display-username">Admin</span>
+                    <button class="btn-auth btn-logout" onclick="dangXuat()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
         </div>
 
         <div class="welcome-card">
@@ -130,15 +155,14 @@
             <p id="welcome-sub">Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.</p>
         </div>
 
-        <!-- VIEW CHỦ THƯỜNG (DẠNG FORM ĐẶT ĐƠN) -->
+        <!-- FORM ĐẶT HÀNG THƯỜNG -->
         <div class="grid-container" id="default-view">
             <div class="card">
                 <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 
                 <div class="form-group">
                     <label>Chọn gói/máy chủ:</label>
-                    <select class="form-control" id="server-select" onchange="tinhTien()">
-                    </select>
+                    <select class="form-control" id="server-select" onchange="tinhTien()"></select>
                 </div>
 
                 <div class="form-group">
@@ -174,9 +198,8 @@
             </div>
         </div>
 
-        <!-- VIEW SẢN PHẨM RIÊNG DÀNH CHO MỤC MMO -->
+        <!-- BẢNG SẢN PHẨM MMO -->
         <div class="product-grid" id="mmo-product-view" style="display: none;">
-            <!-- CARD 1 -->
             <div class="product-card">
                 <img src="https://via.placeholder.com/400x200/1e293b/ffffff?text=Menu+Antiband+99%25" class="product-img" alt="Menu antiband">
                 <div class="product-body">
@@ -191,7 +214,6 @@
                 </div>
             </div>
 
-            <!-- CARD 2 -->
             <div class="product-card">
                 <img src="https://via.placeholder.com/400x200/0f172a/ffffff?text=File+Aimlock+iOS+Anti" class="product-img" alt="File aimlock ios">
                 <div class="product-body">
@@ -206,7 +228,6 @@
                 </div>
             </div>
 
-            <!-- CARD 3 -->
             <div class="product-card">
                 <img src="https://via.placeholder.com/400x200/334155/ffffff?text=File+Aimlock+ADR+VIP" class="product-img" alt="File aimlock adr">
                 <div class="product-body">
@@ -222,9 +243,55 @@
             </div>
         </div>
 
+        <!-- BẢNG ĐIỀU KHIỂN DÀNH RIÊNG CHO ADMIN -->
+        <div class="admin-box" id="admin-panel">
+            <h3><i class="fa-solid fa-user-shield"></i> BẢNG QUẢN TRỊ ADMIN</h3>
+            <p style="font-size: 13px; margin-bottom: 12px;">Bạn đang đăng nhập bằng tài khoản Quản Trị Viên (Admin). Bạn có thể cộng số dư trực tiếp tại đây:</p>
+            
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="admin-add-amount" class="form-control" placeholder="Nhập số tiền muốn cộng (VNĐ)" style="max-width: 250px;">
+                <button class="btn-auth btn-login" onclick="adminCongTien()"><i class="fa-solid fa-plus"></i> Cộng Số Dư</button>
+            </div>
+            <p style="font-size: 12px; color: #64748b; margin-top: 8px;">* Bấm <strong>F2</strong> để bật/tắt chế độ sửa trực tiếp văn bản trên màn hình.</p>
+        </div>
+
     </div>
 
-    <!-- JAVASCRIPT XỬ LÝ CHUYỂN MỤC -->
+    <!-- MODAL ĐĂNG NHẬP -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('login-modal')">&times;</span>
+            <div class="modal-title">Đăng Nhập</div>
+            <div class="form-group">
+                <label>Tài khoản / Username:</label>
+                <input type="text" id="login-user" class="form-control" placeholder="Nhập tài khoản...">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu:</label>
+                <input type="password" id="login-pass" class="form-control" placeholder="Nhập mật khẩu...">
+            </div>
+            <button class="btn-submit" onclick="xuLyDangNhap()">ĐĂNG NHẬP</button>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG KÝ -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('register-modal')">&times;</span>
+            <div class="modal-title">Đăng Ký Tài Khoản</div>
+            <div class="form-group">
+                <label>Tên tài khoản:</label>
+                <input type="text" id="reg-user" class="form-control" placeholder="Tên tài khoản mới...">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu:</label>
+                <input type="password" id="reg-pass" class="form-control" placeholder="Mật khẩu...">
+            </div>
+            <button class="btn-submit" onclick="xuLyDangKy()">ĐĂNG KÝ</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ DỮ LIỆU & QUẢN LÝ USER/ADMIN -->
     <script>
         const serviceData = {
             trangchu: {
@@ -278,6 +345,80 @@
             }
         };
 
+        // QUẢN LÝ TÀI KHOẢN VÀ DỮ LIỆU LOCALSTORAGE
+        let users = JSON.parse(localStorage.getItem('users')) || {
+            'admin': { pass: 'admin123', balance: 9999999, isAdmin: true }
+        };
+        let currentUser = localStorage.getItem('currentUser') || null;
+
+        function capNhatGiaoDienUser() {
+            if (currentUser && users[currentUser]) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-info').style.display = 'flex';
+                document.getElementById('display-username').innerText = currentUser;
+                document.getElementById('user-balance').innerText = users[currentUser].balance.toLocaleString('vi-VN') + 'đ';
+
+                if (users[currentUser].isAdmin) {
+                    document.getElementById('admin-panel').style.display = 'block';
+                } else {
+                    document.getElementById('admin-panel').style.display = 'none';
+                }
+            } else {
+                document.getElementById('auth-buttons').style.display = 'flex';
+                document.getElementById('user-info').style.display = 'none';
+                document.getElementById('user-balance').innerText = '0đ';
+                document.getElementById('admin-panel').style.display = 'none';
+            }
+        }
+
+        function xuLyDangKy() {
+            const user = document.getElementById('reg-user').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+
+            if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
+            if (users[user]) return alert("Tài khoản đã tồn tại!");
+
+            users[user] = { pass: pass, balance: 0, isAdmin: false };
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            dongModal('register-modal');
+        }
+
+        function xuLyDangNhap() {
+            const user = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+
+            if (users[user] && users[user].pass === pass) {
+                currentUser = user;
+                localStorage.setItem('currentUser', currentUser);
+                alert("Đăng nhập thành công!");
+                dongModal('login-modal');
+                capNhatGiaoDienUser();
+            } else {
+                alert("Sai tài khoản hoặc mật khẩu!");
+            }
+        }
+
+        function dangXuat() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            capNhatGiaoDienUser();
+            alert("Đã đăng xuất tài khoản!");
+        }
+
+        function adminCongTien() {
+            const amount = parseInt(document.getElementById('admin-add-amount').value);
+            if (!amount || amount <= 0) return alert("Vui lòng nhập số tiền hợp lệ!");
+
+            users[currentUser].balance += amount;
+            localStorage.setItem('users', JSON.stringify(users));
+            capNhatGiaoDienUser();
+            alert("Đã cộng " + amount.toLocaleString('vi-VN') + "đ vào số dư Admin!");
+        }
+
+        function moModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function dongModal(id) { document.getElementById(id).style.display = 'none'; }
+
         function chonDichVu(type, element) {
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
@@ -292,7 +433,6 @@
             const defaultView = document.getElementById('default-view');
             const mmoView = document.getElementById('mmo-product-view');
 
-            // Nếu chọn mục MMO thì ẩn form thường, hiện thẻ sản phẩm
             if (type === 'mmo') {
                 defaultView.style.display = 'none';
                 mmoView.style.display = 'grid';
@@ -314,8 +454,6 @@
             }
         }
 
-        chonDichVu('trangchu', document.querySelector('.menu-item.active'));
-
         function tinhTien() {
             const donGia = parseInt(document.getElementById('server-select').value) || 0;
             const soLuong = parseInt(document.getElementById('quantity').value) || 0;
@@ -324,17 +462,26 @@
         }
 
         function xacNhanDatHang() {
-            alert("Gửi yêu cầu mua thành công! Hệ thống đang khởi tạo dịch vụ.");
+            if (!currentUser) return alert("Vui lòng đăng nhập để mua hàng!");
+            alert("Gửi yêu cầu mua thành công! Hệ thống đang xử lý đơn.");
         }
 
+        // BẬT TẮT CHẾ ĐỘ SỬA BẰNG PHÍM F2
         let isEdit = false;
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F2') {
+                if (!currentUser || !users[currentUser].isAdmin) {
+                    return alert("Chỉ tài khoản Admin mới có quyền bật chế độ sửa!");
+                }
                 isEdit = !isEdit;
                 document.body.contentEditable = isEdit;
                 document.getElementById('edit-bar').style.display = isEdit ? 'block' : 'none';
             }
         });
+
+        // KHỞI TẠO BAN ĐẦU
+        capNhatGiaoDienUser();
+        chonDichVu('trangchu', document.querySelector('.menu-item.active'));
     </script>
 </body>
 </html>
