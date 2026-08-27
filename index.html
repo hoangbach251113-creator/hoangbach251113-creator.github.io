@@ -407,11 +407,12 @@ nav a:hover {
     </a>
 
     <nav>
-        <a href="#">TRANG CHỦ</a>
-        <a href="#">SẢN PHẨM</a>
-        <a href="#">KHUYẾN MÃI</a>
-        <a href="#">LIÊN HỆ</a>
-    </nav>
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">TRANG CHỦ</a>
+    <a href="#" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'}); return false;">SẢN PHẨM</a>
+    <a href="#" onclick="openDepositModal(); return false;" style="color: #08a85a; font-weight: bold;">💳 NẠP TIỀN</a>
+    <a href="#" onclick="filterKM(); return false;">KHUYẾN MÃI</a>
+    <a href="#" onclick="openBuyModal('Hỗ Trợ Liên Hệ', 0); return false;">LIÊN HỆ</a>
+</nav>
 
     <div class="auth-box">
         <button class="btn-admin-panel" id="adminBtn" onclick="openAdminModal()">⚙️ Thêm SP Mới</button>
@@ -693,7 +694,36 @@ function closeNoticeModal() {
     document.getElementById("noticeModal").style.display = "none";
 }</script>
 
-<!-- POPUP THÔNG BÁO TỰ ĐỘNG -->
+<!-- MODAL NẠP TIỀN -->
+<div class="modal-overlay" id="depositModal" style="display: none;">
+    <div class="modal" style="max-width: 650px; text-align: left;">
+        <span class="close-btn" onclick="closeDepositModal()">&times;</span>
+        <h3 style="color: #08a85a; margin-bottom: 15px; text-align: center;">💳 NẠP TIỀN VÀO TÀI KHOẢN</h3>
+        
+        <!-- Chọn ngân hàng -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="border: 2px solid #08a85a; padding: 10px; border-radius: 8px; flex: 1; background: #e8f5e9; cursor: pointer;">
+                <b>MB Bank</b><br>
+                <small>HOANG THI BACH</small><br>
+                <span style="color: #d32f2f; font-weight: bold;">0973350113</span>
+            </div>
+        </div>
+
+        <!-- Tạo mã QR tự động VietQR -->
+        <div style="text-align: center; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-weight: bold; margin-bottom: 8px;">Quét mã QR để chuyển khoản nhanh:</p>
+            <img id="qrCodeImg" src="https://img.vietqr.io/image/MB-0973350113-compact2.png?amount=50000&addInfo=NAP%20TIEN%20WEB" alt="QR Nap Tien" style="max-width: 200px; border-radius: 8px; border: 1px solid #ddd;">
+            <p style="font-size: 13px; color: #666; margin-top: 5px;">Cú pháp chuyển khoản: <b>NAP TIEN [Tên của bạn]</b></p>
+        </div>
+
+        <!-- Hướng dẫn -->
+        <div style="font-size: 13px; color: #555; background: #fff3cd; padding: 10px; border-radius: 6px;">
+            📌 <b>Lưu ý:</b> Sau khi chuyển khoản xong, vui lòng chụp ảnh hóa đơn và gửi cho Admin qua Zalo <b>0973 350 113</b> để được cộng tiền ngay lập tức.
+        </div>
+
+        <button class="btn-submit" onclick="closeDepositModal()" style="margin-top: 15px; background: #555;">Đóng</button>
+    </div>
+</div><!-- POPUP THÔNG BÁO TỰ ĐỘNG -->
 <div class="modal-overlay" id="noticeModal" style="display: flex;">
     <div class="modal" style="max-width: 500px;">
         <span class="close-btn" onclick="closeNoticeModal()">&times;</span>
