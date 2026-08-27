@@ -72,7 +72,7 @@
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .product-img { width: 100%; height: 140px; object-fit: cover; background: #1e293b; }
         .product-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
-        .product-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; text-transform: capitalize; }
+        .product-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
         .product-price { font-size: 17px; font-weight: 800; color: #ef4444; margin-bottom: 8px; }
         .product-tag { display: inline-block; background: #dcfce7; color: #16a34a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; width: fit-content; }
         .product-rating { font-size: 12px; color: #f59e0b; margin-bottom: 12px; display: flex; align-items: center; gap: 3px; }
@@ -221,6 +221,7 @@
                         <input type="text" id="new-prod-title" class="form-control" placeholder="Tên sản phẩm...">
                         <input type="number" id="new-prod-price" class="form-control" placeholder="Giá tiền (VNĐ)...">
                         <input type="text" id="new-prod-img" class="form-control" placeholder="Link ảnh (bỏ trống dùng mặc định)...">
+                        <input type="text" id="new-prod-link" class="form-control" placeholder="Key / Link tải của sản phẩm...">
                         <button class="btn-auth btn-login" style="background: #10b981;" onclick="themSanPhamMMO()"><i class="fa-solid fa-cart-plus"></i> Thêm Sản Phẩm Mới</button>
                     </div>
                 </div>
@@ -263,8 +264,8 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT XỬ LÝ QUẢN LÝ SẢN PHẨM & TÀI KHOẢN -->
     <script>
+        // CẤU HÌNH DỮ LIỆU KÈM LINK TẢI / KEY MẶC ĐỊNH
         const serviceData = {
             trangchu: {
                 title: "Trang Chủ",
@@ -272,9 +273,9 @@
                 sub: "Vui lòng chọn mục Menu, File iOS-ADR, Aimlock hoặc MMO để tiếp tục.",
                 label: "ID Game / Thông tin nhận:",
                 servers: [
-                    { name: "Menu Hack FF VIP - 1 Ngày (50.000đ)", price: 50000 },
-                    { name: "File Hack iOS-Android VIP (100.000đ)", price: 100000 },
-                    { name: "Aimlock Kéo Tâm Auto Headshot (80.000đ)", price: 80000 }
+                    { name: "Menu Hack FF VIP - 1 Ngày (50.000đ)", price: 50000, link: "KEY-MENU-TRANGCHU-1DAY-XXXXX" },
+                    { name: "File Hack iOS-Android VIP (100.000đ)", price: 100000, link: "https://drive.google.com/file/d/ios-android-vip/view" },
+                    { name: "Aimlock Kéo Tâm Auto Headshot (80.000đ)", price: 80000, link: "KEY-AIMLOCK-80K-YYYYY" }
                 ]
             },
             menu_ff: {
@@ -283,9 +284,9 @@
                 sub: "Menu nổi bật, tích hợp Antiban và chống khóa nick.",
                 label: "Nhập ID Nhân Vật / Email Nhận Key:",
                 servers: [
-                    { name: "Menu VVIP V1 - 1 Ngày (30.000đ)", price: 30000 },
-                    { name: "Menu VVIP V1 - 7 Ngày (100.000đ)", price: 100000 },
-                    { name: "Menu VVIP V1 - 30 Ngày (250.000đ)", price: 250000 }
+                    { name: "Menu VVIP V1 - 1 Ngày (30.000đ)", price: 30000, link: "KEY-MENU-VVIP1-1DAY-9999" },
+                    { name: "Menu VVIP V1 - 7 Ngày (100.000đ)", price: 100000, link: "KEY-MENU-VVIP1-7DAY-8888" },
+                    { name: "Menu VVIP V1 - 30 Ngày (250.000đ)", price: 250000, link: "KEY-MENU-VVIP1-30DAY-7777" }
                 ]
             },
             file_ios_adr: {
@@ -294,9 +295,9 @@
                 sub: "Cài trực tiếp qua file, không cần root máy hay jailbreak.",
                 label: "Nhập Email / Link Zalo Để Nhận File Link:",
                 servers: [
-                    { name: "File OBB Mod Headshot Android (50.000đ)", price: 50000 },
-                    { name: "File IPA Direct Install iOS (120.000đ)", price: 120000 },
-                    { name: "Combo File iOS + Android Full Tính Năng (150.000đ)", price: 150000 }
+                    { name: "File OBB Mod Headshot Android (50.000đ)", price: 50000, link: "https://drive.google.com/file/d/obb-android-mod/view" },
+                    { name: "File IPA Direct Install iOS (120.000đ)", price: 120000, link: "https://drive.google.com/file/d/ipa-ios-direct/view" },
+                    { name: "Combo File iOS + Android Full Tính Năng (150.000đ)", price: 150000, link: "https://drive.google.com/file/d/combo-full/view" }
                 ]
             },
             aimlock: {
@@ -305,9 +306,9 @@
                 sub: "Khóa tâm cực chuẩn, không rung ngắm, tối ưu hóa mọi dòng máy.",
                 label: "Nhập ID Nhân Vật Free Fire:",
                 servers: [
-                    { name: "Aimlock Tâm Đỏ 80% Headshot (60.000đ)", price: 60000 },
-                    { name: "Aimlock VIP Full Headshot + Chống Khóa (100.000đ)", price: 100000 },
-                    { name: "Aimlock Siêu Nhạy Chuyên Đua Top (200.000đ)", price: 200000 }
+                    { name: "Aimlock Tâm Đỏ 80% Headshot (60.000đ)", price: 60000, link: "KEY-AIMLOCK-RED80-XXXX" },
+                    { name: "Aimlock VIP Full Headshot + Chống Khóa (100.000đ)", price: 100000, link: "KEY-AIMLOCK-VIP-FULL-YYYY" },
+                    { name: "Aimlock Siêu Nhạy Chuyên Đua Top (200.000đ)", price: 200000, link: "KEY-AIMLOCK-TOP-RANK-ZZZZ" }
                 ]
             },
             mmo: {
@@ -317,20 +318,20 @@
             }
         };
 
-        // DỮ LIỆU SẢN PHẨM MMO MẶC ĐỊNH
         let defaultProducts = [
-            { id: 1, title: "Menu antiband 99%", price: 20000, img: "https://via.placeholder.com/400x200/1e293b/ffffff?text=Menu+Antiband+99%25" },
-            { id: 2, title: "file aimlock ios anti 90%", price: 40000, img: "https://via.placeholder.com/400x200/0f172a/ffffff?text=File+Aimlock+iOS+Anti" },
-            { id: 3, title: "file aimlock adr vip", price: 30000, img: "https://via.placeholder.com/400x200/334155/ffffff?text=File+Aimlock+ADR+VIP" }
+            { id: 1, title: "Menu antiband 99%", price: 20000, img: "https://via.placeholder.com/400x200/1e293b/ffffff?text=Menu+Antiband+99%25", link: "KEY-ANTIBAND-99-XXXX" },
+            { id: 2, title: "file aimlock ios anti 90%", price: 40000, img: "https://via.placeholder.com/400x200/0f172a/ffffff?text=File+Aimlock+iOS+Anti", link: "https://drive.google.com/file/d/aimlock-ios/view" },
+            { id: 3, title: "file aimlock adr vip", price: 30000, img: "https://via.placeholder.com/400x200/334155/ffffff?text=File+Aimlock+ADR+VIP", link: "https://drive.google.com/file/d/aimlock-adr/view" }
         ];
 
-        let mmoProducts = JSON.parse(localStorage.getItem('mmoProducts')) || defaultProducts;
+        let currentTabKey = 'trangchu';
+        let currentSelectedServer = null;
 
-        // QUẢN LÝ TÀI KHOẢN (MẶC ĐỊNH SẼ ĐĂNG NHẬP BẰNG TÀI KHOẢN ADMIN KHI MỞ TRANG)
+        let mmoProducts = JSON.parse(localStorage.getItem('mmoProducts')) || defaultProducts;
         let users = JSON.parse(localStorage.getItem('users')) || {
             'admin': { pass: 'admin123', balance: 9999999, isAdmin: true }
         };
-        let currentUser = localStorage.getItem('currentUser') || 'admin';
+        let currentUser = localStorage.getItem('currentUser') || null;
 
         function hienThiDanhSachMMO() {
             const container = document.getElementById('mmo-product-view');
@@ -342,7 +343,7 @@
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    ${isAdmin ? `<button class="btn-delete-product" onclick="xoaSanPhamMMO(${index})" title="Xóa sản phẩm này"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                    ${isAdmin ? `<button class="btn-delete-product" onclick="xoaSanPhamMMO(${index})"><i class="fa-solid fa-xmark"></i></button>` : ''}
                     <img src="${p.img}" class="product-img" alt="${p.title}" onerror="this.src='https://via.placeholder.com/400x200/1e293b/ffffff?text=Product+Image'">
                     <div class="product-body">
                         <div class="product-title">${p.title}</div>
@@ -352,7 +353,7 @@
                             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                             <span>Đã bán 0</span>
                         </div>
-                        <button class="btn-buy-product" onclick="xacNhanDatHang()">Mua Hàng</button>
+                        <button class="btn-buy-product" onclick="muaSanPhamMMO(${index})">Mua Hàng</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -363,16 +364,18 @@
             const title = document.getElementById('new-prod-title').value.trim();
             const price = parseInt(document.getElementById('new-prod-price').value);
             let img = document.getElementById('new-prod-img').value.trim();
+            let link = document.getElementById('new-prod-link').value.trim() || "https://sub1s2001.com/default-link";
 
             if (!title || !price || price <= 0) return alert("Vui lòng điền tên và giá tiền hợp lệ!");
             if (!img) img = "https://via.placeholder.com/400x200/0f172a/ffffff?text=" + encodeURIComponent(title);
 
-            mmoProducts.push({ id: Date.now(), title, price, img });
+            mmoProducts.push({ id: Date.now(), title, price, img, link });
             localStorage.setItem('mmoProducts', JSON.stringify(mmoProducts));
             
             document.getElementById('new-prod-title').value = '';
             document.getElementById('new-prod-price').value = '';
             document.getElementById('new-prod-img').value = '';
+            document.getElementById('new-prod-link').value = '';
 
             hienThiDanhSachMMO();
             alert("Thêm sản phẩm mới thành công!");
@@ -459,6 +462,7 @@
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
 
+            currentTabKey = type;
             const data = serviceData[type];
             if (!data) return;
 
@@ -480,27 +484,98 @@
                 document.getElementById('input-label').innerText = data.label;
                 const selectEl = document.getElementById('server-select');
                 selectEl.innerHTML = '';
-                data.servers.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.price;
-                    opt.innerText = s.name;
-                    selectEl.appendChild(opt);
-                });
+                
+                if (data.servers && data.servers.length > 0) {
+                    data.servers.forEach((s, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = idx;
+                        opt.innerText = s.name;
+                        selectEl.appendChild(opt);
+                    });
+                }
 
                 tinhTien();
             }
         }
 
         function tinhTien() {
-            const donGia = parseInt(document.getElementById('server-select').value) || 0;
+            const selectEl = document.getElementById('server-select');
+            const idx = parseInt(selectEl.value) || 0;
+            const data = serviceData[currentTabKey];
+
+            if (data && data.servers && data.servers[idx]) {
+                currentSelectedServer = data.servers[idx];
+            }
+
+            const donGia = currentSelectedServer ? currentSelectedServer.price : 0;
             const soLuong = parseInt(document.getElementById('quantity').value) || 0;
             const tongTien = donGia * soLuong;
             document.getElementById('total-price').innerText = tongTien.toLocaleString('vi-VN') + 'đ';
         }
 
+        // MUA HÀNG TRÊN FORM CHÍNH
         function xacNhanDatHang() {
-            if (!currentUser) return alert("Vui lòng đăng nhập để mua hàng!");
-            alert("Gửi yêu cầu mua thành công! Hệ thống đang xử lý đơn.");
+            if (!currentUser) {
+                alert("Vui lòng đăng nhập tài khoản trước khi mua!");
+                moModal('login-modal');
+                return;
+            }
+
+            const soLuong = parseInt(document.getElementById('quantity').value) || 1;
+            const tongTien = currentSelectedServer ? currentSelectedServer.price * soLuong : 0;
+            const userBalance = users[currentUser].balance;
+
+            if (userBalance < tongTien) {
+                alert("Số dư không đủ! Bạn hiện có " + userBalance.toLocaleString('vi-VN') + "đ. Vui lòng nạp thêm tiền.");
+                return;
+            }
+
+            // Trừ tiền
+            users[currentUser].balance -= tongTien;
+            localStorage.setItem('users', JSON.stringify(users));
+            capNhatGiaoDienUser();
+
+            // Hiển thị Key / Link
+            const resultLink = currentSelectedServer.link || "https://sub1s2001.com/download-link";
+            alert(
+                "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
+                "📌 Gói mua: " + currentSelectedServer.name + "\n" +
+                "💰 Tổng tiền: " + tongTien.toLocaleString('vi-VN') + "đ\n" +
+                "💳 Số dư còn lại: " + users[currentUser].balance.toLocaleString('vi-VN') + "đ\n\n" +
+                "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
+            );
+        }
+
+        // MUA HÀNG DỊCH VỤ MMO
+        function muaSanPhamMMO(index) {
+            if (!currentUser) {
+                alert("Vui lòng đăng nhập tài khoản trước khi mua!");
+                moModal('login-modal');
+                return;
+            }
+
+            const item = mmoProducts[index];
+            const userBalance = users[currentUser].balance;
+
+            if (userBalance < item.price) {
+                alert("Số dư không đủ! Bạn hiện có " + userBalance.toLocaleString('vi-VN') + "đ. Vui lòng nạp thêm tiền.");
+                return;
+            }
+
+            // Trừ tiền
+            users[currentUser].balance -= item.price;
+            localStorage.setItem('users', JSON.stringify(users));
+            capNhatGiaoDienUser();
+
+            // Hiển thị Key / Link
+            const resultLink = item.link || "https://sub1s2001.com/download-mmo";
+            alert(
+                "🎉 MUA HÀNG THÀNH CÔNG!\n\n" +
+                "📌 Sản phẩm: " + item.title + "\n" +
+                "💰 Giá tiền: " + item.price.toLocaleString('vi-VN') + "đ\n" +
+                "💳 Số dư còn lại: " + users[currentUser].balance.toLocaleString('vi-VN') + "đ\n\n" +
+                "🔑 KEY / LINK TẢI CỦA BẠN:\n" + resultLink
+            );
         }
 
         let isEdit = false;
@@ -515,7 +590,7 @@
             }
         });
 
-        // TỰ ĐỘNG CHẠY KHỞI TẠO
+        // KÍCH HOẠT KHI TẢI TRANG
         capNhatGiaoDienUser();
         chonDichVu('trangchu', document.querySelector('.menu-item.active'));
     </script>
