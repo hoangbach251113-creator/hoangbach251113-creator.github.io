@@ -209,7 +209,7 @@
                 <div>
                     <strong>1. Cộng số dư theo ID Tài Khoản:</strong>
                     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 4811)">
+                        <input type="number" id="admin-target-id" class="form-control" placeholder="Nhập ID Khách (VD: 1001)">
                         <input type="number" id="admin-add-amount" class="form-control" placeholder="Số tiền cộng (VNĐ)">
                         <button class="btn-auth btn-login" onclick="adminCongTienTheoID()"><i class="fa-solid fa-plus"></i> Cộng Tiền Theo ID</button>
                     </div>
@@ -322,9 +322,15 @@
         let currentTabKey = 'trangchu';
         let currentSelectedServer = null;
 
-        // TỰ ĐỘNG KHỞI TẠO TÀI KHOẢN ADMIN NẾU CHƯA CÓ
-        let users = JSON.parse(localStorage.getItem('app_users')) || {
-            'admin': { id: 1000, pass: 'admin123', balance: 108909999, isAdmin: true }
+        // KHỞI TẠO BỘ NHỚ USER VÀ ĐẢM BẢO ADMIN CÓ ID 1000
+        let users = JSON.parse(localStorage.getItem('app_users')) || {};
+        
+        // Luôn đảm bảo tài khoản admin tồn tại và đúng ID 1000
+        users['admin'] = {
+            id: 1000,
+            pass: 'admin123',
+            balance: users['admin'] ? users['admin'].balance : 108909999,
+            isAdmin: true
         };
 
         let mmoProducts = JSON.parse(localStorage.getItem('app_products')) || [
@@ -426,7 +432,15 @@
             if (!user || !pass) return alert("Vui lòng điền đầy đủ thông tin!");
             if (users[user]) return alert("Tài khoản đã tồn tại!");
 
-            let newId = Math.floor(1001 + Math.random() * 8999);
+            // Tự động tìm ID tiếp theo (1001, 1002, 1003...)
+            let maxId = 1000;
+            for (let u in users) {
+                if (users[u].id && users[u].id > maxId) {
+                    maxId = users[u].id;
+                }
+            }
+            let newId = maxId + 1;
+
             users[user] = {
                 id: newId,
                 pass: pass,
@@ -435,7 +449,9 @@
             };
             saveUsers();
 
-            alert("Đăng ký thành công! ID của bạn là: " + newId + "\nVui lòng đăng nhập.");
+            alert("Đăng ký thành công!\nTài khoản: " + user + "\nID của bạn là: " + newId + "\nVui lòng đăng nhập.");
+            document.getElementById('reg-user').value = '';
+            document.getElementById('reg-pass').value = '';
             dongModal('register-modal');
         }
 
@@ -447,6 +463,8 @@
                 currentUser = user;
                 localStorage.setItem('currentUser', currentUser);
                 alert("Đăng nhập thành công!");
+                document.getElementById('login-user').value = '';
+                document.getElementById('login-pass').value = '';
                 dongModal('login-modal');
                 capNhatGiaoDienUser();
             } else {
@@ -470,14 +488,14 @@
 
             let foundUserKey = null;
             for (let username in users) {
-                if (users[username].id === targetId) {
+                if (parseInt(users[username].id) === targetId) {
                     foundUserKey = username;
                     break;
                 }
             }
 
             if (!foundUserKey) {
-                return alert("Không tìm thấy người dùng có ID: " + targetId);
+                return alert("Không tìm thấy người dùng có ID: " + targetId + "\n(Vui lòng kiểm tra lại tài khoản khách đã đăng ký trên máy này chưa)");
             }
 
             users[foundUserKey].balance = (users[foundUserKey].balance || 0) + amount;
