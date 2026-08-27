@@ -3,478 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUB1S2001.COM - Hệ Thống Dịch Vụ Game & MXH</title>
+    <title>VIP6S2000.COM - Quản Lý Dịch Vụ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-soft: #eef2ff;
-            --bg: #f8fafc;
-            --sidebar-width: 260px;
-            --border: #e2e8f0;
-            --text: #334155;
-            --text-muted: #94a3b8;
-            --badge-hot: #ef4444;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
-
-        /* SIDEBAR */
-        .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); padding: 15px; flex-shrink: 0; overflow-y: auto; height: 100vh; position: sticky; top: 0; }
-        .logo-box { padding: 10px 5px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px; }
-        .logo-box div { background: linear-gradient(135deg, #1e1b4b, #4338ca); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 12px; }
-
-        .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 8px; letter-spacing: 0.5px; }
-        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; color: var(--text); border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 2px; cursor: pointer; transition: all 0.2s; user-select: none; }
-        .menu-item:hover, .menu-item.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
-        .menu-item .left { display: flex; align-items: center; gap: 10px; }
-        .menu-item i.arrow { font-size: 10px; transition: transform 0.3s; color: var(--text-muted); }
-        .menu-item.open i.arrow { transform: rotate(90deg); color: var(--primary); }
-
-        .badge-hot { background: var(--badge-hot); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
-
-        /* SUBMENU */
-        .submenu { display: none; padding-left: 15px; margin-bottom: 5px; }
-        .submenu.show { display: block; }
-        .submenu-item { display: flex; align-items: center; padding: 8px 12px; font-size: 12px; color: #64748b; text-decoration: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .submenu-item:hover, .submenu-item.active { color: var(--primary); background: #f1f5f9; font-weight: 600; }
-
-        /* WRAPPER & HEADER */
-        .wrapper { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
-        header { background: #fff; border-bottom: 1px solid var(--border); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; position: sticky; top: 0; z-index: 90; }
-        .toggle-btn { font-size: 18px; color: var(--text-muted); cursor: pointer; }
-        .user-nav { display: flex; align-items: center; gap: 15px; position: relative; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #818cf8; cursor: pointer; }
-
-        .auth-btns { display: flex; gap: 10px; }
-        .btn-auth { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
-        .btn-login { background: #ef4444; color: #fff; }
-        .btn-register { background: #e2e8f0; color: var(--text); }
-
-        /* USER DROPDOWN */
-        .user-dropdown { position: absolute; top: 50px; right: 0; width: 220px; background: #fff; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 15px; display: none; z-index: 100; }
-        .user-dropdown.show { display: block; }
-        .user-profile-header { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; margin-bottom: 10px; }
-        .user-profile-header img { width: 42px; height: 42px; border-radius: 50%; }
-        .user-name { font-weight: 700; font-size: 14px; color: #0f172a; }
-        .user-balance { font-size: 13px; color: var(--primary); font-weight: 700; }
-        .drop-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--text); text-decoration: none; font-weight: 500; cursor: pointer; }
-        .drop-item:hover { color: var(--primary); }
-        .drop-item.logout { color: #ef4444; border-top: 1px solid #f1f5f9; margin-top: 5px; padding-top: 10px; }
-
-        /* MAIN CONTENT */
-        main { padding: 25px; overflow-y: auto; flex-grow: 1; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* DASHBOARD LAYOUT */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; }
-        .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .stat-val { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 6px; }
-        .stat-badge { position: absolute; top: 18px; right: 18px; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: var(--text-muted); }
-
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-
-        /* FORM ELEMENTS */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #1e293b; }
-        .form-control { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
-        .form-control:focus { border-color: var(--primary); }
-        .btn-submit { background: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
-
-        /* MODAL DIALOG */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; }
+        body { background-color: #f3f4f6; color: #374151; font-family: sans-serif; }
+        .sidebar { width: 220px; background: #fff; min-height: 100vh; border-right: 1px solid #e5e7eb; }
+        .logo-box { background: #b91c1c; color: white; padding: 15px; text-align: center; border-radius: 8px; margin: 10px; }
+        .menu-cat { font-size: 11px; font-weight: bold; color: #9ca3af; text-transform: uppercase; margin: 15px 10px 5px; }
+        .menu-link { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 13px; color: #374151; text-decoration: none; border-radius: 6px; margin: 2px 10px; }
+        .menu-link:hover, .menu-link.active { background: #fee2e2; color: #b91c1c; font-weight: bold; }
+        
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; }
         .modal.show { display: flex; }
-        .modal-content { background: #fff; border-radius: 12px; width: 380px; padding: 25px; position: relative; }
-        .modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; color: var(--text-muted); }
-
-        /* DEPOSIT TAB */
-        .deposit-type-btns { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-type { padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; background: #f1f5f9; color: var(--text-muted); }
-        .btn-type.active { background: var(--primary); color: #fff; }
-        .bank-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
-        .bank-card { border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; background: #fff; }
-        .bank-logo { width: 40px; height: 40px; border-radius: 8px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); font-size: 12px; }
-        .bank-info h4 { font-size: 13px; color: #0f172a; }
-        .bank-info p { font-size: 11px; color: var(--text-muted); }
-        .bank-info span { font-size: 11px; color: var(--primary); font-weight: 700; }
-        .deposit-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #f1f5f9; }
-        th { color: var(--text-muted); font-weight: 600; }
-        .badge-pending { background: #fef3c7; color: #d97706; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
     </style>
 </head>
-<body>
+<body class="flex">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <!-- SIDEBAR GỐC -->
+    <div class="sidebar flex-shrink-0">
         <div class="logo-box">
-            <div>TĂNG TƯƠNG TÁC MẠNG XÃ HỘI<br><span style="color: #818cf8; font-size: 10px;">sub1s2001.com</span></div>
+            <h1 class="font-bold text-base">HỆ THỐNG DỊCH VỤ GAME</h1>
+            <p class="text-xs">Vip6s2000.com</p>
         </div>
 
-        <div class="menu-title">DASHBOARD</div>
-        <div class="menu-item active" onclick="showDashboard(this)">
-            <div class="left"><i class="fa-solid fa-house" style="color: #6366f1;"></i> Trang chủ</div>
-        </div>
-        <div class="menu-item" onclick="switchTab('tab-deposit', this)">
-            <div class="left"><i class="fa-solid fa-wallet" style="color: #6366f1;"></i> Nạp Tiền</div>
+        <div class="menu-cat">DASHBOARD</div>
+        <a href="#" class="menu-link active"><i class="fa-solid fa-house"></i> Trang chủ</a>
+        <a href="#" class="menu-link"><i class="fa-solid fa-download"></i> Tải File Bằng Mã Đơn</a>
+
+        <div class="menu-cat">CHUYÊN MỤC GAME</div>
+        <a href="#" class="menu-link" onclick="chonDichVu('Menu FF')"><i class="fa-solid fa-bars"></i> Menu FF</a>
+        <a href="#" class="menu-link" onclick="chonDichVu('File iOS-ADR')"><i class="fa-solid fa-file"></i> File iOS-ADR</a>
+        <a href="#" class="menu-link" onclick="chonDichVu('Aimlock')"><i class="fa-solid fa-crosshair"></i> Aimlock</a>
+
+        <div class="menu-cat">DỊCH VỤ FREE</div>
+        <a href="#" class="menu-link" onclick="chonDichVu('File iOS&ADR Free')"><i class="fa-solid fa-gift text-green-600"></i> File iOS&ADR</a>
+        <a href="#" class="menu-link" onclick="chonDichVu('Menu YSM V8')"><i class="fa-solid fa-gift text-green-600"></i> Menu YSM V8</a>
+        <a href="#" class="menu-link" onclick="chonDichVu('Tool Dame Facebook')"><i class="fa-solid fa-gift text-green-600"></i> Tool Dame Facebook</a>
+
+        <div class="menu-cat">DỊCH VỤ KIẾM TIỀN</div>
+        <a href="#" class="menu-link" onclick="chonDichVu('MMO')"><i class="fa-solid fa-folder text-blue-600"></i> MMO</a>
+    </div>
+
+    <!-- CONTENT CHÍNH GỐC -->
+    <div class="flex-grow p-6">
+        <!-- HEADER TOP -->
+        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm mb-6">
+            <h2 class="text-xl font-bold">Trang Chủ</h2>
+            <div class="flex items-center gap-3">
+                <span class="bg-green-50 text-green-600 px-3 py-1.5 rounded-lg text-sm font-semibold border border-green-200">Số dư: <span id="soDuText">0đ</span></span>
+                <button onclick="openModal('login')" class="bg-red-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-red-600">Đăng nhập</button>
+                <button onclick="openModal('register')" class="bg-gray-200 text-gray-700 px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-gray-300">Đăng ký</button>
+            </div>
         </div>
 
-        <div class="menu-title">DỊCH VỤ</div>
-
-        <!-- FREE FIRE -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ff')">
-            <div class="left"><i class="fa-solid fa-gamepad" style="color: #06b6d4;"></i> Free Fire</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="submenu" id="sub-ff">
-            <div class="submenu-item" onclick="openService('Free Fire', 'Nạp Kim Cương')">Nạp Kim Cương</div>
-            <div class="submenu-item" onclick="openService('Free Fire', 'Cày Cấp / Thách Đấu')">Cày Cấp / Thách Đấu</div>
+        <!-- THÔNG BÁO -->
+        <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+            <h3 class="font-bold text-lg mb-1">Chào mừng trở lại!</h3>
+            <p class="text-gray-500 text-sm">Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu mua hàng hoặc tải file.</p>
         </div>
 
-        <!-- FACEBOOK -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-fb')">
-            <div class="left"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="submenu" id="sub-fb">
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Like Bài Viết')">Tăng Like Bài Viết</div>
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Theo Dõi (Follow)')">Tăng Theo Dõi (Follow)</div>
-            <div class="submenu-item" onclick="openService('Facebook', 'Tăng Mắt Livestream')">Tăng Mắt Livestream</div>
-        </div>
+        <!-- GRID ĐẶT HÀNG & NẠP TIỀN -->
+        <div class="grid grid-cols-2 gap-6">
+            <!-- CỘT 1: ĐẶT ĐƠN HÀNG -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="font-bold text-red-600 text-base mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Đặt Đơn Hàng Dịch Vụ
+                </h3>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Chọn gói/máy chủ:</label>
+                    <select id="selectGoi" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500">
+                        <option value="">-- Chọn dịch vụ ở menu bên trái trước --</option>
+                    </select>
+                </div>
 
-        <!-- TIKTOK -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-tiktok')">
-            <div class="left"><i class="fa-brands fa-tiktok" style="color: #000;"></i> Tiktok</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="submenu" id="sub-tiktok">
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Tim Video')">Tăng Tim Video</div>
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng Follow TikTok')">Tăng Follow TikTok</div>
-            <div class="submenu-item" onclick="openService('TikTok', 'Tăng View Video')">Tăng View Video</div>
-        </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">ID Nhân Vật / Link Profile:</label>
+                    <input type="text" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500" placeholder="Dán ID hoặc thông tin tại đây...">
+                </div>
 
-        <!-- INSTAGRAM -->
-        <div class="menu-item" onclick="toggleSubmenu(this, 'sub-ig')">
-            <div class="left"><i class="fa-brands fa-instagram" style="color: #e1306c;"></i> Instagram</div>
-            <i class="fa-solid fa-chevron-right arrow"></i>
-        </div>
-        <div class="submenu" id="sub-ig">
-            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Like Instagram')">Tăng Like Instagram</div>
-            <div class="submenu-item" onclick="openService('Instagram', 'Tăng Follow Instagram')">Tăng Follow Instagram</div>
-        </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Số lượng:</label>
+                    <input type="number" value="1" min="1" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500">
+                </div>
 
-        <!-- OTHER MENUS -->
-        <div class="menu-item" style="margin-top: 10px;" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-clock-history"></i> Lịch Sử Đơn Hàng</div>
-        </div>
-        <div class="menu-item" onclick="switchTab('tab-home', this)">
-            <div class="left"><i class="fa-solid fa-calendar-check"></i> Điểm Danh</div>
-            <span class="badge-hot">Hot</span>
+                <div class="mb-6 font-bold text-sm">
+                    Tổng thanh toán: <span class="text-red-600 text-base">0đ</span>
+                </div>
+
+                <button class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> MUA NGAY
+                </button>
+            </div>
+
+            <!-- CỘT 2: QR ZALOPAY -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+                <h3 class="font-bold text-blue-900 text-base mb-4 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-qrcode"></i> Nạp Tiền Qua ZaloPay
+                </h3>
+
+                <div class="flex justify-center mb-3">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=ZaloPay" alt="QR ZaloPay" class="border-4 border-blue-500 rounded-xl p-1">
+                </div>
+
+                <div class="text-xs space-y-1 text-gray-700">
+                    <p><b>Ví điện tử:</b> ZaloPay</p>
+                    <p><b>Chủ tài khoản:</b> DANG TRAN HOANG BACH</p>
+                    <p class="text-red-500 font-bold">Nội dung ck: NAP [Đăng nhập để xem ID]</p>
+                </div>
+
+                <div class="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg text-xs text-red-500">
+                    <i class="fa-solid fa-headset"></i> Nếu nạp tiền mà không vô, vui lòng liên hệ Zalo/SĐT: <b>0973350113</b> (Hoàng Bách) để được hỗ trợ!
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- WRAPPER -->
-    <div class="wrapper">
-        <header>
-            <div class="toggle-btn"><i class="fa-solid fa-bars"></i></div>
-            
-            <div id="userHeaderBox" class="user-nav">
-                <!-- Nội dung JS tự điền tuỳ trạng thái Đăng nhập -->
-            </div>
-        </header>
-
-        <main>
-            <!-- TAB TRANG CHỦ -->
-            <div id="tab-home" class="tab-content active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">SỐ DƯ KHẢ DỤNG</div>
-                        <div class="stat-val" id="displayBalance">24.999đ</div>
-                        <div class="stat-badge">Số dư</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">TIỀN NẠP THÁNG NÀY</div>
-                        <div class="stat-val">0đ</div>
-                        <div class="stat-badge">Tháng này</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">TỔNG ĐƠN HÀNG</div>
-                        <div class="stat-val">1</div>
-                        <div class="stat-badge">Đơn hàng</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">SẢN PHẨM ĐÃ MUA</div>
-                        <div class="stat-val">0</div>
-                        <div class="stat-badge">Sản phẩm</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
-                    <div class="card">
-                        <h3 style="font-size: 14px; margin-bottom: 15px;">Biểu đồ thống kê</h3>
-                        <canvas id="statChart" style="width:100%; max-height:220px;"></canvas>
-                    </div>
-
-                    <div>
-                        <div class="card" style="background: #3b82f6; color: #fff;">
-                            <div style="font-size: 11px; opacity: 0.8; font-weight: 700;">DỊCH VỤ</div>
-                            <h3 style="font-size: 16px; margin: 5px 0 10px;">Tạo đơn hàng ngay</h3>
-                            <p style="font-size: 12px; opacity: 0.9; margin-bottom: 15px; line-height: 1.4;">Chọn dịch vụ phù hợp từ menu bên trái để thực hiện đặt hàng.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB ĐẶT DỊCH VỤ DỘNG -->
-            <div id="tab-service" class="tab-content">
-                <div class="card">
-                    <h3 id="service-title" style="margin-bottom: 15px; font-size: 16px;">Đặt Đơn Hàng Dịch Vụ</h3>
-                    <div class="form-group">
-                        <label>Nhập Link / ID Cần Trợ Lực:</label>
-                        <input type="text" class="form-control" placeholder="https://facebook.com/username hoặc ID...">
-                    </div>
-                    <div class="form-group">
-                        <label>Chọn Máy Chủ (Server):</label>
-                        <select class="form-control">
-                            <option>Server 1 (Tốc độ nhanh - Cực ổn định) - 25đ/lượt</option>
-                            <option>Server 2 (Giá rẻ - Hoàn thành trong 24h) - 10đ/lượt</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Số Lượng Cần Mua:</label>
-                        <input type="number" class="form-control" value="1000" min="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Ghi Chú Đơn Hàng:</label>
-                        <textarea class="form-control" rows="2" placeholder="Nhập ghi chú nếu có..."></textarea>
-                    </div>
-                    <button class="btn-submit" onclick="alert('Đặt hàng thành công!')">Tạo Đơn Hàng Ngay</button>
-                </div>
-            </div>
-
-            <!-- TAB NẠP TIỀN -->
-            <div id="tab-deposit" class="tab-content">
-                <div class="deposit-type-btns">
-                    <button class="btn-type active">Chuyển khoản</button>
-                    <button class="btn-type">Nạp thẻ cào</button>
-                </div>
-
-                <div class="bank-cards">
-                    <div class="bank-card">
-                        <div class="bank-logo">MB</div>
-                        <div class="bank-info">
-                            <h4>Mb Bank</h4>
-                            <p>NGUYEN NHU VIET CHINH</p>
-                            <span>2715092001</span>
-                        </div>
-                    </div>
-                    <div class="bank-card">
-                        <div class="bank-logo" style="background: #e0f2fe; color: #0284c7;">ACB</div>
-                        <div class="bank-info">
-                            <h4>ACB</h4>
-                            <p>NGUYEN NHU VIET CHINH</p>
-                            <span>8711591</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="deposit-grid">
-                    <div class="card">
-                        <h4 style="font-size: 13px; margin-bottom: 15px;"><i class="fa-solid fa-receipt"></i> Lịch sử hoá đơn</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>CỔNG</th>
-                                    <th>MÃ HOÁ ĐƠN</th>
-                                    <th>SỐ TIỀN</th>
-                                    <th>TRẠNG THÁI</th>
-                                    <th>THỜI GIAN</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><div class="bank-logo" style="width:24px; height:24px; font-size:9px;">MB</div></td>
-                                    <td><b>676444J</b></td>
-                                    <td>25.000đ</td>
-                                    <td><span class="badge-pending">Đang chờ</span></td>
-                                    <td>23/08/2026 01:19</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- MODAL ĐĂNG NHẬP (SỬA LỖI JS AN TOÀN) -->
+    <!-- MODAL ĐĂNG NHẬP -->
     <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
-            <h3 style="text-align: center; margin-bottom: 20px;">Đăng Nhập</h3>
+        <div class="bg-white rounded-xl w-80 p-6 relative">
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-center font-bold text-lg mb-4">Đăng Nhập</h3>
             <form onsubmit="xulyAuth(event)">
-                <div class="form-group">
-                    <label>Tên tài khoản:</label>
-                    <input type="text" id="username" class="form-control" placeholder="admin" required>
+                <div class="mb-3">
+                    <label class="block text-xs font-semibold mb-1">Tên tài khoản:</label>
+                    <input type="text" id="accUser" value="admin" class="w-full p-2 border rounded-lg text-sm bg-blue-50 focus:outline-none" required>
                 </div>
-                <div class="form-group">
-                    <label>Mật khẩu:</label>
-                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold mb-1">Mật khẩu:</label>
+                    <input type="password" value="12345678" class="w-full p-2 border rounded-lg text-sm focus:outline-none" required>
                 </div>
-                <button type="submit" class="btn-submit" style="background: #ef4444;">Đăng Nhập</button>
+                <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-lg font-bold text-sm hover:bg-red-600">Đăng Nhập</button>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT ĐÃ ĐƯỢC FIX SẠCH LỖI CONSOLE -->
+    <!-- FIX TRIỆT ĐỂ LỖI DÒNG 233 & LỖI BIẾN -->
     <script>
-        // 1. KHAI BÁO BIẾN DỮ LIỆU LÊN ĐẦU (Giải quyết triệt để lỗi ReferenceError: Cannot access 'users' before initialization)
-        let users = [];
-        try {
-            const storedUsers = localStorage.getItem('users');
-            if (storedUsers) {
-                users = JSON.parse(storedUsers);
-            }
-        } catch (e) {
-            console.warn("Lỗi đọc dữ liệu users:", e);
-            users = [];
-        }
-
-        let currentUser = null;
-        try {
-            const storedUser = localStorage.getItem('currentUser');
-            if (storedUser) {
-                // Giải quyết triệt để lỗi Unexpected token 'a', "admin" is not valid JSON
-                currentUser = storedUser.startsWith('{') ? JSON.parse(storedUser) : { username: storedUser };
-            }
-        } catch (e) {
-            console.warn("Lỗi đọc currentUser:", e);
-            currentUser = null;
-        }
-
-        // 2. KHỞI TẠO GIAO DIỆN
-        document.addEventListener('DOMContentLoaded', function() {
-            renderHeaderUser();
-            initChart();
-        });
-
-        function renderHeaderUser() {
-            const userBox = document.getElementById('userHeaderBox');
-            if (currentUser && currentUser.username) {
-                userBox.innerHTML = `
-                    <i class="fa-solid fa-globe" style="color: var(--text-muted); cursor: pointer;"></i>
-                    <i class="fa-solid fa-dollar-sign" style="color: var(--text-muted); cursor: pointer;"></i>
-                    <img src="https://via.placeholder.com/36/818cf8/ffffff?text=${currentUser.username.charAt(0).toUpperCase()}" class="user-avatar" onclick="toggleUserMenu()">
-
-                    <div class="user-dropdown" id="userMenu">
-                        <div class="user-profile-header">
-                            <img src="https://via.placeholder.com/42/818cf8/ffffff?text=${currentUser.username.charAt(0).toUpperCase()}" alt="Avatar">
-                            <div>
-                                <div class="user-name">${currentUser.username}</div>
-                                <div class="user-balance">24.999đ</div>
-                            </div>
-                        </div>
-                        <a class="drop-item"><i class="fa-regular fa-user" style="color: #3b82f6;"></i> Hồ sơ cá nhân</a>
-                        <a class="drop-item" onclick="switchTab('tab-deposit')"><i class="fa-solid fa-wallet" style="color: #10b981;"></i> Nạp tiền</a>
-                        <a class="drop-item logout" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>
-                    </div>
-                `;
-            } else {
-                userBox.innerHTML = `
-                    <div class="auth-btns">
-                        <button class="btn-auth btn-login" onclick="openModal()">Đăng nhập</button>
-                        <button class="btn-auth btn-register" onclick="openModal()">Đăng ký</button>
-                    </div>
-                `;
+        // Sửa lỗi JSON.parse tại dòng 233: Kiểm tra an toàn trước khi Parse
+        function layUserSafe() {
+            try {
+                const data = localStorage.getItem('user');
+                if (!data) return null;
+                // Nếu là chuỗi JSON hợp lệ thì parse, không thì trả về object chuẩn
+                return data.startsWith('{') || data.startsWith('[') ? JSON.parse(data) : { username: data };
+            } catch (e) {
+                return null;
             }
         }
 
-        // 3. XỬ LÝ ĐĂNG NHẬP CHUẨN (KHÔNG BỊ LỖI JSON)
-        function xulyAuth(event) {
-            if (event) event.preventDefault();
-            const usernameInput = document.getElementById('username').value.trim();
-            
-            if (usernameInput) {
-                const userObj = { username: usernameInput };
-                localStorage.setItem('currentUser', JSON.stringify(userObj));
-                currentUser = userObj;
-                closeModal();
-                renderHeaderUser();
-                alert('Đăng nhập thành công!');
-            }
+        function openModal(type) {
+            document.getElementById('loginModal').classList.add('show');
+        }
+        function closeModal() {
+            document.getElementById('loginModal').classList.remove('show');
         }
 
-        function logout() {
-            localStorage.removeItem('currentUser');
-            currentUser = null;
-            renderHeaderUser();
+        // Hàm xử lý Đăng Nhập không lo crash web
+        function xulyAuth(e) {
+            e.preventDefault();
+            const u = document.getElementById('accUser').value;
+            localStorage.setItem('user', JSON.stringify({ username: u }));
+            alert('Đăng nhập thành công!');
+            closeModal();
+            location.reload();
         }
 
-        function openModal() { document.getElementById('loginModal').classList.add('show'); }
-        function closeModal() { document.getElementById('loginModal').classList.remove('show'); }
-        function toggleUserMenu() { 
-            const menu = document.getElementById('userMenu');
-            if(menu) menu.classList.toggle('show'); 
-        }
-
-        // 4. XỬ LÝ SUBMENU & TAB DỊCH VỤ
-        function toggleSubmenu(element, subId) {
-            const submenu = document.getElementById(subId);
-            const isOpen = submenu.classList.contains('show');
-
-            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('open'));
-
-            if (!isOpen) {
-                submenu.classList.add('show');
-                element.classList.add('open');
-            }
-        }
-
-        function openService(platform, serviceName) {
-            switchTab('tab-service');
-            document.getElementById('service-title').innerText = `${platform} - ${serviceName}`;
-        }
-
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-
-            if (element) {
-                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-                element.classList.add('active');
-            }
-        }
-
-        function showDashboard(element) {
-            document.querySelectorAll('.submenu').forEach(sub => sub.classList.remove('show'));
-            switchTab('tab-home', element);
-        }
-
-        // 5. CHARTS
-        function initChart() {
-            const ctx = document.getElementById('statChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'],
-                    datasets: [{
-                        label: 'Số đơn hàng',
-                        data: [0, 0, 0, 0, 0, 1],
-                        borderColor: '#f97316',
-                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+        function chonDichVu(tenDichVu) {
+            const select = document.getElementById('selectGoi');
+            select.innerHTML = `<option value="1">-- Gói ${tenDichVu} VIP (10.000đ) --</option><option value="2">-- Gói ${tenDichVu} Thường (5.000đ) --</option>`;
         }
     </script>
 </body>
