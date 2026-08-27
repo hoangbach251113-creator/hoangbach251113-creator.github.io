@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BÁCH SHOP</title>
+<title>Bách Shop</title>
 
 <style>
 * {
@@ -14,192 +14,225 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #222;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #111;
 }
 
 /* HEADER */
 header {
-    background: #ff4d4d;
-    color: white;
-    padding: 15px 6%;
+    height: 72px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 0 8%;
+    gap: 35px;
 }
 
 .logo {
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 26px;
+    font-weight: 800;
+    color: #08a85a;
+    white-space: nowrap;
 }
 
-.search {
-    width: 40%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
+.logo span {
+    color: #111;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.login {
+    margin-left: auto;
+    border: 1px solid #08a85a;
+    color: #078c4d;
+    background: white;
+    padding: 9px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* MAIN */
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    background: white;
+    padding: 14px;
+    min-height: 600px;
+}
+
+.sidebar label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sidebar input,
+.sidebar select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    margin-bottom: 15px;
     outline: none;
 }
 
-.cart {
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* BANNER */
-.banner {
-    background: linear-gradient(135deg, #ff4d4d, #ff8a00);
-    color: white;
-    text-align: center;
-    padding: 70px 20px;
-}
-
-.banner h1 {
-    font-size: 45px;
-    margin-bottom: 15px;
-}
-
-.banner p {
-    font-size: 20px;
+.sidebar input:focus,
+.sidebar select:focus {
+    border-color: #08a85a;
 }
 
 /* PRODUCTS */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 40px auto;
-}
-
-.container h2 {
-    margin-bottom: 25px;
-}
-
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .product {
     background: white;
-    border-radius: 12px;
+    border-radius: 7px;
     overflow: hidden;
-    box-shadow: 0 3px 12px rgba(0,0,0,.1);
-    transition: .3s;
+    transition: 0.2s;
 }
 
 .product:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
-.product img {
+.product-img {
     width: 100%;
-    height: 220px;
+    height: 190px;
     object-fit: cover;
+    display: block;
 }
 
 .product-info {
-    padding: 18px;
+    padding: 16px;
 }
 
-.product-info h3 {
-    margin-bottom: 10px;
+.product-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
 }
 
 .price {
-    color: #ff3333;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-.buy {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: #ff4d4d;
-    color: white;
-    border-radius: 7px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.buy:hover {
-    background: #e60000;
-}
-
-/* CART */
-#cartBox {
-    position: fixed;
-    right: -400px;
-    top: 0;
-    width: 350px;
-    height: 100%;
-    background: white;
-    z-index: 200;
-    padding: 25px;
-    box-shadow: -5px 0 15px rgba(0,0,0,.2);
-    transition: .3s;
-    overflow-y: auto;
-}
-
-#cartBox.active {
-    right: 0;
-}
-
-.close {
-    float: right;
-    cursor: pointer;
-    font-size: 22px;
-}
-
-.cart-item {
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
-}
-
-.checkout {
-    width: 100%;
-    padding: 15px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 7px;
-    margin-top: 20px;
-    cursor: pointer;
+    color: #ff3025;
     font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 7px;
 }
 
-footer {
-    margin-top: 60px;
-    background: #222;
+.old-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+.discount {
+    border: 1px solid #ff4b43;
+    color: #ff3025;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.category {
+    display: inline-block;
+    color: #58bd36;
+    border: 1px solid #8cdb72;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin: 5px 0 12px;
+}
+
+.rating {
+    color: #ffc400;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.sold {
+    color: #888;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.buy-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #08a85a;
+    background: linear-gradient(90deg, #effff2, #eefaff);
+    color: #111;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.buy-btn:hover {
+    background: #08a85a;
     color: white;
-    text-align: center;
-    padding: 30px;
 }
 
 /* MOBILE */
-@media(max-width:600px) {
+@media (max-width: 800px) {
+
     header {
-        flex-wrap: wrap;
-        gap: 10px;
+        padding: 0 15px;
+        gap: 15px;
     }
 
-    .search {
-        width: 100%;
-        order: 3;
+    nav {
+        display: none;
     }
 
-    .banner h1 {
-        font-size: 32px;
+    .container {
+        grid-template-columns: 1fr;
     }
 
-    #cartBox {
-        width: 100%;
+    .sidebar {
+        min-height: auto;
+    }
+
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+
+    .products {
+        grid-template-columns: 1fr;
+    }
+
+    .product-img {
+        height: 210px;
     }
 }
 </style>
@@ -208,251 +241,381 @@ footer {
 <body>
 
 <header>
-    <div class="logo">🛍️ BÁCH SHOP</div>
 
-    <input
-        class="search"
-        id="search"
-        type="text"
-        placeholder="🔎 Tìm sản phẩm..."
-        onkeyup="searchProduct()"
-    >
-
-    <div class="cart" onclick="openCart()">
-        🛒 Giỏ hàng (<span id="cartCount">0</span>)
+    <div class="logo">
+        BÁCH <span>SHOP</span>
     </div>
+
+    <nav>
+        <a href="#">TRANG CHỦ</a>
+        <a href="#">SẢN PHẨM</a>
+        <a href="#">KHUYẾN MÃI</a>
+        <a href="#">LIÊN HỆ</a>
+    </nav>
+
+    <button class="login">
+        Đăng nhập
+    </button>
+
 </header>
 
-<section class="banner">
-    <h1>🔥 BÁCH SHOP 🔥</h1>
-    <p>Chào mừng bạn đến với cửa hàng online</p>
-</section>
 
 <div class="container">
 
-    <h2>🛍️ Sản phẩm nổi bật</h2>
+    <!-- SIDEBAR -->
 
-    <div class="products" id="products">
+    <aside class="sidebar">
 
-        <div class="product">
-            <img src="https://picsum.photos/500/500?random=1">
+        <label>Tìm kiếm</label>
 
-            <div class="product-info">
-                <h3>Áo thun thời trang</h3>
-                <p>Áo thun nam nữ chất lượng cao.</p>
+        <input
+            type="text"
+            id="search"
+            placeholder="Tìm sản phẩm..."
+        >
 
-                <div class="price">199.000đ</div>
+        <label>Danh mục</label>
 
-                <button class="buy"
-                    onclick="addCart('Áo thun thời trang',199000)">
-                    🛒 Thêm vào giỏ
-                </button>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="game">Sản phẩm Game</option>
+            <option value="tool">Tool</option>
+            <option value="file">File</option>
+            <option value="other">Khác</option>
+        </select>
+
+        <label>Sắp xếp</label>
+
+        <select id="sort">
+            <option value="default">Mặc định</option>
+            <option value="cheap">Giá thấp → cao</option>
+            <option value="expensive">Giá cao → thấp</option>
+        </select>
+
+    </aside>
+
+
+    <!-- PRODUCT LIST -->
+
+    <main>
+
+        <div class="products" id="products">
+
+            <!-- SẢN PHẨM 1 -->
+
+            <div class="product" data-category="game" data-price="50000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+1"
+                    alt="Sản phẩm 1"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Sản phẩm Game #1
+                    </div>
+
+                    <div class="price">
+                        50.000 đ
+                    </div>
+
+                    <span class="category">
+                        Sản phẩm Game
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 12
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
             </div>
+
+
+            <!-- SẢN PHẨM 2 -->
+
+            <div class="product" data-category="tool" data-price="100000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+2"
+                    alt="Sản phẩm 2"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Sản phẩm Tool #2
+                    </div>
+
+                    <div class="price">
+                        100.000 đ
+                    </div>
+
+                    <span class="category">
+                        Tool
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 8
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SẢN PHẨM 3 -->
+
+            <div class="product" data-category="file" data-price="30000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+3"
+                    alt="Sản phẩm 3"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        File Premium #3
+                    </div>
+
+                    <div class="price">
+                        30.000 đ
+                    </div>
+
+                    <span class="category">
+                        File
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 25
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SẢN PHẨM 4 -->
+
+            <div class="product" data-category="game" data-price="80000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+4"
+                    alt="Sản phẩm 4"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Sản phẩm Game #4
+                    </div>
+
+                    <div class="price">
+                        80.000 đ
+                    </div>
+
+                    <span class="category">
+                        Sản phẩm Game
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 15
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SẢN PHẨM 5 -->
+
+            <div class="product" data-category="other" data-price="120000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+5"
+                    alt="Sản phẩm 5"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Sản phẩm đặc biệt #5
+                    </div>
+
+                    <div class="price">
+                        120.000 đ
+                    </div>
+
+                    <span class="category">
+                        Khác
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 6
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SẢN PHẨM 6 -->
+
+            <div class="product" data-category="tool" data-price="150000">
+
+                <img
+                    class="product-img"
+                    src="https://via.placeholder.com/500x300?text=San+Pham+6"
+                    alt="Sản phẩm 6"
+                >
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Tool Premium #6
+                    </div>
+
+                    <div class="price">
+                        150.000 đ
+                    </div>
+
+                    <span class="category">
+                        Tool
+                    </span>
+
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                        <span class="sold">
+                            Đã bán 4
+                        </span>
+                    </div>
+
+                    <button class="buy-btn">
+                        → Xem ngay
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
 
+    </main>
 
-        <div class="product">
-            <img src="https://picsum.photos/500/500?random=2">
-
-            <div class="product-info">
-                <h3>Giày thể thao</h3>
-                <p>Giày thể thao phong cách trẻ.</p>
-
-                <div class="price">499.000đ</div>
-
-                <button class="buy"
-                    onclick="addCart('Giày thể thao',499000)">
-                    🛒 Thêm vào giỏ
-                </button>
-            </div>
-        </div>
-
-
-        <div class="product">
-            <img src="https://picsum.photos/500/500?random=3">
-
-            <div class="product-info">
-                <h3>Balo thời trang</h3>
-                <p>Balo tiện dụng cho học tập và đi chơi.</p>
-
-                <div class="price">299.000đ</div>
-
-                <button class="buy"
-                    onclick="addCart('Balo thời trang',299000)">
-                    🛒 Thêm vào giỏ
-                </button>
-            </div>
-        </div>
-
-
-        <div class="product">
-            <img src="https://picsum.photos/500/500?random=4">
-
-            <div class="product-info">
-                <h3>Tai nghe Bluetooth</h3>
-                <p>Tai nghe không dây chất lượng tốt.</p>
-
-                <div class="price">399.000đ</div>
-
-                <button class="buy"
-                    onclick="addCart('Tai nghe Bluetooth',399000)">
-                    🛒 Thêm vào giỏ
-                </button>
-            </div>
-        </div>
-
-    </div>
 </div>
-
-<!-- GIỎ HÀNG -->
-
-<div id="cartBox">
-
-    <span class="close" onclick="closeCart()">✖</span>
-
-    <h2>🛒 Giỏ hàng</h2>
-
-    <br>
-
-    <div id="cartItems"></div>
-
-    <h3>
-        Tổng:
-        <span id="total">0đ</span>
-    </h3>
-
-    <button class="checkout" onclick="checkout()">
-        💳 Thanh toán
-    </button>
-
-</div>
-
-<footer>
-    <p>© 2026 Bách Shop</p>
-    <p>Hotline: 0123 456 789</p>
-</footer>
 
 
 <script>
 
-let cart = [];
+const search = document.getElementById("search");
+const category = document.getElementById("category");
+const sort = document.getElementById("sort");
+const productsBox = document.getElementById("products");
 
-function addCart(name, price) {
+function filterProducts() {
 
-    cart.push({
-        name: name,
-        price: price
-    });
+    const keyword = search.value.toLowerCase();
+    const selectedCategory = category.value;
 
-    updateCart();
-
-    alert("✅ Đã thêm sản phẩm vào giỏ hàng!");
-}
-
-
-function updateCart() {
-
-    document.getElementById("cartCount").innerText = cart.length;
-
-    let html = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-
-        total += item.price;
-
-        html += `
-        <div class="cart-item">
-
-            <b>${item.name}</b>
-
-            <p>${item.price.toLocaleString()}đ</p>
-
-            <button onclick="removeCart(${index})">
-                ❌ Xóa
-            </button>
-
-        </div>
-        `;
-    });
-
-    document.getElementById("cartItems").innerHTML = html;
-
-    document.getElementById("total").innerText =
-        total.toLocaleString() + "đ";
-}
-
-
-function removeCart(index) {
-
-    cart.splice(index, 1);
-
-    updateCart();
-}
-
-
-function openCart() {
-
-    document
-        .getElementById("cartBox")
-        .classList.add("active");
-}
-
-
-function closeCart() {
-
-    document
-        .getElementById("cartBox")
-        .classList.remove("active");
-}
-
-
-function checkout() {
-
-    if (cart.length === 0) {
-
-        alert("🛒 Giỏ hàng đang trống!");
-
-        return;
-    }
-
-    alert(
-        "🎉 Đặt hàng thành công!\n\n" +
-        "Shop sẽ liên hệ với bạn để xác nhận đơn hàng."
+    const products = Array.from(
+        productsBox.querySelectorAll(".product")
     );
-}
-
-
-function searchProduct() {
-
-    let keyword =
-        document
-        .getElementById("search")
-        .value
-        .toLowerCase();
-
-    let products =
-        document.querySelectorAll(".product");
 
     products.forEach(product => {
 
-        let name =
+        const name =
             product
-            .querySelector("h3")
-            .innerText
+            .querySelector(".product-name")
+            .textContent
             .toLowerCase();
 
-        if (name.includes(keyword)) {
+        const productCategory =
+            product.dataset.category;
 
-            product.style.display = "block";
+        const matchName =
+            name.includes(keyword);
 
-        } else {
+        const matchCategory =
+            selectedCategory === "all" ||
+            productCategory === selectedCategory;
 
-            product.style.display = "none";
+        product.style.display =
+            matchName && matchCategory
+            ? ""
+            : "none";
 
-        }
     });
+
+    if (sort.value === "cheap") {
+
+        products.sort(
+            (a,b) =>
+            Number(a.dataset.price) -
+            Number(b.dataset.price)
+        );
+
+    }
+
+    if (sort.value === "expensive") {
+
+        products.sort(
+            (a,b) =>
+            Number(b.dataset.price) -
+            Number(a.dataset.price)
+        );
+
+    }
+
+    products.forEach(product =>
+        productsBox.appendChild(product)
+    );
 }
+
+search.addEventListener("input", filterProducts);
+category.addEventListener("change", filterProducts);
+sort.addEventListener("change", filterProducts);
 
 </script>
 
