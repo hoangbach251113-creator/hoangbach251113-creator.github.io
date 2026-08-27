@@ -162,7 +162,6 @@
     </div>
 
     <script>
-        // CẤU HÌNH FIREBASE THỰC TẾ CỦA BẠN:
         const firebaseConfig = {
             apiKey: "AIzaSyCEgTw4uVIOEvYlwBVQtlVBhYQLac9lTxs",
             authDomain: "sub1s2001-db.firebaseapp.com",
@@ -180,7 +179,44 @@
         let users = {};
         let currentUser = localStorage.getItem('currentUser') || null;
 
-        // Tự động đồng bộ dữ liệu từ Firebase Server về
+        const dichVuData = {
+            'menu_ff': {
+                title: 'Dịch Vụ Menu FF (Mod VIP)',
+                labelInput: 'Nhập ID Nhân Vật Free Fire:',
+                servers: [
+                    { name: 'Server 1: Menu VIP Auto Headshot (1 Ngày) - 20,000đ', price: 20000 },
+                    { name: 'Server 2: Menu VIP Chống Ban FULL (7 Ngày) - 100,000đ', price: 100000 },
+                    { name: 'Server 3: Menu Super VVIP (30 Ngày) - 300,000đ', price: 300000 }
+                ]
+            },
+            'file_ios_adr': {
+                title: 'Dịch Vụ File iOS - Android',
+                labelInput: 'Nhập ID Game / Loại Thiết Bị:',
+                servers: [
+                    { name: 'Server 1: File Regedit Android (Khóa Tâm) - 30,000đ', price: 30000 },
+                    { name: 'Server 2: File IPA iOS (Không Cần Cài Cắm) - 50,000đ', price: 50000 },
+                    { name: 'Server 3: Combo File iOS + ADR VVIP - 120,000đ', price: 120000 }
+                ]
+            },
+            'aimlock': {
+                title: 'Dịch Vụ Aimlock Siêu Chuẩn',
+                labelInput: 'Nhập ID Nhân Vật Free Fire:',
+                servers: [
+                    { name: 'Server 1: Aimlock 80% (An Toàn) - 25,000đ', price: 25000 },
+                    { name: 'Server 2: Aimlock 100% Đạn Đuổi - 60,000đ', price: 60000 }
+                ]
+            }
+        };
+
+        const mmoProducts = [
+            { id: 1, name: 'Tài Khoản Facebook Clone Veri Phone', price: 5000, img: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' },
+            { id: 2, name: 'Tài Khoản TikTok 1k Follow (Bật Livestream)', price: 45000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=400' },
+            { id: 3, name: 'VPS US 2 Core - 4GB RAM (1 Tháng)', price: 80000, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400' },
+            { id: 4, name: 'Proxy IPv4 Dùng Riêng (1 Tháng)', price: 30000, img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400' }
+        ];
+
+        let currentCategory = 'trangchu';
+
         db.ref('users').on('value', snapshot => {
             users = snapshot.val() || {};
             if (!users['admin']) {
@@ -188,6 +224,116 @@
             }
             capNhatGiaoDienUser();
         });
+
+        function chonDichVu(key, element) {
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+            currentCategory = key;
+
+            const defaultView = document.getElementById('default-view');
+            const mmoView = document.getElementById('mmo-product-view');
+
+            if (key === 'mmo') {
+                defaultView.style.display = 'none';
+                mmoView.style.display = 'grid';
+                document.getElementById('page-title').innerText = 'Dịch Vụ Kiếm Tiền (MMO)';
+                document.getElementById('welcome-heading').innerText = 'Kho Sản Phẩm MMO VIP';
+                document.getElementById('welcome-sub').innerText = 'Tự động giao dịch - Nhận tài khoản ngay lập tức!';
+                hienThiMMO();
+            } else if (dichVuData[key]) {
+                defaultView.style.display = 'grid';
+                mmoView.style.display = 'none';
+
+                const data = dichVuData[key];
+                document.getElementById('page-title').innerText = data.title;
+                document.getElementById('welcome-heading').innerText = data.title;
+                document.getElementById('welcome-sub').innerText = 'Điền đúng ID/Thông tin để hệ thống xử lý nhanh nhất.';
+                document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn: ${data.title}`;
+                document.getElementById('input-label').innerText = data.labelInput;
+
+                const select = document.getElementById('server-select');
+                select.innerHTML = '';
+                data.servers.forEach((srv, index) => {
+                    let opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = srv.name;
+                    select.appendChild(opt);
+                });
+                tinhTien();
+            } else {
+                defaultView.style.display = 'grid';
+                mmoView.style.display = 'none';
+                document.getElementById('page-title').innerText = 'Trang Chủ';
+                document.getElementById('welcome-heading').innerText = 'Chào mừng trở lại!';
+                document.getElementById('welcome-sub').innerText = 'Chọn một gói dịch vụ ở danh mục bên trái để bắt đầu.';
+                document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ`;
+                document.getElementById('input-label').innerText = 'ID Nhân Vật Free Fire / Link Profile:';
+
+                const select = document.getElementById('server-select');
+                select.innerHTML = '<option value="">-- Vui lòng chọn chuyên mục ở menu trái --</option>';
+                document.getElementById('total-price').innerText = '0đ';
+            }
+        }
+
+        function hienThiMMO() {
+            const container = document.getElementById('mmo-product-view');
+            container.innerHTML = '';
+            mmoProducts.forEach(prod => {
+                container.innerHTML += `
+                    <div class="product-card">
+                        <img src="${prod.img}" class="product-img">
+                        <div class="product-body">
+                            <div class="product-title">${prod.name}</div>
+                            <div class="product-price">${prod.price.toLocaleString('vi-VN')}đ</div>
+                            <button class="btn-buy-product" onclick="muaMMO(${prod.price}, '${prod.name}')"><i class="fa-solid fa-cart-arrow-down"></i> Mua Ngay</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function tinhTien() {
+            if (!dichVuData[currentCategory]) return;
+            const srvIndex = document.getElementById('server-select').value;
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            if (srvIndex !== '') {
+                const unitPrice = dichVuData[currentCategory].servers[srvIndex].price;
+                const total = unitPrice * quantity;
+                document.getElementById('total-price').innerText = total.toLocaleString('vi-VN') + 'đ';
+            }
+        }
+
+        function xacNhanDatHang() {
+            if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện mua hàng!");
+            if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
+
+            const srvIndex = document.getElementById('server-select').value;
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const total = dichVuData[currentCategory].servers[srvIndex].price * quantity;
+
+            let userBal = users[currentUser].balance || 0;
+            if (userBal < total) {
+                alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
+            } else {
+                let newBal = userBal - total;
+                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+                    alert("Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.");
+                });
+            }
+        }
+
+        function muaMMO(price, name) {
+            if (!currentUser) return alert("Vui lòng đăng nhập để mua sản phẩm!");
+            let userBal = users[currentUser].balance || 0;
+            if (userBal < price) {
+                alert("Số dư không đủ! Vui lòng nạp thêm tiền qua ZaloPay.");
+            } else {
+                let newBal = userBal - price;
+                db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
+                    alert("Mua thành công sản phẩm: " + name);
+                });
+            }
+        }
 
         function xuLyDangKy() {
             const user = document.getElementById('reg-user').value.trim();
