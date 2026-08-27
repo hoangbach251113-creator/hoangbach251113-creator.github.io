@@ -509,7 +509,38 @@
                     break;
                 }
             }
+function adminCheckDonHang() {
+  const orderId = document.getElementById('admin-check-order-id').value.trim();
+  const resultBox = document.getElementById('admin-order-result');
 
+  if (!orderId) {
+    alert("Vui lòng nhập Mã đơn hàng!");
+    return;
+  }
+
+  db.ref('orders/' + orderId).once('value').then((snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      
+      document.getElementById('res-order-id').innerText = orderId;
+      document.getElementById('res-user-id').innerText = data.userId || data.idKhach || 'Không có';
+      document.getElementById('res-product-name').innerText = data.productName || data.tenSanPham || 'Đơn hàng';
+      document.getElementById('res-price').innerText = (data.price || data.gia || 0).toLocaleString('vi-VN');
+      document.getElementById('res-time').innerText = data.time || data.thoiGian || 'Không xác định';
+      
+      const details = data.details || data.noiDung || data.code || JSON.stringify(data, null, 2);
+      document.getElementById('res-details').innerText = details;
+
+      resultBox.style.display = 'block';
+    } else {
+      alert("Không tìm thấy đơn hàng với mã này!");
+      resultBox.style.display = 'none';
+    }
+  }).catch((error) => {
+    console.error(error);
+    alert("Có lỗi xảy ra khi kiểm tra đơn hàng!");
+  });
+}
             if (!foundUserKey) return alert("Không tìm thấy ID " + targetId + " trên hệ thống Cloud!");
 
             let newBalance = (users[foundUserKey].balance || 0) + amount;
@@ -575,6 +606,40 @@
 
         function moModal(id) { document.getElementById(id).style.display = 'flex'; }
         function dongModal(id) { document.getElementById(id).style.display = 'none'; }
-    </script>
+    <function adminCheckDonHang() {
+  const orderId = document.getElementById('admin-check-order-id').value.trim();
+  const resultBox = document.getElementById('admin-order-result');
+
+  if (!orderId) {
+    alert("Vui lòng nhập Mã đơn hàng!");
+    return;
+  }
+
+  // Truy vấn đến bảng orders (hoặc history) trên Firebase
+  db.ref('orders/' + orderId).once('value').then((snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      
+      // Đổ dữ liệu ra giao diện
+      document.getElementById('res-order-id').innerText = orderId;
+      document.getElementById('res-user-id').innerText = data.userId || data.idKhach || 'Không có';
+      document.getElementById('res-product-name').innerText = data.productName || data.tenSanPham || 'Đơn hàng';
+      document.getElementById('res-price').innerText = (data.price || data.gia || 0).toLocaleString('vi-VN');
+      document.getElementById('res-time').innerText = data.time || data.thoiGian || 'Không xác định';
+      
+      // Hiển thị nội dung mua (văn bản, link, tài khoản clone, v.v.)
+      const details = data.details || data.noiDung || data.code || JSON.stringify(data, null, 2);
+      document.getElementById('res-details').innerText = details;
+
+      resultBox.style.display = 'block';
+    } else {
+      alert("Không tìm thấy đơn hàng với mã này!");
+      resultBox.style.display = 'none';
+    }
+  }).catch((error) => {
+    console.error(error);
+    alert("Có lỗi xảy ra khi kiểm tra đơn hàng!");
+  });
+}>
 </body>
 </html>
