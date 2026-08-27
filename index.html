@@ -56,11 +56,15 @@
         .btn-delete-product { width: 100%; background: #ef4444; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 10000; }
-        .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 350px; position: relative; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 12px; width: 380px; position: relative; }
         .close-modal { position: absolute; top: 12px; right: 15px; font-size: 18px; cursor: pointer; }
 
         .admin-box { background: #fff; border: 2px dashed #ef4444; border-radius: 12px; padding: 20px; margin-top: 25px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Giao diện xem hàng mua thành công */
+        .order-result-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .order-result-content { background: #fff; border: 1px dashed #16a34a; padding: 12px; border-radius: 6px; margin-top: 10px; word-break: break-all; font-family: monospace; color: #15803d; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -113,7 +117,7 @@
             <div class="card">
                 <div class="card-title" id="form-title"><i class="fa-solid fa-cart-shopping" style="color:#ef4444;"></i> Đặt Đơn Hàng Dịch Vụ</div>
                 <div class="form-group"><label>Chọn gói/máy chủ:</label><select class="form-control" id="server-select" onchange="tinhTien()"></select></div>
-                <div class="form-group"><label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label><input type="text" class="form-control" placeholder="Dán ID hoặc thông tin tại đây..."></div>
+                <div class="form-group"><label id="input-label">ID Nhân Vật Free Fire / Link Profile:</label><input type="text" class="form-control" id="order-input-target" placeholder="Dán ID hoặc thông tin tại đây..."></div>
                 <div class="form-group"><label>Số lượng:</label><input type="number" class="form-control" id="quantity" value="1" min="1" oninput="tinhTien()"></div>
                 <div class="form-group" style="margin-top: 20px;"><p style="font-size: 15px; font-weight: 700;">Tổng thanh toán: <span id="total-price" style="color:#ef4444;">0đ</span></p></div>
                 <button class="btn-submit" id="btn-submit-order" onclick="xacNhanDatHang()"><i class="fa-solid fa-paper-plane"></i> MUA NGAY</button>
@@ -156,6 +160,24 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL HIỂN THỊ KẾT QUẢ GIAO DỊCH / NHẬN HÀNG -->
+    <div class="modal" id="order-success-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="dongModal('order-success-modal')">&times;</span>
+            <div style="font-size:20px; font-weight:800; color:#16a34a; text-align:center;">
+                <i class="fa-solid fa-circle-check" style="font-size:32px; display:block; margin-bottom:8px;"></i>
+                GIAO DỊCH THÀNH CÔNG!
+            </div>
+            
+            <div class="order-result-box">
+                <p style="font-size: 13px; font-weight: 700; color: #166534;" id="result-title">Thông tin sản phẩm:</p>
+                <div class="order-result-content" id="result-content">VIP6S-KEY-XXXXX-YYYYY</div>
+            </div>
+
+            <button class="btn-submit" style="background: #10b981; margin-top: 15px;" onclick="saoChepHang()"><i class="fa-solid fa-copy"></i> Sao Chép Nội Dung</button>
         </div>
     </div>
 
@@ -205,47 +227,47 @@
                 title: 'Dịch Vụ Menu FF (Mod VIP)',
                 labelInput: 'Nhập ID Nhân Vật Free Fire:',
                 servers: [
-                    { name: 'Server 1: Menu VIP Auto Headshot (1 Ngày) - 20,000đ', price: 20000 },
-                    { name: 'Server 2: Menu VIP Chống Ban FULL (7 Ngày) - 100,000đ', price: 100000 },
-                    { name: 'Server 3: Menu Super VVIP (30 Ngày) - 300,000đ', price: 300000 }
+                    { name: 'Server 1: Menu VIP Auto Headshot (1 Ngày) - 20,000đ', price: 20000, content: 'KEY-MENU-FF-1DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 2: Menu VIP Chống Ban FULL (7 Ngày) - 100,000đ', price: 100000, content: 'KEY-MENU-FF-7DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 3: Menu Super VVIP (30 Ngày) - 300,000đ', price: 300000, content: 'KEY-MENU-FF-30DAY-VIP6S-' + Math.floor(100000 + Math.random() * 900000) }
                 ]
             },
             'file_ios_adr': {
                 title: 'Dịch Vụ File iOS - Android',
                 labelInput: 'Nhập ID Game / Loại Thiết Bị:',
                 servers: [
-                    { name: 'Server 1: File Regedit Android (Khóa Tâm) - 30,000đ', price: 30000 },
-                    { name: 'Server 2: File IPA iOS (Không Cần Cài Cắm) - 50,000đ', price: 50000 },
-                    { name: 'Server 3: Combo File iOS + ADR VVIP - 120,000đ', price: 120000 }
+                    { name: 'Server 1: File Regedit Android (Khóa Tâm) - 30,000đ', price: 30000, content: 'https://vip6s2000.com/download/regedit-android-vip.zip' },
+                    { name: 'Server 2: File IPA iOS (Không Cần Cài Cắm) - 50,000đ', price: 50000, content: 'https://vip6s2000.com/download/ff-ios-vip.ipa' },
+                    { name: 'Server 3: Combo File iOS + ADR VVIP - 120,000đ', price: 120000, content: 'https://vip6s2000.com/download/combo-ios-android-vvip.zip' }
                 ]
             },
             'aimlock': {
                 title: 'Dịch Vụ Aimlock Siêu Chuẩn',
                 labelInput: 'Nhập ID Nhân Vật Free Fire:',
                 servers: [
-                    { name: 'Server 1: Aimlock 80% (An Toàn) - 25,000đ', price: 25000 },
-                    { name: 'Server 2: Aimlock 100% Đạn Đuổi - 60,000đ', price: 60000 }
+                    { name: 'Server 1: Aimlock 80% (An Toàn) - 25,000đ', price: 25000, content: 'AIMLOCK-80-KEY: AL80-' + Math.floor(100000 + Math.random() * 900000) },
+                    { name: 'Server 2: Aimlock 100% Đạn Đuổi - 60,000đ', price: 60000, content: 'AIMLOCK-100-KEY: AL100-' + Math.floor(100000 + Math.random() * 900000) }
                 ]
             },
             'free_file_ios_adr': {
                 title: 'Dịch Vụ Miễn Phí: File iOS & ADR',
                 labelInput: 'Nhập Email / Link Tải Của Bạn:',
                 servers: [
-                    { name: 'Gói Miễn Phí: File Regedit Free iOS & Android - 0đ', price: 0 }
+                    { name: 'Gói Miễn Phí: File Regedit Free iOS & Android - 0đ', price: 0, content: 'https://vip6s2000.com/free/regedit-free-ios-android.zip' }
                 ]
             },
             'free_menu_ysm_v8': {
                 title: 'Dịch Vụ Miễn Phí: Menu YSM V8',
                 labelInput: 'Nhập ID Game / Email Nhận Key:',
                 servers: [
-                    { name: 'Gói Miễn Phí: Menu YSM V8 (Bản Free) - 0đ', price: 0 }
+                    { name: 'Gói Miễn Phí: Menu YSM V8 (Bản Free) - 0đ', price: 0, content: 'KEY-YSM-V8-FREE: YSM8-FREE-' + Math.floor(1000 + Math.random() * 9000) }
                 ]
             },
             'free_tool_dame_fb': {
                 title: 'Dịch Vụ Miễn Phí: Tool Dame Facebook',
                 labelInput: 'Nhập Link/ID Facebook Cần Dame:',
                 servers: [
-                    { name: 'Gói Miễn Phí: Tool Dame Facebook Spam Link - 0đ', price: 0 }
+                    { name: 'Gói Miễn Phí: Tool Dame Facebook Spam Link - 0đ', price: 0, content: 'https://vip6s2000.com/free/tool-dame-fb-v1.exe' }
                 ]
             }
         };
@@ -374,13 +396,30 @@
             }
         }
 
+        function hienThiGiaoDienNhanHang(title, content) {
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-content').innerText = content;
+            moModal('order-success-modal');
+        }
+
+        function saoChepHang() {
+            const text = document.getElementById('result-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Đã sao chép nội dung sản phẩm vào bộ nhớ tạm!');
+            });
+        }
+
         function xacNhanDatHang() {
             if (!currentUser) return alert("Vui lòng đăng nhập để thực hiện đặt đơn!");
             if (!dichVuData[currentCategory]) return alert("Vui lòng chọn gói dịch vụ ở menu bên trái!");
 
+            const targetInput = document.getElementById('order-input-target').value.trim();
+            if (!targetInput) return alert("Vui lòng nhập ID/Thông tin trước khi tiếp tục!");
+
             const srvIndex = document.getElementById('server-select').value;
+            const selectedSrv = dichVuData[currentCategory].servers[srvIndex];
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
-            const total = dichVuData[currentCategory].servers[srvIndex].price * quantity;
+            const total = selectedSrv.price * quantity;
 
             let userBal = users[currentUser].balance || 0;
             if (userBal < total) {
@@ -388,11 +427,8 @@
             } else {
                 let newBal = userBal - total;
                 db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
-                    if (total === 0) {
-                        alert("Nhận dịch vụ miễn phí thành công! Yêu cầu của bạn đang được xử lý.");
-                    } else {
-                        alert("Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.");
-                    }
+                    const content = selectedSrv.content || ('Đơn hàng cho ID: ' + targetInput + ' đã gửi lên hệ thống!');
+                    hienThiGiaoDienNhanHang('Nội dung nhận hàng (' + selectedSrv.name + '):', content);
                 });
             }
         }
@@ -405,7 +441,8 @@
             } else {
                 let newBal = userBal - price;
                 db.ref('users/' + currentUser + '/balance').set(newBal).then(() => {
-                    alert("Mua thành công sản phẩm: " + name);
+                    let randomAccount = "TK: clone_" + Math.floor(Math.random()*899999+100000) + " | PASS: vip6s2000@" + Math.floor(Math.random()*899+100) + " | 2FA: " + Math.random().toString(36).substring(2, 10).toUpperCase();
+                    hienThiGiaoDienNhanHang('Nội dung sản phẩm (' + name + '):', randomAccount);
                 });
             }
         }
